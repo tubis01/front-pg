@@ -1,0 +1,25 @@
+<p-toolbar class="p-1 ">
+  <div class="p-toolbar-group-start">
+
+    <div class="p-toolbar-group-center">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText placeholder="Search" />
+      </span>
+    </div>
+
+  </div>
+  <div class="p-toolbar-group-end">
+    <p-button class="mr-2" (onClick)="chageOrder('name')" label="Excel" icon="pi pi-sort" styleClass="p-button-success">
+    </p-button>
+
+    <p-button class="mr-2" (onClick)="chageOrder('canFly')" l label="PDF " icon="pi pi-sort"
+      styleClass="p-button-danger">
+    </p-button>
+
+    <p-button class="mr-2" (onClick)="chageOrder('color')" l label="color " icon="pi pi-sort"
+      styleClass="p-button-help">
+    </p-button>
+
+  </div>
+</p-toolbar>
