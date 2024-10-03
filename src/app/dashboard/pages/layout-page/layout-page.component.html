@@ -1,0 +1,81 @@
+<div class="grid">
+  <!-- Tarjetas para estadísticas -->
+  <div class="col-12 md:col-6 lg:col-3">
+    <p-card header="Proyectos en curso" class="text-center">
+      <h2 class="text-bold">{{ proyectosEnCurso }}</h2>
+      <i class="pi pi-briefcase" style="font-size: 2em;"></i>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-3">
+    <p-card header="Proyectos finalizados" class="text-center">
+      <h2 class="text-bold">{{ proyectosFinalizados}}</h2>
+      <i class="pi pi-check-circle" style="font-size: 2em;"></i>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-3">
+    <p-card header="Beneficiarios del mes" class="text-center">
+      <h2 class="text-bold">{{ beneficiariosMes }}</h2>
+      <i class="pi pi-users" style="font-size: 2em;"></i>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-3">
+    <p-card header="Total de beneficiarios" class="text-center">
+      <h2 class="text-bold">{{ beneficiariosActivos }}</h2>
+      <i class="pi pi-chart-line" style="font-size: 2em;"></i>
+    </p-card>
+  </div>
+</div>
+
+<!-- Filtro por fechas -->
+<div class="grid">
+  <div class="col-12">
+    <p-card header="Filtrar por fechas">
+      <div class="grid align-items-center">
+        <div class="col-12 md:col-4">
+          <p-calendar  dateFormat="dd/mm/yy" placeholder="Fecha de inicio"></p-calendar>
+        </div>
+        <div class="col-12 md:col-4">
+          <p-calendar  dateFormat="dd/mm/yy" placeholder="Fecha de fin"></p-calendar>
+        </div>
+        <div class="col-12 md:col-4">
+          <button pButton type="button" label="Filtrar" icon="pi pi-search"></button>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+
+<!-- Gráfica de beneficiarios por mes -->
+<div class="grid">
+  <div class="col-12">
+    <p-card header="Beneficiarios por mes">
+      <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+    </p-card>
+  </div>
+</div>
+
+<!-- Últimos proyectos completados -->
+<!-- Últimos proyectos completados -->
+<div class="grid">
+  <div class="col-12">
+    <p-card header="Últimos proyectos completados">
+      <p-table [value]="completedProjects">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre del Proyecto</th>
+            <th>Fecha de Finalización</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-project>
+          <tr>
+            <td>{{ project.nombre }}</td>
+            <td>{{ project.fechaFin | date: 'dd/MM/yyyy' }}</td> <!-- Se muestra la fecha con un formato legible -->
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

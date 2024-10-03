@@ -10,6 +10,7 @@ import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 import { MaterialModule } from '../material/material.module';
 import { PersonTableComponent } from './components/person-table/person-table.component';
 import { SharedModule } from '../shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -23,10 +24,11 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-
+    FormsModule,
     PersonasRoutingModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
 export class PersonasModule { }

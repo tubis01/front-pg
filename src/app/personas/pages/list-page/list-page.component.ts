@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { Person } from '../../interfaces/person.interface';
+import { DatosDetalleDonadorList } from '../../../donadores/interfaces/donador.interface';
 @Component({
   selector: 'app-list-page',
   templateUrl: './list-page.component.html',
@@ -8,7 +8,7 @@ import { Person } from '../../interfaces/person.interface';
 })
 export class ListPageComponent {
 
-  public persons: Person[] = [];
+  public persons: DatosDetalleDonadorList[] = [];
 
 
 }

@@ -1,0 +1,25 @@
+.info-section {
+  background-color: #f4f4f4; /* Gris claro */
+  color: #333; /* Gris oscuro */
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.info-section h2 {
+  color: #6a1b9a; /* Morado oscuro */
+}
+
+.info-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.info-section ul li {
+  margin: 10px 0;
+}
+
+input{
+  width: 100%;
+  max-width: 700px;
+}

@@ -1,0 +1,32 @@
+<p-table
+[value]="responsables"
+[paginator]="true"
+[rows]="5"
+[totalRecords]="totalElements"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width:5%">#</th>
+            <th style="width:10%">nombre</th>
+            <th style="width:10%">apellido</th>
+            <th style="width:10%">genero</th>
+            <th style="width:10%">correo</th>
+            <th style="width:10%">telefono</th>
+            <th style="width:10%">fechaNacimiento</th>
+
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-responsable let-i="rowIndex">
+        <tr>
+            <td>{{i + 1 }}</td>
+            <td>{{ responsable.nombre}}</td>
+            <td>{{ responsable.apellido}}</td>
+            <td>{{ responsable.genero }}</td>
+            <td>{{ responsable.correo }}</td>
+            <td>{{ responsable.telefono }}</td>
+            <td>{{ responsable.fechaNacimiento }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+

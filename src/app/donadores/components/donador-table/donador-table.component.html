@@ -1,0 +1,34 @@
+<p-table
+[value]="donadores"
+[paginator]="true"
+[rows]="5"
+[totalRecords]="totalElements"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width:5%">#</th>
+            <th style="width:10%">nombre</th>
+            <th style="width:10%">apellido</th>
+            <th style="width:10%">genero</th>
+            <th style="width:10%">correo</th>
+            <th style="width:10%">telefono</th>
+            <th style="width:10%">fechaNacimiento</th>
+            <th style="width:10%">comentario</th>
+
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-donador let-i="rowIndex">
+        <tr>
+            <td>{{i + 1 }}</td>
+            <td>{{ donador.nombre}}</td>
+            <td>{{ donador.apellido}}</td>
+            <td>{{ donador.genero }}</td>
+            <td>{{ donador.correo }}</td>
+            <td>{{ donador.telefono }}</td>
+            <td>{{ donador.fechaNacimiento }}</td>
+            <td>{{ donador.comentarios }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+

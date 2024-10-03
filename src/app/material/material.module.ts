@@ -23,6 +23,9 @@ import { SidebarModule } from 'primeng/sidebar';
 import { AvatarModule } from 'primeng/avatar';
 import { TableModule } from 'primeng/table';
 import { PanelModule } from 'primeng/panel';
+import { ChartModule } from 'primeng/chart';
+import { CalendarModule } from 'primeng/calendar';
+import { CheckboxModule } from 'primeng/checkbox';
 
 
 
@@ -50,7 +53,10 @@ import { PanelModule } from 'primeng/panel';
     AvatarModule,
     TableModule,
     PanelModule,
-    ToolbarModule
+    ToolbarModule,
+    ChartModule,
+    CalendarModule,
+    CheckboxModule
 
   ]
 })

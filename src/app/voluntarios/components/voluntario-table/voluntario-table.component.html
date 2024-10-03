@@ -1,0 +1,34 @@
+<p-table
+[value]="voluntarios"
+[paginator]="true"
+[rows]="5"
+[totalRecords]="totalElements"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width:5%">#</th>
+            <th style="width:10%">nombre</th>
+            <th style="width:10%">apellido</th>
+            <th style="width:10%">genero</th>
+            <th style="width:10%">correo</th>
+            <th style="width:10%">telefono</th>
+            <th style="width:10%">fechaNacimiento</th>
+            <th style="width:10%">comentario</th>
+
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-voluntario let-i="rowIndex">
+        <tr>
+            <td>{{i + 1 }}</td>
+            <td>{{ voluntario.nombre}}</td>
+            <td>{{ voluntario.apellido}}</td>
+            <td>{{ voluntario.genero }}</td>
+            <td>{{ voluntario.correo }}</td>
+            <td>{{ voluntario.telefono }}</td>
+            <td>{{ voluntario.fechaNacimiento }}</td>
+            <td>{{ voluntario.comentarios }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+

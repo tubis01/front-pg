@@ -12,6 +12,10 @@ const routes: Routes = [
     component: LayoutPageComponent,
     children: [
       {
+        path: 'list',
+        component: ListPageComponent
+      },
+      {
       path: 'new-person',
       component: NewPageComponent
     },
@@ -22,10 +26,6 @@ const routes: Routes = [
     {
       path: 'edit/:id',
       component: NewPageComponent
-    },
-    {
-      path: 'list',
-      component: ListPageComponent
     },
     {
       path: ':id',

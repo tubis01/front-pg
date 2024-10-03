@@ -1,130 +1,53 @@
-<div class="grid">
-  <div class="col mt-12 p-1">
 
-    <p-panel header="Personas">
-      <p-table [value]="persons" [tableStyle]="{'min-width': '60rem'}">
-        <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="id" style="width:5%">
-              #
-              <p-sortIcon field="id"></p-sortIcon>
-            </th>
-            <th pSortableColumn="dpi" style="width:10%">
-              Dpi
-              <p-sortIcon field="dpi"></p-sortIcon>
-            </th>
-            <th pSortableColumn="primerNombre" style="width:10%">
-              Primer Nombre
-              <p-sortIcon field="primerNombre"></p-sortIcon>
-            </th>
-            <th pSortableColumn="segundoNombre" style="width:10%">
-              Segundo Nombre
-              <p-sortIcon field="segundoNombre"></p-sortIcon>
-            </th>
-            <th pSortableColumn="tercerNombre" style="width:10%">
-              Tercer Nombre
-              <p-sortIcon field="tercerNombre"></p-sortIcon>
-            </th>
-            <th pSortableColumn="primerApellido" style="width:10%">
-              Primer Apellido
-              <p-sortIcon field="primerApellido"></p-sortIcon>
-            </th>
-            <th pSortableColumn="segundoApellido" style="width:10%">
-              Segundo Apellido
-              <p-sortIcon field="segundoApellido"></p-sortIcon>
-            </th>
-            <th pSortableColumn="nit" style="width:10%">
-              Nit
-              <p-sortIcon field="nit"></p-sortIcon>
-            </th>
-            <th pSortableColumn="telefono" style="width:10%">
-              Teléfono
-              <p-sortIcon field="telefono"></p-sortIcon>
-            </th>
-            <th pSortableColumn="fechaNacimiento" style="width:10%">
-              Fecha Nacimiento
-              <p-sortIcon field="fechaNacimiento"></p-sortIcon>
-            </th>
-            <th pSortableColumn="etnia" style="width:10%">
-              Etnia
-              <p-sortIcon field="etnia"></p-sortIcon>
-            </th>
-            <th pSortableColumn="genero" style="width:10%">
-              Género
-              <p-sortIcon field="genero"></p-sortIcon>
-            </th>
-            <th pSortableColumn="estadoCivil" style="width:10%">
-              Estado Civil
-              <p-sortIcon field="estadoCivil"></p-sortIcon>
-            </th>
-            <th pSortableColumn="numeroHijos" style="width:10%">
-              Número Hijos
-              <p-sortIcon field="numeroHijos"></p-sortIcon>
-            </th>
-            <th pSortableColumn="codigoDepartamento" style="width:10%">
-              Código Departamento
-              <p-sortIcon field="codigoDepartamento"></p-sortIcon>
-            </th>
-            <th pSortableColumn="nombreDepartamento" style="width:10%">
-              Nombre Departamento
-              <p-sortIcon field="nombreDepartamento"></p-sortIcon>
-            </th>
-            <th pSortableColumn="codigoMunicipio" style="width:10%">
-              Código Municipio
-              <p-sortIcon field="codigoMunicipio"></p-sortIcon>
-            </th>
-            <th pSortableColumn="nombreMunicipio" style="width:10%">
-              Nombre Municipio
-              <p-sortIcon field="nombreMunicipio"></p-sortIcon>
-            </th>
-            <th pSortableColumn="comunidad" style="width:10%">
-              Comunidad
-              <p-sortIcon field="comunidad"></p-sortIcon>
-            </th>
-            <th pSortableColumn="discapacidadAuditiva" style="width:10%">
-              Discapacidad Auditiva
-              <p-sortIcon field="discapacidadAuditiva"></p-sortIcon>
-            </th>
-            <th pSortableColumn="discapacidadMotora" style="width:10%">
-              Discapacidad Motora
-              <p-sortIcon field="discapacidadMotora"></p-sortIcon>
-            </th>
-            <th pSortableColumn="discapacidadIntelectual" style="width:10%">
-              Discapacidad Intelectual
-              <p-sortIcon field="discapacidadIntelectual"></p-sortIcon>
-            </th>
-            <th pSortableColumn="comunidadLinguistica" style="width:10%">
-              Comunidad Lingüística
-              <p-sortIcon field="comunidadLinguistica"></p-sortIcon>
-            </th>
-            <th pSortableColumn="cultivo" style="width:10%">
-              Cultivo
-              <p-sortIcon field="cultivo"></p-sortIcon>
-            </th>
-            <th pSortableColumn="vendeExcedenteCosecha" style="width:10%">
-              Vende Excedente Cosecha
-              <p-sortIcon field="vendeExcedenteCosecha"></p-sortIcon>
-            </th>
-            <th pSortableColumn="tipoProductor" style="width:10%">
-              Tipo Productor
-              <p-sortIcon field="tipoProductor"></p-sortIcon>
-            </th>
-            <th pSortableColumn="organizacion" style="width:10%">
-              Organización
-              <p-sortIcon field="organizacion"></p-sortIcon>
-            </th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-person let-i="rowIndex">
-          <tr>
-            <td>{{ i + 1}}</td>
-            <td>{{ person.DPI }}</td>
+<p-table
+[value]="persons"
+[paginator]="true"
+[rows]="20"
+[totalRecords]="totalElements"
+(onPageChange)="onPageChange($event)"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width:5%">#</th>
+            <th style="width:10%">DPI</th>
+            <th style="width:10%">Primer Nombre</th>
+            <th style="width:10%">Segundo Nombre</th>
+            <th style="width:10%">Tercer Nombre</th>
+            <th style="width:10%">Primer Apellido</th>
+            <th style="width:10%">Segundo Apellido</th>
+            <th style="width:10%">NIT</th>
+            <th style="width:10%">Teléfono</th>
+            <th style="width:10%">Fecha Nacimiento</th>
+            <th style="width:10%">Etnia</th>
+            <th style="width:10%">Género</th>
+            <th style="width:10%">Estado Civil</th>
+            <th style="width:15%">Número Hijos</th>
+            <th style="width:10%">Código Departamento</th>
+            <th style="width:10%">Nombre Departamento</th>
+            <th style="width:10%">Código Municipio</th>
+            <th style="width:10%">Nombre Municipio</th>
+            <th style="width:10%">Comunidad</th>
+            <th style="width:10%">Discapacidad Auditiva</th>
+            <th style="width:10%">Discapacidad Motora</th>
+            <th style="width:10%">Discapacidad Intelectual</th>
+            <th style="width:10%">Comunidad Lingüística</th>
+            <th style="width:10%">Cultivo</th>
+            <th style="width:10%">Vende Excedente Cosecha</th>
+            <th style="width:10%">Tipo Productor</th>
+            <th style="width:10%">Organización</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-person let-i="rowIndex">
+        <tr>
+            <td>{{getRowNumber(i) }}</td>
+            <td>{{ person.DPI}}</td>
             <td>{{ person.primerNombre }}</td>
             <td>{{ person.segundoNombre }}</td>
             <td>{{ person.tercerNombre }}</td>
             <td>{{ person.primerApellido }}</td>
             <td>{{ person.segundoApellido }}</td>
-            <td>{{ person.nit }}</td>
+            <td>{{ person.NIT }}</td>
             <td>{{ person.telefono }}</td>
             <td>{{ person.fechaNacimiento }}</td>
             <td>{{ person.etnia }}</td>
@@ -134,7 +57,7 @@
             <td>{{ person.direccion.codigoDepartamento }}</td>
             <td>{{ person.direccion.nombreDepartamento }}</td>
             <td>{{ person.direccion.codigoMunicipio }}</td>
-            <td>{{ person.nombreMunicipio }}</td>
+            <td>{{ person.direccion.nombreMunicipio }}</td>
             <td>{{ person.direccion.comunidad }}</td>
             <td>{{ person.discapacidad.discapacidadAuditiva }}</td>
             <td>{{ person.discapacidad.discapacidadMotora }}</td>
@@ -144,11 +67,10 @@
             <td>{{ person.vendeExecedenteCosecha }}</td>
             <td>{{ person.tipoProductor }}</td>
             <td>{{ person.organizacion }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
+        </tr>
+    </ng-template>
+</p-table>
 
-    </p-panel>
-  </div>
-
+<div *ngIf="isLoadMoreVisible()">
+  <button (click)="loadMore()">Cargar más</button>
 </div>

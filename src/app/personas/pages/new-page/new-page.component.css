@@ -1,0 +1,9 @@
+@media (max-width: 768px) {
+  .form-container {
+    width: 100%;
+  }
+
+  .table-container {
+    width: 100%;
+  }
+}
