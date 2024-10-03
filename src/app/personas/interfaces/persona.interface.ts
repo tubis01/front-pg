@@ -1,14 +1,14 @@
 export interface HateoasResponse <T>{
-  _embedded: Embedded;
+  _embedded?: Embedded<T>;
   _links:    Links;
   page:      Page;
 }
 
-export interface Embedded {
-  datosDetallePersonaList: DatosDetallePersonaList[];
+export interface Embedded<T> {
+  datosDetallePersonaList: Persona[];
 }
 
-export interface DatosDetallePersonaList {
+export interface Persona {
   DPI:                    string;
   NIT:                    string;
   primerNombre:           string;
@@ -76,6 +76,7 @@ export interface Links {
   self:  First;
   next:  First;
   last:  First;
+  prev: First;
 }
 
 export interface First {

@@ -7,3 +7,9 @@
     width: 100%;
   }
 }
+
+.form-scroll-container {
+  max-height: 500px; /* Cambia esto según necesites */
+  overflow-y: auto;  /* Permite el scroll vertical */
+  padding-right: 15px; /* Añade un pequeño espacio a la derecha para el scroll */
+}

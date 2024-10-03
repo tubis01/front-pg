@@ -11,6 +11,7 @@ import { MaterialModule } from '../material/material.module';
 import { PersonTableComponent } from './components/person-table/person-table.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { YesNoPipe } from './pipes/booleanYesNo.pipe';
 
 
 @NgModule({
@@ -20,7 +21,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NewPageComponent,
     PeronaPageComponent,
     LayoutPageComponent,
-    PersonTableComponent
+    PersonTableComponent,
+
+    // pipe
+    YesNoPipe
   ],
   imports: [
     CommonModule,

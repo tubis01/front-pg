@@ -1,10 +1,12 @@
 
 <p-table
 [value]="persons"
-[paginator]="true"
-[rows]="20"
+[rows]="pageSize"
 [totalRecords]="totalElements"
 (onPageChange)="onPageChange($event)"
+[scrollable]="true"
+scrollHeight="590px"
+[frozenWidth]= '"600px"'
 >
     <ng-template pTemplate="header">
         <tr>
@@ -35,12 +37,13 @@
             <th style="width:10%">Vende Excedente Cosecha</th>
             <th style="width:10%">Tipo Productor</th>
             <th style="width:10%">Organización</th>
+            <th style="width:10%">Acciones</th>
         </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-person let-i="rowIndex">
         <tr>
-            <td>{{getRowNumber(i) }}</td>
+            <td>{{ currentPage * pageSize + i + 1 }}</td>
             <td>{{ person.DPI}}</td>
             <td>{{ person.primerNombre }}</td>
             <td>{{ person.segundoNombre }}</td>
@@ -59,18 +62,31 @@
             <td>{{ person.direccion.codigoMunicipio }}</td>
             <td>{{ person.direccion.nombreMunicipio }}</td>
             <td>{{ person.direccion.comunidad }}</td>
-            <td>{{ person.discapacidad.discapacidadAuditiva }}</td>
-            <td>{{ person.discapacidad.discapacidadMotora }}</td>
-            <td>{{ person.discapacidad.dicapacidadIntelectual }}</td>
+            <td>{{ person.discapacidad.discapacidadAuditiva | YesOrNo }}</td>
+            <td>{{ person.discapacidad.discapacidadMotora | YesOrNo }}</td>
+            <td>{{ person.discapacidad.dicapacidadIntelectual | YesOrNo }}</td>
             <td>{{ person.comunidadLinguistica }}</td>
             <td>{{ person.cultivo }}</td>
-            <td>{{ person.vendeExecedenteCosecha }}</td>
+            <td>{{ person.vendeExecedenteCosecha | YesOrNo}}</td>
             <td>{{ person.tipoProductor }}</td>
             <td>{{ person.organizacion }}</td>
+
+            <td class="fixed-column">
+              <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info"
+                (click)="onEdit(person)">
+              </button>
+              <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                (click)="confirmDelete(person)">
+              </button>
+            </td>
         </tr>
     </ng-template>
+    <button></button>
 </p-table>
-
-<div *ngIf="isLoadMoreVisible()">
-  <button (click)="loadMore()">Cargar más</button>
+<div class="pagination-container">
+  <button pButton class="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>
+  <button pButton class="pi pi-angle-left" (click)="loadPrevPage()" *ngIf="links?.prev"></button>
+  <button pButton class="pi pi-angle-right" (click)="loadNextPage()" *ngIf="links?.next"></button>
+  <button pButton class="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
 </div>
+

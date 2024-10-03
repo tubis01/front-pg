@@ -83,18 +83,23 @@ export class NewPageComponent implements OnInit {
       return;
     }
 
-    console.log('Formulario válido', this.personaForm.value);
 
 
-    this.personaService.registrarPersona(this.personaForm.value).subscribe(
-      (response) => {
+    this.personaService.registrarPersona(this.personaForm.value).subscribe({
+      next: (response) => {
         console.log('Persona registrada con éxito', response);
-        this.router.navigate(['/person']);
+        this.router.navigate(['/person/list']);
       },
-      (error) => {
+      error: (error) => {
         console.error('Error al registrar persona', error);
+      },
+      complete: () => {
+        console.log('Registro completado');
+        // Limpiar el formulario después de un registro exitoso
+        this.personaForm.reset();
       }
-    );
+    });
+
   }
 
 }

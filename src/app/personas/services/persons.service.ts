@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { DatosDetallePersonaList, HateoasResponse } from '../interfaces/persona.interface';
+import { Persona, HateoasResponse } from '../interfaces/persona.interface';
 
 @Injectable({providedIn: 'root'})
 
@@ -13,12 +13,29 @@ export class PersonService {
   constructor( private http: HttpClient) { }
 
 
-  public getPersons(page: number = 0, size: number = 20): Observable<HateoasResponse<DatosDetallePersonaList>> {
-    return this.http.get<HateoasResponse<DatosDetallePersonaList>>(`${this.apiUrl}/listar?page=${page}&size=${size}`);
+  // public getPersons(page: number = 0, size: number = 20): Observable<HateoasResponse<DatosDetallePersonaList>> {
+  //   return this.http.get<HateoasResponse<DatosDetallePersonaList>>(`${this.apiUrl}/listar?page=${page}&size=${size}`);
+  // }
+
+  public getPersons(page: number = 0, size: number = 20): Observable<HateoasResponse<Persona>> {
+    return this.http.get<HateoasResponse<Persona>>(`${this.apiUrl}/listar?page=${page}&size=${size}`);
   }
 
-    registrarPersona(persona: DatosDetallePersonaList ): Observable<DatosDetallePersonaList> {
-    return this.http.post<DatosDetallePersonaList>(`${this.apiUrl}/registrar`, persona);
+  public getPersonsByUrl(url: string): Observable<HateoasResponse<Persona>> {
+    return this.http.get<HateoasResponse<Persona>>(url);
+  }
+
+  public updatePerson(dpi: string, persona: Persona): Observable<Persona> {
+    return this.http.put<Persona>(`${this.apiUrl}/modificar/${dpi}`, persona);
+  }
+
+
+  public deletePerson(dpi: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/eliminar/${dpi}`);
+  }
+
+    registrarPersona(persona: Persona ): Observable<Persona> {
+    return this.http.post<Persona>(`${this.apiUrl}/registrar`, persona);
   }
 
 }
