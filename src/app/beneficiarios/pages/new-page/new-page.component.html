@@ -1,1 +1,31 @@
-<p>new-page works!</p>
+<h1>{{ beneficiarioToEdit ? 'Actualizar Beneficiario' : 'Registrar Beneficiario' }}</h1>
+
+<p-divider></p-divider>
+
+<div class="grid justify-content-center align-items-center">
+  <div class="col-12 sm:col-8 md:col-6">
+    <p-card class="grid">
+    <div class="grid">
+      <!-- Formulario para agregar o editar un beneficiario -->
+      <form [formGroup]="beneficiarioForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
+        <!-- Campo DPI -->
+        <div class="col-12">
+          <label for="dpi">DPI</label>
+          <input pInputText id="dpi" formControlName="dpi" placeholder="DPI" required />
+        </div>
+
+        <!-- Campo Proyecto -->
+        <div class="col-12">
+          <label for="proyecto">ID del Proyecto</label>
+          <input pInputText id="proyecto" formControlName="proyecto" placeholder="ID del Proyecto" required />
+        </div>
+
+        <!-- Botón para guardar -->
+        <div class="col-12">
+          <button pButton type="submit" label="{{ beneficiarioToEdit ? 'Actualizar' : 'Guardar' }}"></button>
+        </div>
+      </form>
+    </div>
+    </p-card>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Ajusta el margen según necesites */
+  gap: 10px; /* Espacio entre los botones */
+}
+
+.fixed-column {
+  position: sticky;
+  right: 0;
+  background: white;
+  z-index: 1;
+}

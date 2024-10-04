@@ -6,6 +6,9 @@ import { ListPageComponent } from './pages/list-page/list-page.component';
 import { NewPageComponent } from './pages/new-page/new-page.component';
 import { UsuarioPageComponent } from './pages/usuario-page/usuario-page.component';
 import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
+import { UserTableComponent } from './components/user-table/user-table.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material/material.module';
 
 
 @NgModule({
@@ -13,11 +16,14 @@ import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
     LayoutPageComponent,
     ListPageComponent,
     NewPageComponent,
-    UsuarioPageComponent
+    UsuarioPageComponent,
+    UserTableComponent
   ],
   imports: [
     CommonModule,
-    UsuariosRoutingModule
+    UsuariosRoutingModule,
+    ReactiveFormsModule,
+    MaterialModule
   ]
 })
 export class UsuariosModule { }

@@ -4,6 +4,7 @@
 
 <div class="grid justify-content-center align-items-center">
   <div class="col-12 sm:col-8 md:col-6">
+    <p-card class="grid">
       <div class="grid">
         <!-- Formulario para agregar o editar un responsable -->
         <form [formGroup]="responsableForm" (ngSubmit)="onSubmit()" class="p-fluid grid ">
@@ -49,5 +50,6 @@
           </div>
         </form>
       </div>
+    </p-card>
   </div>
 </div>

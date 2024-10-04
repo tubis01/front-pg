@@ -26,6 +26,7 @@ import { PanelModule } from 'primeng/panel';
 import { ChartModule } from 'primeng/chart';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 
@@ -56,7 +57,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     ToolbarModule,
     ChartModule,
     CalendarModule,
-    CheckboxModule
+    CheckboxModule,
+    MultiSelectModule
 
   ]
 })

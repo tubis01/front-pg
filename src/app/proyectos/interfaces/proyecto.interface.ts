@@ -1,34 +1,33 @@
+
 export interface HateoasResponse <T>{
-  _embedded: Embedded;
-  _links:    HateoasResponseLinks;
+  _embedded: Embedded <T>;
+  _links:    Links;
   page:      Page;
 }
 
-export interface Embedded {
-  datosDetalleProyectoList: DatosDetalleProyectoList[];
+export interface Embedded <T> {
+  datosDetalleProyectoList: Proyecto[];
 }
 
-export interface DatosDetalleProyectoList {
+export interface Proyecto {
   id:          number;
   nombre:      string;
   descripcion: string;
   fechaInicio: Date;
   estado:      string;
   fechaFin:    Date;
-  _links:      DatosDetalleProyectoListLinks;
 }
 
-export interface DatosDetalleProyectoListLinks {
-  self:     Self;
-  eliminar: Self;
+export interface Links {
+  first: First;
+  self:  First;
+  next:  First;
+  last:  First;
+  prev:  First;
 }
 
-export interface Self {
+export interface First {
   href: string;
-}
-
-export interface HateoasResponseLinks {
-  self: Self;
 }
 
 export interface Page {

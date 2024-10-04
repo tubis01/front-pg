@@ -1,0 +1,41 @@
+<p-table
+  [value]="usuarios"
+  [rows]="pageSize"
+  [totalRecords]="totalElements"
+  [lazy]="true"
+  (onPage)="onPageChange($event)"
+  [scrollable]="true"
+  scrollHeight="670px"
+  [frozenWidth]="'600px'"
+  class="usuario-table"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width:5%">#</th>
+      <th style="width:20%">Email</th>
+      <th style="width:20%">Usuario</th>
+      <th style="width:20%">Rol</th>
+      <th style="width:15%">Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-usuario let-i="rowIndex">
+    <tr>
+      <td>{{ currentPage * pageSize + i + 1 }}</td>
+      <td>{{ usuario.email }}</td>
+      <td>{{ usuario.usuario }}</td>
+      <td>{{ usuario.rol }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(usuario)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(usuario)"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<div class="pagination-container">
+  <button pButton class="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>
+  <button pButton class="pi pi-angle-left" (click)="loadPrevPage()" *ngIf="links?.prev"></button>
+  <button pButton class="pi pi-angle-right" (click)="loadNextPage()" *ngIf="links?.next"></button>
+  <button pButton class="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
+</div>

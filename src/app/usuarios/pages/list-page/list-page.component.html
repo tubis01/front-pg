@@ -1,1 +1,13 @@
-<p>list-page works!</p>
+<div class="grid">
+  <div class="table-container col-12 md:col-8">
+    <app-user-table (editUsuario)="onEditUsuario($event)"></app-user-table>
+  </div>
+  <div class="form-container col-12 md:col-4">
+    <p-card>
+      <app-new-usuario
+        [usuarioToEdit]="selectedUsuario"
+        (formSubmit)="onFormSubmit()"
+      ></app-new-usuario>
+    </p-card>
+  </div>
+</div>
