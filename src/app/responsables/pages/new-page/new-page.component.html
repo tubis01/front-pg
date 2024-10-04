@@ -1,69 +1,53 @@
-<h1></h1>
+<h1>{{ responsableToEdit ? 'Actualizar Responsable' : 'Registrar Responsable' }}</h1>
 
 <p-divider></p-divider>
 
 <div class="grid justify-content-center align-items-center">
   <div class="col-12 sm:col-8 md:col-6">
-    <p-card>
       <div class="grid">
-        <!-- Formulario para agregar o editar un héroe -->
-        <form [formGroup]="responsableForm" (ngSubmit)="onSubmit()" class="p-fluid grid fromgrid">
-          <div class="col-12">
-            <label for="nombre"> Nombre</label>
-            <input
-              pInputText
-              id="nombre"
-              required
-              placeholder="Nombre"
-              formControlName="nombre"
-            />
+        <!-- Formulario para agregar o editar un responsable -->
+        <form [formGroup]="responsableForm" (ngSubmit)="onSubmit()" class="p-fluid grid ">
+          <!-- Campo Nombre -->
+          <div class="col-12 ">
+            <label for="nombre">Nombre</label>
+            <input pInputText id="nombre" formControlName="nombre" placeholder="Nombre" required />
           </div>
 
-          <!-- Alter ego -->
-          <div class="col-12">
+          <!-- Campo Apellido -->
+          <div class="col-12  ">
             <label for="apellido">Apellido</label>
-            <input id="apellido" pInputText formControlName="apellido" placeholder="Apellido" />
+            <input pInputText id="apellido" formControlName="apellido" placeholder="Apellido" required />
           </div>
 
-          <!-- Primera aparición -->
-          <div class="col-12">
-            <label for="genero">genero</label>
-            <input id="genero" pInputText formControlName="genero" placeholder="Genero" />
+          <!-- Campo Género -->
+          <div class="col-12 ">
+            <label for="genero">Género</label>
+            <p-dropdown id="genero" formControlName="genero" [options]="generos" placeholder="Selecciona un género" required></p-dropdown>
           </div>
 
-          <!-- Personajes -->
-          <div class="col-12">
-            <label for="correo">E-mail</label>
-            <input id="correo" pInputText formControlName="correo" placeholder="E-mail" />
-          </div>
-          <div class="col-12">
-            <label for="telefono">telefono</label>
-            <input id="telefono" pInputText formControlName="telefono" placeholder="telefono" />
-          </div>
-          <div class="col-12">
-            <label for="fechaNacimiento">fechaNacimiento</label>
-            <input id="fechaNacimiento" pInputText formControlName="fechaNacimiento" placeholder="fechaNacimiento" />
+          <!-- Campo Correo -->
+          <div class="col-12 ">
+            <label for="correo">Correo Electrónico</label>
+            <input pInputText id="correo" formControlName="correo" placeholder="Correo Electrónico" required type="email" />
           </div>
 
+          <!-- Campo Teléfono -->
+          <div class="col-12 ">
+            <label for="telefono">Teléfono</label>
+            <input pInputText id="telefono" formControlName="telefono" placeholder="Teléfono" required />
+          </div>
+
+          <!-- Campo Fecha de Nacimiento -->
+          <div class="col-12 ">
+            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            <p-calendar id="fechaNacimiento" formControlName="fechaNacimiento" [showIcon]="true" placeholder="Fecha de Nacimiento" required></p-calendar>
+          </div>
 
           <!-- Botón para guardar -->
           <div class="col-12">
-            <button
-            (click)="onSubmit()"
-            pButton type="submit" label="Guardar"></button>
+            <button pButton type="submit" label="{{ responsableToEdit ? 'Actualizar' : 'Guardar' }}"></button>
           </div>
         </form>
       </div>
-    </p-card>
-  </div>
-
-  <!-- Vista informativa-->
-  <div class="col-12 sm:col-8 md:col-4">
-    <p-card>
-      <div class="grid">
-        <div class="col-12 info-section">
-        </div>
-      </div>
-    </p-card>
   </div>
 </div>

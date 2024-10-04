@@ -25,8 +25,8 @@ export class PersonService {
     return this.http.get<HateoasResponse<Persona>>(url);
   }
 
-  public updatePerson(dpi: string, persona: Persona): Observable<Persona> {
-    return this.http.put<Persona>(`${this.apiUrl}/modificar/${dpi}`, persona);
+  public updatePerson( persona: Persona): Observable<Persona> {
+    return this.http.put<Persona>(`${this.apiUrl}/modificar`, persona);
   }
 
 

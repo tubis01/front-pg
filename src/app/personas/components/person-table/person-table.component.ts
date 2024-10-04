@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PersonService } from '../../services/persons.service';
 import { Persona, HateoasResponse, Links } from '../../interfaces/persona.interface';
 import { TableLazyLoadEvent } from 'primeng/table';
@@ -13,6 +13,10 @@ import { ConfirmationService } from 'primeng/api';
 export class PersonTableComponent implements OnInit {
   public persons: Persona[] = [];
   public selectedPerson: Persona | null = null;
+
+  @Output()
+  editPerson = new EventEmitter<Persona>();
+
   public links: Links | undefined;
   public currentPage: number = 0; // Página actual
   public totalPages: number = 1; // Total de páginas
@@ -50,8 +54,9 @@ export class PersonTableComponent implements OnInit {
 
 
   // Método para seleccionar una persona para editar
-  onEdit(person: Persona): void {
-    this.selectedPerson = { ...person }; // Copia de la persona para editar
+  onEdit(person: Persona): void {// Copia de la persona para editar
+    console.log('Editing person', person);
+    this.editPerson.emit(person); // Emitir evento para editar en el componente padre
   }
 
   // Método para cancelar la edición
@@ -62,7 +67,7 @@ export class PersonTableComponent implements OnInit {
   // Método para enviar los cambios al backend
   onSubmitUpdate(): void {
     if (this.selectedPerson) {
-      this.personService.updatePerson(this.selectedPerson.DPI, this.selectedPerson).subscribe(
+      this.personService.updatePerson( this.selectedPerson).subscribe(
         (response) => {
           this.loadPersons(this.currentPage); // Recargar la lista de personas
           this.selectedPerson = null; // Limpiar la selección

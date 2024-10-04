@@ -1,4 +1,4 @@
-<h1>Registro de persona</h1>
+<h1>{{ isEditMode ? 'Actualizar Persona' : 'Registro de Persona' }}</h1>
 
 <p-divider></p-divider>
 
@@ -8,55 +8,55 @@
       <div class="grid form-scroll-container" >
         <form [formGroup]="personaForm" (ngSubmit)="onSubmit()" class="p-fluid grid fromgrid">
           <!-- Campo DPI -->
-          <div class="col-12">
-            <label for="dpi">DPI</label>
-            <input pInputText id="dpi" required formControlName="dpi" placeholder="DPI" />
+          <div class="col-12 form-field">
+            <label for="DPI">DPI</label>
+            <input pInputText id="DPI" required formControlName="DPI" placeholder="DPI" />
           </div>
 
           <!-- Campo NIT -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="NIT">NIT</label>
             <input pInputText id="NIT" required formControlName="NIT" placeholder="NIT" />
           </div>
 
           <!-- Primer Nombre -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="primerNombre">Primer Nombre</label>
             <input pInputText id="primerNombre" required formControlName="primerNombre" placeholder="Primer Nombre" />
           </div>
 
           <!-- Segundo Nombre -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="segundoNombre">Segundo Nombre</label>
             <input pInputText id="segundoNombre" required formControlName="segundoNombre" placeholder="Segundo Nombre" />
           </div>
 
           <!-- Tercer Nombre -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="tercerNombre">Tercer Nombre</label>
             <input pInputText id="tercerNombre" formControlName="tercerNombre" placeholder="Tercer Nombre" />
           </div>
 
           <!-- Primer Apellido -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="primerApellido">Primer Apellido</label>
             <input pInputText id="primerApellido" required formControlName="primerApellido" placeholder="Primer Apellido" />
           </div>
 
           <!-- Segundo Apellido -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="segundoApellido">Segundo Apellido</label>
             <input pInputText id="segundoApellido" required formControlName="segundoApellido" placeholder="Segundo Apellido" />
           </div>
 
           <!-- Teléfono -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="telefono">Teléfono</label>
             <input pInputText id="telefono" required formControlName="telefono" placeholder="Teléfono" />
           </div>
 
           <!-- Fecha de Nacimiento -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="fechaNacimiento">Fecha de Nacimiento</label>
             <p-calendar id="fechaNacimiento" required formControlName="fechaNacimiento" [showIcon]="true" placeholder="Fecha de Nacimiento"></p-calendar>
 
@@ -64,24 +64,24 @@
           </div>
 
           <!-- Etnia -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="etnia">Etnia</label>
             <input pInputText id="etnia" required formControlName="etnia" placeholder="Etnia" />
           </div>
 
           <!-- Género -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="genero">Género</label>
             <p-dropdown id="genero" formControlName="genero" [options]="generos" placeholder="Selecciona un género"></p-dropdown>
           </div>
 
           <!-- Dirección -->
           <div formGroupName="direccion">
-            <div class="col-12">
+            <div class="col-12 form-field">
               <label for="codigo">Código Dirección</label>
               <input pInputText id="codigo" required formControlName="codigo" placeholder="Código Dirección" />
             </div>
-            <div class="col-12">
+            <div class="col-12 form-field">
               <label for="comunidad">Comunidad</label>
               <input pInputText id="comunidad" required formControlName="comunidad" placeholder="Comunidad" />
             </div>
@@ -89,84 +89,84 @@
 
           <!-- dicapacidad -->
 <!-- Discapacidad -->
-<div formGroupName="discapacidad" class="col-12">
-  <label>Discapacidad</label>
-  <div class="field-checkbox">
-    <p-checkbox id="auditiva" formControlName="discapacidadAuditiva" binary="true" label="Auditiva"></p-checkbox>
-  </div>
-  <div class="field-checkbox">
-    <p-checkbox id="intelectual" formControlName="dicapacidadIntelectual" binary="true" label="Intelectual"></p-checkbox>
-  </div>
-  <div class="field-checkbox">
-    <p-checkbox id="motora" formControlName="discapacidadMotora" binary="true" label="Motora"></p-checkbox>
-  </div>
-</div>
+        <div formGroupName="discapacidad" class="col-12 form-field">
+          <label>Discapacidad</label>
+          <div class="field-checkbox">
+            <p-checkbox id="auditiva" formControlName="discapacidadAuditiva" binary="true" label="Auditiva"></p-checkbox>
+          </div>
+          <div class="field-checkbox">
+            <p-checkbox id="intelectual" formControlName="dicapacidadIntelectual" binary="true" label="Intelectual"></p-checkbox>
+          </div>
+          <div class="field-checkbox">
+            <p-checkbox id="motora" formControlName="discapacidadMotora" binary="true" label="Motora"></p-checkbox>
+          </div>
+        </div>
 
 
           <!-- Estado Civil -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="estadoCivil">Estado Civil</label>
             <input pInputText id="estadoCivil" required formControlName="estadoCivil" placeholder="Estado Civil" />
           </div>
 
           <!-- Número de Hijos -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="numeroHijos">Número de Hijos</label>
             <input type="number" pInputText id="numeroHijos" required formControlName="numeroHijos" />
           </div>
 
           <!-- Comunidad Lingüística -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="comunidadLinguistica">Comunidad Lingüística</label>
             <input pInputText id="comunidadLinguistica" required formControlName="comunidadLinguistica" placeholder="Comunidad Lingüística" />
           </div>
 
           <!-- Área -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="area">Área</label>
             <input pInputText id="area" required formControlName="area" placeholder="Área" />
           </div>
 
           <!-- Cultivo -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="cultivo">Cultivo</label>
             <input pInputText id="cultivo" required formControlName="cultivo" placeholder="Cultivo" />
           </div>
 
           <!-- Vende Excedente Cosecha -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="vendeExecedenteCosecha">¿Vende Excedente de Cosecha?</label>
             <p-checkbox id="vendeExecedenteCosecha" formControlName="vendeExecedenteCosecha" binary="true"></p-checkbox>
           </div>
 
           <!-- Tipo de Productor -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="tipoProductor">Tipo de Productor</label>
             <p-dropdown id="tipoProductor" formControlName="tipoProductor" [options]="tiposProductor" placeholder="Selecciona un tipo de productor"></p-dropdown>
           </div>
 
           <!-- Responsable -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="responsable">Responsable</label>
             <input pInputText id="responsable" required formControlName="responsable" placeholder="Responsable" />
           </div>
 
           <!-- Organización -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="organizacion">Organización</label>
             <p-dropdown id="organizacion" formControlName="organizacion" [options]="organizaciones" placeholder="Selecciona una organización"></p-dropdown>
             <!-- <input pInputText id="organizacion" required formControlName="organizacion" placeholder="Organización" /> -->
           </div>
 
           <!-- Tipo de Vivienda -->
-          <div class="col-12">
+          <div class="col-12 form-field">
             <label for="tipoVivienda">Tipo de Vivienda</label>
             <input pInputText id="tipoVivienda" required formControlName="tipoVivienda" placeholder="Tipo de Vivienda" />
           </div>
 
           <!-- Botón para guardar -->
-          <div class="col-12">
-            <button pButton type="submit" label="Guardar"></button>
+          <div class="col-12 ">
+            <button pButton type="submit" label="{{ isEditMode ? 'Actualizar Persona' : 'Guardar' }}"></button>
           </div>
         </form>
       </div>

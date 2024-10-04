@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Route, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { PersonService } from '../../services/persons.service';
 import { DIRECCIONES } from '../../interfaces/direcciones';
-import moment from 'moment';
+import { Persona } from '../../interfaces/persona.interface';
 
 
 @Component({
@@ -11,10 +11,17 @@ import moment from 'moment';
   templateUrl: './new-page.component.html',
   styleUrl: `./new-page.component.css`
 })
-export class NewPageComponent implements OnInit {
+export class NewPageComponent implements OnInit, OnChanges {
+
+  @Input() personToEdit: Persona | null = null;
+  @Output() formSubmit = new EventEmitter<void>();
 
   public personaForm: FormGroup;
   public direcciones = DIRECCIONES;
+
+
+
+  public isEditMode  = false;
 
   public generos = [
     { label: 'Masculino', value: 'Masculino' },
@@ -39,10 +46,11 @@ export class NewPageComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private personaService: PersonService
+    private personaService: PersonService,
+    private cd: ChangeDetectorRef
   ) {
     this.personaForm = this.fb.group({
-      dpi: ['', Validators.required],
+      DPI: ['', Validators.required],
       NIT: ['', Validators.required],
       primerNombre: ['', Validators.required],
       segundoNombre: [''],
@@ -75,7 +83,25 @@ export class NewPageComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Esta parte se ejecuta una sola vez cuando el componente es inicializado
+    if (this.personToEdit) {
+      this.isEditMode = true;
+      this.personaForm.patchValue(this.personToEdit);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Detectar cambios en la propiedad de entrada personToEdit
+    if (changes['personToEdit'] && changes['personToEdit'].currentValue) {
+      this.isEditMode = true;
+      this.personaForm.patchValue(this.personToEdit!);
+      this.cd.detectChanges();
+    } else {
+      this.isEditMode = false;
+      this.personaForm.reset();
+    }
+  }
 
   onSubmit(): void {
     if (this.personaForm.invalid) {
@@ -83,23 +109,25 @@ export class NewPageComponent implements OnInit {
       return;
     }
 
-
-
-    this.personaService.registrarPersona(this.personaForm.value).subscribe({
-      next: (response) => {
-        console.log('Persona registrada con éxito', response);
-        this.router.navigate(['/person/list']);
-      },
-      error: (error) => {
-        console.error('Error al registrar persona', error);
-      },
-      complete: () => {
-        console.log('Registro completado');
-        // Limpiar el formulario después de un registro exitoso
-        this.personaForm.reset();
-      }
-    });
-
+if (this.isEditMode) {
+      // Actualizar persona
+      this.personaService.updatePerson( this.personaForm.value).subscribe({
+        next: () => {
+          console.log('Persona actualizada con éxito');
+          this.formSubmit.emit();
+          this.isEditMode = false;
+          this.personaForm.reset();
+        }
+      });
+    } else {
+      // Registrar nueva persona
+      this.personaService.registrarPersona(this.personaForm.value).subscribe({
+        next: () => {
+          console.log('Persona registrada con éxito');
+          this.formSubmit.emit();
+          this.personaForm.reset();
+        }
+      });
+    }
   }
-
 }

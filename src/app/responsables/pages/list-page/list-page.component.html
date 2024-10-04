@@ -1,3 +1,14 @@
-<h1>listado de responsables</h1>
-<p-divider></p-divider>
-<responsable-table></responsable-table>
+<div class="grid">
+  <div class="table-container col-12 md:col-8">
+    <responsable-table (editResponsable)="onEditResponsable($event)"></responsable-table>
+  </div>
+  <div class="form-container col-12 md:col-4">
+    <p-card>
+
+      <app-new-responsable
+      [responsableToEdit]="selectedResponsable"
+      (formSubmit)="onFormSubmit()"
+      ></app-new-responsable>
+    </p-card>
+    </div>
+</div>

@@ -1,14 +1,14 @@
 export interface HateoasResponse <T> {
-  _embedded: Embedded;
-  _links:    HateoasResponseLinks;
+  _embedded: Embedded<T>;
+  _links:    Links;
   page:      Page;
 }
 
-export interface Embedded {
-  datosDetalleResponsableList: DatosDetalleResponsableList[];
+export interface Embedded <T> {
+  datosDetalleResponsableList: Responsable[];
 }
 
-export interface DatosDetalleResponsableList {
+export interface Responsable {
   id:              number;
   nombre:          string;
   apellido:        string;
@@ -16,21 +16,21 @@ export interface DatosDetalleResponsableList {
   fechaNacimiento: Date;
   correo:          string;
   telefono:        string;
-  _links:          DatosDetalleResponsableListLinks;
 }
 
-export interface DatosDetalleResponsableListLinks {
-  self:     Self;
-  eliminar: Self;
+
+export interface Links {
+  first: First;
+  self:  First;
+  next:  First;
+  last:  First;
+  prev:  First;
 }
 
-export interface Self {
+export interface First {
   href: string;
 }
 
-export interface HateoasResponseLinks {
-  self: Self;
-}
 
 export interface Page {
   size:          number;

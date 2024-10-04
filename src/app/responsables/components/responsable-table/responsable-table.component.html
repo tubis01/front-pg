@@ -1,32 +1,47 @@
 <p-table
-[value]="responsables"
-[paginator]="true"
-[rows]="5"
-[totalRecords]="totalElements"
+  [value]="responsables"
+  [rows]="pageSize"
+  [totalRecords]="totalElements"
+  [lazy]="true"
+  (onPage)="onPageChange($event)"
+  [scrollable]="true"
+  scrollHeight="670px"
+  [frozenWidth]= '"600px"'
+  class="responsable-table"
 >
-    <ng-template pTemplate="header">
-        <tr>
-            <th style="width:5%">#</th>
-            <th style="width:10%">nombre</th>
-            <th style="width:10%">apellido</th>
-            <th style="width:10%">genero</th>
-            <th style="width:10%">correo</th>
-            <th style="width:10%">telefono</th>
-            <th style="width:10%">fechaNacimiento</th>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width:5%">#</th>
+      <th style="width:10%">Nombre</th>
+      <th style="width:10%">Apellido</th>
+      <th style="width:10%">Género</th>
+      <th style="width:10%">Correo</th>
+      <th style="width:10%">Teléfono</th>
+      <th style="width:15%">Fecha Nacimiento</th>
+      <th style="width:10%">Acciones</th>
+    </tr>
+  </ng-template>
 
-        </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-responsable let-i="rowIndex">
-        <tr>
-            <td>{{i + 1 }}</td>
-            <td>{{ responsable.nombre}}</td>
-            <td>{{ responsable.apellido}}</td>
-            <td>{{ responsable.genero }}</td>
-            <td>{{ responsable.correo }}</td>
-            <td>{{ responsable.telefono }}</td>
-            <td>{{ responsable.fechaNacimiento }}</td>
-        </tr>
-    </ng-template>
+  <ng-template pTemplate="body" let-responsable let-i="rowIndex">
+    <tr>
+      <td>{{ currentPage * pageSize + i + 1 }}</td>
+      <td>{{ responsable.nombre }}</td>
+      <td>{{ responsable.apellido }}</td>
+      <td>{{ responsable.genero }}</td>
+      <td>{{ responsable.correo }}</td>
+      <td>{{ responsable.telefono }}</td>
+      <td>{{ responsable.fechaNacimiento | date: 'shortDate' }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(responsable)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(responsable)"></button>
+      </td>
+    </tr>
+  </ng-template>
 </p-table>
 
+<div class="pagination-container">
+  <button pButton class="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>
+  <button pButton class="pi pi-angle-left" (click)="loadPrevPage()" *ngIf="links?.prev"></button>
+  <button pButton class="pi pi-angle-right" (click)="loadNextPage()" *ngIf="links?.next"></button>
+  <button pButton class="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
+</div>

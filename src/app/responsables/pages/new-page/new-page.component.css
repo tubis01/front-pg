@@ -1,0 +1,39 @@
+.form-container {
+  width: 100%;
+  max-width: 450px;
+  min-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+input, .p-dropdown, .p-calendar, button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  max-width: 200px;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #6c63ff; /* Cambia según el estilo que desees */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #574b90; /* Efecto hover para el botón */
+}

@@ -76,7 +76,7 @@ export interface Links {
   self:  First;
   next:  First;
   last:  First;
-  prev: First;
+  prev:  First;
 }
 
 export interface First {

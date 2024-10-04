@@ -6,6 +6,11 @@
   .table-container {
     width: 100%;
   }
+
+  .p-dropdown, .p-inputtext, .p-checkbox {
+    width: 100%; /* Ajusta este valor según tus necesidades */
+  }
+
 }
 
 .form-scroll-container {
@@ -13,3 +18,5 @@
   overflow-y: auto;  /* Permite el scroll vertical */
   padding-right: 15px; /* Añade un pequeño espacio a la derecha para el scroll */
 }
+
+
