@@ -1,3 +1,6 @@
-.p-dropdown {
-  width: 100%; /* Mantén un ancho consistente para todos los dropdowns */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Ajusta el margen según necesites */
+  gap: 10px; /* Espacio entre los botones */
 }

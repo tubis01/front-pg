@@ -32,6 +32,7 @@ export class ProjectTableComponent implements OnInit{
         if (response._embedded?.datosDetalleProyectoList) {
           this.proyectos = response._embedded.datosDetalleProyectoList;
         }
+        this.links = response._links; // Asignar los enlaces HATEOAS aquí
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
@@ -46,6 +47,7 @@ export class ProjectTableComponent implements OnInit{
 
     this.proyectoService.listarProyectos(page, this.pageSize).subscribe(observer);
   }
+
 
   // Método para editar un proyecto
   onEdit(proyecto: Proyecto): void {
@@ -69,44 +71,48 @@ export class ProjectTableComponent implements OnInit{
     this.loadProyectos(event.page);
   }
 
-  loadFirstPage(): void {
-    if (this.links?.first) {
-      this.loadFromLink(this.links.first.href);
-    }
+  // Método para cambiar de página usando los enlaces HATEOAS
+loadFirstPage(): void {
+  if (this.links?.first) {
+    this.loadFromLink(this.links.first.href);
   }
+}
 
-  loadLastPage(): void {
-    if (this.links?.last) {
-      this.loadFromLink(this.links.last.href);
-    }
+loadLastPage(): void {
+  if (this.links?.last) {
+    this.loadFromLink(this.links.last.href);
   }
+}
 
-  loadNextPage(): void {
-    if (this.links?.next) {
-      this.loadFromLink(this.links.next.href);
-    }
+loadNextPage(): void {
+  if (this.links?.next) {
+    this.loadFromLink(this.links.next.href);
   }
+}
 
-  loadPrevPage(): void {
-    if (this.links?.prev) {
-      this.loadFromLink(this.links.prev.href);
-    }
+loadPrevPage(): void {
+  if (this.links?.prev) {
+    this.loadFromLink(this.links.prev.href);
   }
+}
 
-  // Cargar proyectos desde un enlace HATEOAS
-  loadFromLink(url: string): void {
-    this.proyectoService.getProyectoByUrl(url).subscribe(
-      (response:HateoasResponse <Proyecto>) => {
-        if (response._embedded?.datosDetalleProyectoList) {
-          this.proyectos = response._embedded.datosDetalleProyectoList;
-        }
-        this.currentPage = response.page.number;
-        this.totalPages = response.page.totalPages;
-        this.totalElements = response.page.totalElements;
-      },
-      (error) => console.error('Error fetching projects from link', error)
-    );
-  }
+loadFromLink(url: string): void {
+  this.proyectoService.getProyectoByUrl(url).subscribe(
+    (response: HateoasResponse<Proyecto>) => {
+        this.proyectos = response._embedded.datosDetalleProyectoList;
+      this.links = response._links; // Asignar los enlaces HATEOAS
+      this.currentPage = response.page.number;
+      this.totalPages = response.page.totalPages;
+      this.totalElements = response.page.totalElements;
+      console.log('Loaded projects from link', response);
+
+    },
+    (error) => {
+      console.error('Error fetching projects from link', error);
+    }
+  );
+}
+
 
   confirmDelete(proyecto: Proyecto): void {
     if (confirm(`¿Estás seguro de que deseas eliminar el proyecto ${proyecto.nombre}?`)) {

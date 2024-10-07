@@ -5,18 +5,17 @@
   [lazy]="true"
   (onPage)="onPageChange($event)"
   [scrollable]="true"
-  scrollHeight="600px"
-  scrollWidth="800px"
-  class="project-table"
+  scrollHeight="670px"
+  class="proyecto-table"
 >
   <ng-template pTemplate="header">
     <tr>
       <th style="width:5%">#</th>
-      <th style="width:15%">Nombre</th>
+      <th style="width:10%">Nombre</th>
       <th style="width:20%">Descripción</th>
-      <th style="width:15%">Fecha Inicio</th>
-      <th style="width:15%">Fecha Fin</th>
-      <th style="width:15%">Acciones</th>
+      <th style="width:10%">Fecha Inicio</th>
+      <th style="width:10%">Fecha Fin</th>
+      <th style="width:10%">Acciones</th>
     </tr>
   </ng-template>
 
@@ -35,9 +34,10 @@
   </ng-template>
 </p-table>
 
+<!-- Sección de Paginación -->
 <div class="pagination-container">
-  <button pButton class="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>
-  <button pButton class="pi pi-angle-left" (click)="loadPrevPage()" *ngIf="links?.prev"></button>
-  <button pButton class="pi pi-angle-right" (click)="loadNextPage()" *ngIf="links?.next"></button>
-  <button pButton class="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
+  <button pButton icon="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>
+  <button pButton icon="pi pi-angle-left" (click)="loadPrevPage()" *ngIf="links?.prev"></button>
+  <button pButton icon="pi pi-angle-right" (click)="loadNextPage()" *ngIf="links?.next"></button>
+  <button pButton icon="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
 </div>

@@ -5,7 +5,6 @@ export interface AuthResponse {
   userName: string;
 }
 
-
 export interface LoginRequest {
   usuario: string;
   contrasena: string;

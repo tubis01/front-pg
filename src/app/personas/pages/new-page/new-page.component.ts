@@ -66,7 +66,7 @@ export class NewPageComponent implements OnInit, OnChanges {
       comunidadLinguistica: ['', Validators.required],
       area: ['', Validators.required],
       cultivo: ['', Validators.required],
-      vendeExecedenteCosecha: [false, Validators.required],
+      vendeExcedenteCosecha: [false, Validators.required],
       tipoProductor: ['', Validators.required],
       responsable: ['', Validators.required],
       organizacion: ['', Validators.required],
@@ -77,7 +77,7 @@ export class NewPageComponent implements OnInit, OnChanges {
       }),
       discapacidad: this.fb.group({
         discapacidadAuditiva: [false], // Checkbox para discapacidad auditiva
-        dicapacidadIntelectual: [false], // Checkbox para discapacidad intelectual
+        discapacidadIntelectual: [false], // Checkbox para discapacidad intelectual
         discapacidadMotora: [false] // Checkbox para discapacidad motora
       })
     });
