@@ -5,6 +5,8 @@ import { PersonService } from '../../services/persons.service';
 import { DIRECCIONES } from '../../interfaces/direcciones';
 import { Persona } from '../../interfaces/persona.interface';
 import { MessageService } from 'primeng/api';
+import { HateoasResponse, Responsable } from '../../../responsables/interfaces/responsable.interface';
+import { ResponsableService } from '../../../responsables/services/responsable.service';
 
 
 @Component({
@@ -22,6 +24,13 @@ export class NewPageComponent implements OnInit, OnChanges {
 
   public direcciones = DIRECCIONES;
   public filteredUbicaciones: any[] = [];
+
+  public responsables : Responsable[] = [];
+  public filteredResponsables: Responsable[] = [];
+
+  public nextPageUrl: string | null = null;
+
+  public selectedResponsable: string = '';
 
   public generos = [
     { label: 'Masculino', value: 'Masculino' },
@@ -48,6 +57,7 @@ export class NewPageComponent implements OnInit, OnChanges {
     private personaService: PersonService,
     private cd: ChangeDetectorRef,
     private messageService: MessageService,
+    private responsableService : ResponsableService
   ) {
     this.personaForm = this.fb.group({
       DPI: ['',
@@ -92,12 +102,82 @@ export class NewPageComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+
+
+    this.cargarResponsables();
     // Esta parte se ejecuta una sola vez cuando el componente es inicializado
     if (this.personToEdit) {
       this.isEditMode = true;
       this.personaForm.patchValue(this.personToEdit);
     }
+}
+
+cargarResponsables(): void {
+  this.responsableService.getResponsable().subscribe(response => {
+    // Concatenar los responsables previamente cargados con los nuevos
+    this.responsables = [
+      ...this.responsables, // Mantiene los ya cargados
+      ...response._embedded.datosDetalleResponsableList.map(responsable => {
+        return {
+          ...responsable,
+          nombreCompleto: `${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
+        };
+      })
+    ];
+    // Si hay un siguiente enlace para cargar más, lo guardamos
+    this.nextPageUrl = response._links.next?.href || null;
+  });
+}
+
+// Método para cargar más responsables
+cargarMasResponsables(): void {
+  if (this.nextPageUrl) {
+    this.responsableService.getResponsableByUrl(this.nextPageUrl).subscribe((data: HateoasResponse<Responsable>) => {
+      // Concatenar los nuevos responsables a los que ya tienes
+      this.responsables.push(...data._embedded.datosDetalleResponsableList.map(responsable => {
+        return {
+          ...responsable,
+          nombreCompleto: `${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
+        };
+      }));
+      // Actualizar el nextPageUrl para la siguiente carga, si existe
+      this.nextPageUrl = data._links.next?.href || null;
+    });
   }
+}
+
+// Método para buscar responsables en la lista completa de responsables cargados
+buscarResponsables(event: any) {
+  const query = event.query.toLowerCase();
+  this.filteredResponsables = this.responsables.filter(responsable =>
+    responsable.nombre.toLowerCase().includes(query)
+  );
+}
+
+
+    public selectedResponsableNombre: string = ''; // Variable para mostrar el nombre en el autocompletado
+
+    onResponsableSeleccionado(event: any) {
+      const selectedResponsable = event.id ? event : event.value; // Manejar ambos casos (en caso de que `event.value` esté presente)
+      if (selectedResponsable && selectedResponsable.id) {
+        // Establecer el ID del responsable en el formulario
+        this.personaForm.get('responsable')?.setValue(selectedResponsable.id);
+
+        // Mostrar el nombre completo en la interfaz
+        this.selectedResponsableNombre = `${selectedResponsable.nombre} ${selectedResponsable.apellido}`;
+        console.log('Responsable seleccionado con ID:', selectedResponsable.id); // Depuración
+      } else {
+        console.error('El responsable seleccionado no tiene un ID válido.');
+      }
+    }
+
+
+
+
+
+
+
+
 
   ngOnChanges(changes: SimpleChanges): void {
     // Detectar cambios en la propiedad de entrada personToEdit
@@ -128,14 +208,6 @@ export class NewPageComponent implements OnInit, OnChanges {
       console.error('No se asignó código, evento no contiene "codigo".');
     }
   }
-
-
-
-
-  seleccionarUbicacion(event: any) {
-    this.personaForm.get('direccion')?.get('codigo')?.setValue(event.codigo);
-  }
-
 
 
   isFieldInvalid(field: string): boolean | undefined {
@@ -172,7 +244,7 @@ export class NewPageComponent implements OnInit, OnChanges {
       });
       return;
     }
-    
+
 
     if (this.isEditMode) {
       this.personaService.updatePerson(this.personaForm.value).subscribe({

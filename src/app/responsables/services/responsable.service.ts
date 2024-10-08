@@ -14,6 +14,10 @@ export class ResponsableService {
     return this.http.get<HateoasResponse<Responsable>>(`${this.apiUrl}/listar?page=${page}&size=${size}`);
   }
 
+  public getAallResponsable(): Observable<HateoasResponse<Responsable>> {
+    return this.http.get<HateoasResponse<Responsable>>(`${this.apiUrl}/listar`);
+  }
+
   public getResponsableByUrl(url: string): Observable<HateoasResponse<Responsable>> {
     return this.http.get<HateoasResponse<Responsable>>(url);
   }

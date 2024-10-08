@@ -31,6 +31,7 @@ export class ResponsableTableComponent implements OnInit {
 
    // Método para cargar los responsables según la página actual
    loadResponsable(page: number): void {
+
      this.responsableService.getResponsable(page, this.pageSize)
        .subscribe(
          (response: HateoasResponse<Responsable>) => {
@@ -40,6 +41,8 @@ export class ResponsableTableComponent implements OnInit {
            this.currentPage = response.page.number;
            this.totalPages = response.page.totalPages;
            this.totalElements = response.page.totalElements;
+           console.log('Responsables', this.responsables);
+
          },
          error => {
            console.error('Error fetching responsables', error);

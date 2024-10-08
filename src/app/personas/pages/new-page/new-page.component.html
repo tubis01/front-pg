@@ -193,6 +193,7 @@
             <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalidD('direccion', 'codigo') }">
               <label for="ubicacion">Departamento y Municipio</label>
               <p-autoComplete
+              class="form-field col-12"
               id="ubicacion"
               [suggestions]="filteredUbicaciones"
               (completeMethod)="buscarUbicaciones($event)"
@@ -342,17 +343,43 @@
             <label for="responsable">Responsable</label>
             <input pInputText id="responsable" required formControlName="responsable" placeholder="Responsable" />
           </div> -->
-          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('responsable') }">
-            <label for="responsable">Responsable</label>
-            <input pInputText
-                  id="responsable"
-                  required
-                  formControlName="responsable"
-                  placeholder="Responsable" />
-            <div class="error-message" *ngIf="isFieldInvalid('responsable')">
-              El campo Responsable es obligatorio.
-            </div>
-          </div>
+    <!-- Campo para seleccionar el responsable -->
+    <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('responsable') }">
+      <label for="responsable">Responsable</label>
+
+      <!-- Autocomplete para seleccionar el responsable -->
+      <p-autoComplete
+        [inputStyle]="{'width': '100%'}"
+        [suggestions]="filteredResponsables"
+        (completeMethod)="buscarResponsables($event)"
+        (onSelect)="onResponsableSeleccionado($event)"
+        [forceSelection]="true"
+        [dropdown]="true"
+        field="nombreCompleto"
+        [minLength]="1"
+        [value]="selectedResponsableNombre"
+        placeholder="Selecciona un responsable">
+      </p-autoComplete>
+
+      <!-- Campo oculto para enviar solo el ID del responsable -->
+      <input type="hidden" formControlName="responsable">
+
+      <div class="error-message" *ngIf="isFieldInvalid('responsable')">
+        <ng-container *ngIf="personaForm.get('responsable')?.errors?.['required']">
+          El campo Responsable es obligatorio.
+        </ng-container>
+      </div>
+    </div>
+
+    <div *ngIf="nextPageUrl">
+      <button pButton label="Cargar más responsables" (click)="cargarMasResponsables()"></button>
+    </div>
+
+
+
+
+
+
 
           <!-- Organización -->
           <!-- <div class="col-12 form-field">
