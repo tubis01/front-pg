@@ -32,6 +32,7 @@ export class NewPageComponent implements OnInit, OnChanges {
   public nextPageUrl: string | null = null;
 
   public selectedResponsable: string = '';
+  public originalResponsableId: number | null = null;
 
   public generos = [
     { label: 'Masculino', value: 'Masculino' },
@@ -176,7 +177,21 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
     // Detectar cambios en la propiedad de entrada personToEdit
     if (changes['personToEdit'] && changes['personToEdit'].currentValue) {
       this.isEditMode = true;
-      this.personaForm.patchValue(this.personToEdit!);
+
+// Parchar los valores excepto el responsable
+    const { idResponsable, responsable, ...restOfPerson } = changes['personToEdit'].currentValue;
+    
+    this.personaForm.patchValue(restOfPerson);
+
+    // Asigna el idResponsable al campo responsable del formulario
+    this.personaForm.get('responsable')?.setValue(idResponsable);
+
+    // Almacenar el id original para comparar si se modifica
+    this.originalResponsableId = idResponsable;
+
+    // Establecer el nombre del responsable visible
+    this.selectedResponsableNombre = responsable || '';
+      // this.originalResponsableId = responsable ? responsable : null;
       this.cd.detectChanges();
     } else {
       this.isEditMode = false;
@@ -238,8 +253,12 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
       return;
     }
 
+    const formData = { ...this.personaForm.value };
 
     if (this.isEditMode) {
+
+      const currentResposbleId = this.personaForm.get('responsable')?.value;
+
       this.personaService.updatePerson(this.personaForm.value).subscribe({
           next: () => {
               this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona actualizada con éxito' });
@@ -266,6 +285,7 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
           console.log('Persona registrada con éxito');
           this.formSubmit.emit();
           this.personaForm.reset();
+
         },
         error: (error) => {
           if (error.status === 409) {

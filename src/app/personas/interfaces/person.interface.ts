@@ -1,3 +1,4 @@
+import { Responsable } from "../../responsables/interfaces/responsable.interface";
 
 export interface Person {
   DPI:                    string;
@@ -20,7 +21,7 @@ export interface Person {
   cultivo:                string;
   vendeExecedenteCosecha: boolean;
   tipoProductor:          TipoProductor;
-  responsable:            string;
+  responsable:            Responsable;
   organizacion:           string;
   tipoVivienda:           string;
   _links:                 Links;

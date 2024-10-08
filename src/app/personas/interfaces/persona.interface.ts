@@ -29,6 +29,7 @@ export interface Persona {
   cultivo:                string;
   vendeExecedenteCosecha: boolean;
   tipoProductor:          TipoProductor;
+  idResponsable:           number;
   responsable:            string;
   organizacion:           string;
   tipoVivienda:           TipoVivienda;
