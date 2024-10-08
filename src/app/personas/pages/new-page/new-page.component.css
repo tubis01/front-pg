@@ -1,22 +1,27 @@
-@media (max-width: 768px) {
-  /* .form-container {
-    width: 100%;
-  } */
-
-  /* .table-container {
-    width: 100%;
-  } */
-
-  /* .p-dropdown, .p-inputtext, .p-checkbox {
-    width: 100%; /* Ajusta este valor según tus necesidades */
-  }
-
-
-
 .form-scroll-container {
-  max-height: 500px; /* Cambia esto según necesites */
-  overflow-y: auto;  /* Permite el scroll vertical */
-  padding-right: 15px; /* Añade un pequeño espacio a la derecha para el scroll */
+  min-width: 400px;
+  box-sizing: border-box;
+  max-height: 570px; /* Ajusta esto según necesites */
+  overflow-y: auto; /* Permite el scroll vertical */
+  padding: 25px; /* Añade espacio interno para evitar que los elementos queden pegados al scrollbar */
+  width: 100%;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+  .form-scroll-container {
+    min-width: auto; /* Eliminar el ancho mínimo */
+    padding: 15px; /* Reducir el padding un poco para pantallas pequeñas */
+  }
 }
 
 
+.has-error input{
+  border: 1px solid red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 5px;
+}

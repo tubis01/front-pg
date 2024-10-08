@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PersonService } from '../../services/persons.service';
 import { Persona, HateoasResponse, Links } from '../../interfaces/persona.interface';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 
 @Component({
@@ -24,7 +24,8 @@ export class PersonTableComponent implements OnInit {
   public pageSize: number = 20; // Tamaño de página
 
   constructor(private personService: PersonService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -54,10 +55,24 @@ export class PersonTableComponent implements OnInit {
 
 
   // Método para seleccionar una persona para editar
-  onEdit(person: Persona): void {// Copia de la persona para editar
-    console.log('Editing person', person);
-    this.editPerson.emit(person); // Emitir evento para editar en el componente padre
-  }
+// Método para confirmar antes de editar y asignar la persona seleccionada al formulario
+onEdit(person: Persona): void {
+  this.confirmationService.confirm({
+    message: `¿Estás seguro de que deseas editar a ${person.primerNombre} ${person.primerApellido}?`,
+    header: 'Confirmar Edición',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+
+      this.selectedPerson = person; // Asignar la persona seleccionada al formulario si se confirma
+      this.editPerson.emit(person); // Emitir evento para llenar el formulario
+    },
+    reject: () => {
+      this.messageService.add({ severity: 'info', summary: 'Edición Cancelada', detail: 'La operación ha sido cancelada.' });
+    }
+  });
+}
+
+
 
   // Método para cancelar la edición
   onCancelEdit(): void {
@@ -82,16 +97,36 @@ export class PersonTableComponent implements OnInit {
 
     // Método para mostrar el mensaje de confirmación antes de eliminar
     confirmDelete(person: Persona): void {
-      if (confirm(`¿Estás seguro de que deseas eliminar a ${person.primerNombre} ${person.primerApellido}?`)) {
-        this.personService.deletePerson(person.DPI).subscribe(
-          () => {
-            this.loadPersons(this.currentPage); // Recargar la lista de personas
-          },
-          (error) => {
-            console.error('Error al eliminar la persona', error);
-          }
-        );
-      }
+      this.confirmationService.confirm({
+        message: `¿Estás seguro de que deseas eliminar a ${person.primerNombre} ${person.primerApellido}?`,
+        header: 'Confirmar Eliminación',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.personService.deletePerson(person.DPI).subscribe(
+            () => {
+              this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Persona eliminada con éxito' });
+              this.loadPersons(this.currentPage); // Recargar la lista de personas
+            },
+            (error) => {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
+            }
+          );
+        },
+        reject: () => {
+          this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Eliminación cancelada' });
+        }
+      });
+    }
+
+    confirmUpdate(): void {
+      this.confirmationService.confirm({
+        message: '¿Estás seguro de que deseas actualizar esta persona?',
+        header: 'Confirmar Actualización',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.onSubmitUpdate(); // Llama a la función de actualización
+        }
+      });
     }
 
   // Método para manejar el cambio de página en la tabla

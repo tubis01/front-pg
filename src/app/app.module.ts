@@ -9,6 +9,7 @@ import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthInterceptor } from './auth/services/auth.interceptor';
+import { MaterialModule } from './material/material.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +21,11 @@ import { AuthInterceptor } from './auth/services/auth.interceptor';
     HttpClientModule,
 
     SharedModule,
+    MaterialModule
+
+
+
+
 
   ],
   providers: [

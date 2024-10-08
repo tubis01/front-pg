@@ -5,7 +5,7 @@ import { Persona } from '../../interfaces/persona.interface';
 @Component({
   selector: 'app-list-page',
   templateUrl: './list-page.component.html',
-  styles: ``
+  styleUrl: `./list-page.component.css`
 })
 export class ListPageComponent {
 

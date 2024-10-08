@@ -1,12 +1,15 @@
-<div class="grid">
+<div class="layout-container">
   <!-- Columna de la tabla de personas -->
-  <div class="table-container col-12 md:col-8 lg:col-9">
-    <person-table (editPerson)="onEditPerson($event)"></person-table>
+  <div class="table-container">
+    <p-card>
+
+      <person-table (editPerson)="onEditPerson($event)"></person-table>
+    </p-card>
   </div>
 
   <!-- Columna del formulario de registro/actualización -->
-  <div class=" col-12 md:col-4 lg:col-3">
-      <person-new-page
+  <div class="form-container">
+    <person-new-page
       [personToEdit]="selectedPerson"
       (formSubmit)="onFormSubmit()">
     </person-new-page>

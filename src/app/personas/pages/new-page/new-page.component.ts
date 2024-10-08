@@ -4,6 +4,7 @@ import {  Router } from '@angular/router';
 import { PersonService } from '../../services/persons.service';
 import { DIRECCIONES } from '../../interfaces/direcciones';
 import { Persona } from '../../interfaces/persona.interface';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -17,11 +18,10 @@ export class NewPageComponent implements OnInit, OnChanges {
   @Output() formSubmit = new EventEmitter<void>();
 
   public personaForm: FormGroup;
-  public direcciones = DIRECCIONES;
-
-
-
   public isEditMode  = false;
+
+  public direcciones = DIRECCIONES;
+  public filteredUbicaciones: any[] = [];
 
   public generos = [
     { label: 'Masculino', value: 'Masculino' },
@@ -45,13 +45,21 @@ export class NewPageComponent implements OnInit, OnChanges {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
     private personaService: PersonService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private messageService: MessageService,
   ) {
     this.personaForm = this.fb.group({
-      DPI: ['', Validators.required],
-      NIT: ['', Validators.required],
+      DPI: ['',
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]{13}$'), // Solo permite 13 dígitos numéricos
+          Validators.minLength(13),
+          Validators.maxLength(13)
+
+        ]
+      ], // Validar que sea un número de 13 dígitos
+      NIT: [''],
       primerNombre: ['', Validators.required],
       segundoNombre: [''],
       tercerNombre: [''],
@@ -66,7 +74,7 @@ export class NewPageComponent implements OnInit, OnChanges {
       comunidadLinguistica: ['', Validators.required],
       area: ['', Validators.required],
       cultivo: ['', Validators.required],
-      vendeExcedenteCosecha: [false, Validators.required],
+      vendeExcedenteCosecha: [false],
       tipoProductor: ['', Validators.required],
       responsable: ['', Validators.required],
       organizacion: ['', Validators.required],
@@ -103,31 +111,107 @@ export class NewPageComponent implements OnInit, OnChanges {
     }
   }
 
+  buscarUbicaciones(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredUbicaciones = this.direcciones.filter(ubicacion =>
+      ubicacion.nombreCompleto.toLowerCase().includes(query)
+    );
+  }
+
+  // Asigna el código de la ubicación seleccionada al formulario
+  onUbicacionSeleccionada(event: any) {
+    // Acceder al valor dentro de "event.value"
+    if (event && event.value && event.value.codigo) {
+      this.personaForm.get('direccion.codigo')?.setValue(event.value.codigo);
+      console.log('Código asignado:', event.value.codigo); // Verifica que se asigna correctamente el código como string
+    } else {
+      console.error('No se asignó código, evento no contiene "codigo".');
+    }
+  }
+
+
+
+
+  seleccionarUbicacion(event: any) {
+    this.personaForm.get('direccion')?.get('codigo')?.setValue(event.codigo);
+  }
+
+
+
+  isFieldInvalid(field: string): boolean | undefined {
+    return (
+      this.personaForm.get(field)?.invalid &&
+      (this.personaForm.get(field)?.dirty || this.personaForm.get(field)?.touched)
+    );
+  }
+
+
+  isFieldInvalidD(groupName: string, fieldName: string): boolean | undefined {
+    const field = this.personaForm.get(`${groupName}.${fieldName}`);
+    return field?.invalid && (field?.dirty || field?.touched);
+  }
+
+
   onSubmit(): void {
+
+    console.log('Formulario a enviar:', this.personaForm.value);
     if (this.personaForm.invalid) {
-      console.log('Formulario no válido');
+      // Mostrar errores específicos
+      Object.keys(this.personaForm.controls).forEach(field => {
+        const control = this.personaForm.get(field);
+        if (control && control.invalid) {
+          // Mostrar los errores de cada campo
+          if (control.errors?.['required']) {
+            this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio` });
+          } else if (control.errors?.['pattern']) {
+            this.messageService.add({ severity: 'warn', summary: 'Formato Incorrecto', detail: `El campo ${field} tiene un formato incorrecto` });
+          } else if (control.errors?.['minlength'] || control.errors?.['maxlength']) {
+            this.messageService.add({ severity: 'warn', summary: 'Longitud Incorrecta', detail: `El campo ${field} no tiene la longitud correcta` });
+          }
+        }
+      });
       return;
     }
+    
 
-if (this.isEditMode) {
-      // Actualizar persona
-      this.personaService.updatePerson( this.personaForm.value).subscribe({
-        next: () => {
-          console.log('Persona actualizada con éxito');
-          this.formSubmit.emit();
-          this.isEditMode = false;
-          this.personaForm.reset();
-        }
+    if (this.isEditMode) {
+      this.personaService.updatePerson(this.personaForm.value).subscribe({
+          next: () => {
+              this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona actualizada con éxito' });
+              this.formSubmit.emit();
+              this.isEditMode = false;
+              this.personaForm.reset();
+          },
+          error: (error) => {
+              // Aquí manejas los errores específicos que devuelve el backend
+              if (error.status === 404) {
+                  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El DPI de la persona no existe para actualizar' });
+              } else if (error.status === 409) {
+                  this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
+              } else {
+                  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar la persona' });
+              }
+          }
       });
     } else {
       // Registrar nueva persona
       this.personaService.registrarPersona(this.personaForm.value).subscribe({
         next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona registrada con éxito' });
           console.log('Persona registrada con éxito');
           this.formSubmit.emit();
           this.personaForm.reset();
+        },
+        error: (error) => {
+          if (error.status === 409) {
+            this.messageService.add({ severity: 'error', summary: 'Error de Duplicación', detail: error.error });
+          } else {
+            console.error('Error registering person', error);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar la persona' });
+          }
         }
       });
     }
   }
+
 }

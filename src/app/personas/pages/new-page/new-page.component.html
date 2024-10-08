@@ -8,75 +8,177 @@
       <div class="grid form-scroll-container" >
         <form [formGroup]="personaForm" (ngSubmit)="onSubmit()" class="p-fluid grid fromgrid">
           <!-- Campo DPI -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="DPI">DPI</label>
             <input pInputText id="DPI" required formControlName="DPI" placeholder="DPI" />
+          </div> -->
+          <!-- DPI -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('DPI') }">
+            <label for="DPI">DPI</label>
+            <input pInputText
+                  id="DPI"
+                  formControlName="DPI"
+                  placeholder="DPI" />
+            <div class="error-message" *ngIf="isFieldInvalid('DPI')">
+              <ng-container *ngIf="personaForm.get('DPI')?.errors?.['required']">
+                El campo DPI es obligatorio.
+              </ng-container>
+              <ng-container *ngIf="personaForm.get('DPI')?.errors?.['pattern']">
+                El DPI debe contener exactamente 13 dígitos numéricos.
+              </ng-container>
+              <ng-container *ngIf="personaForm.get('DPI')?.errors?.['minlength'] || personaForm.get('DPI')?.errors?.['maxlength']">
+                El DPI debe tener 13 caracteres.
+              </ng-container>
+            </div>
           </div>
+
+
+
 
           <!-- Campo NIT -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="NIT">NIT</label>
             <input pInputText id="NIT" required formControlName="NIT" placeholder="NIT" />
-          </div>
+          </div> -->
+<!-- NIT -->
+      <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('NIT') }">
+        <label for="NIT">NIT</label>
+        <input pInputText id="NIT" formControlName="NIT" placeholder="NIT" />
+        <div class="error-message" *ngIf="isFieldInvalid('NIT')">
+          El campo NIT no tiene un formato válido.
+        </div>
+      </div>
+
+
 
           <!-- Primer Nombre -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="primerNombre">Primer Nombre</label>
             <input pInputText id="primerNombre" required formControlName="primerNombre" placeholder="Primer Nombre" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('primerNombre') }">
+            <label for="primerNombre">Primer Nombre</label>
+            <input pInputText id="primerNombre" required formControlName="primerNombre" placeholder="Primer Nombre" />
+            <div class="error-message" *ngIf="isFieldInvalid('primerNombre')">
+              El campo Primer Nombre es obligatorio.
+            </div>
           </div>
 
           <!-- Segundo Nombre -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="segundoNombre">Segundo Nombre</label>
             <input pInputText id="segundoNombre" required formControlName="segundoNombre" placeholder="Segundo Nombre" />
+          </div> -->
+
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('segundoNombre') }">
+            <label for="segundoNombre">Segundo Nombre</label>
+            <input pInputText id="segundoNombre" formControlName="segundoNombre" placeholder="Segundo Nombre" />
+            <div class="error-message" *ngIf="isFieldInvalid('segundoNombre')">
+              El campo Segundo Nombre no es válido.
+            </div>
           </div>
 
           <!-- Tercer Nombre -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="tercerNombre">Tercer Nombre</label>
             <input pInputText id="tercerNombre" formControlName="tercerNombre" placeholder="Tercer Nombre" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('tercerNombre') }">
+            <label for="tercerNombre">Tercer Nombre</label>
+            <input pInputText id="tercerNombre" formControlName="tercerNombre" placeholder="Tercer Nombre" />
+            <div class="error-message" *ngIf="isFieldInvalid('tercerNombre')">
+              El campo Tercer Nombre no es válido.
+            </div>
           </div>
+
 
           <!-- Primer Apellido -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="primerApellido">Primer Apellido</label>
             <input pInputText id="primerApellido" required formControlName="primerApellido" placeholder="Primer Apellido" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('primerApellido') }">
+            <label for="primerApellido">Primer Apellido</label>
+            <input pInputText id="primerApellido" required formControlName="primerApellido" placeholder="Primer Apellido" />
+            <div class="error-message" *ngIf="isFieldInvalid('primerApellido')">
+              El campo Primer Apellido es obligatorio.
+            </div>
           </div>
+
+
 
           <!-- Segundo Apellido -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="segundoApellido">Segundo Apellido</label>
             <input pInputText id="segundoApellido" required formControlName="segundoApellido" placeholder="Segundo Apellido" />
+          </div> -->
+<!-- Segundo Apellido -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('segundoApellido') }">
+            <label for="segundoApellido">Segundo Apellido</label>
+            <input pInputText id="segundoApellido" formControlName="segundoApellido" placeholder="Segundo Apellido" />
+            <div class="error-message" *ngIf="isFieldInvalid('segundoApellido')">
+              El campo Segundo Apellido no tiene un formato válido.
+            </div>
           </div>
 
+
           <!-- Teléfono -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="telefono">Teléfono</label>
             <input pInputText id="telefono" required formControlName="telefono" placeholder="Teléfono" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('telefono') }">
+            <label for="telefono">Teléfono</label>
+            <input pInputText id="telefono" required formControlName="telefono" placeholder="Teléfono" />
+            <div class="error-message" *ngIf="isFieldInvalid('telefono')">
+              El campo Teléfono es obligatorio.
+            </div>
           </div>
 
           <!-- Fecha de Nacimiento -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="fechaNacimiento">Fecha de Nacimiento</label>
             <p-calendar id="fechaNacimiento" required formControlName="fechaNacimiento" [showIcon]="true" placeholder="Fecha de Nacimiento"></p-calendar>
-
-            <!-- <input type="date" pInputText id="fechaNacimiento" required formControlName="fechaNacimiento" /> -->
+            <input type="date" pInputText id="fechaNacimiento" required formControlName="fechaNacimiento" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaNacimiento') }">
+            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            <p-calendar id="fechaNacimiento" required formControlName="fechaNacimiento" [showIcon]="true" placeholder="Fecha de Nacimiento"></p-calendar>
+            <div class="error-message" *ngIf="isFieldInvalid('fechaNacimiento')">
+              El campo Fecha de Nacimiento es obligatorio.
+            </div>
           </div>
+
 
           <!-- Etnia -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="etnia">Etnia</label>
             <input pInputText id="etnia" required formControlName="etnia" placeholder="Etnia" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('etnia') }">
+            <label for="etnia">Etnia</label>
+            <input pInputText id="etnia" required formControlName="etnia" placeholder="Etnia" />
+            <div class="error-message" *ngIf="isFieldInvalid('etnia')">
+              El campo Etnia es obligatorio.
+            </div>
           </div>
 
+
           <!-- Género -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="genero">Género</label>
-            <p-dropdown id="genero" formControlName="genero" [options]="generos" placeholder="Selecciona un género"></p-dropdown>
+            <p-dropdown id="genero" formControlName="genero" [options]="generos" class="w-full" placeholder="Selecciona un género" ></p-dropdown>
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('genero') }">
+            <label for="genero">Género</label>
+            <p-dropdown id="genero" formControlName="genero" [options]="generos" class="w-full" placeholder="Selecciona un género"></p-dropdown>
+            <div class="error-message" *ngIf="isFieldInvalid('genero')">
+              El campo Género es obligatorio.
+            </div>
           </div>
 
           <!-- Dirección -->
-          <div formGroupName="direccion">
+          <!-- <div formGroupName="direccion">
             <div class="col-12 form-field">
               <label for="codigo">Código Dirección</label>
               <input pInputText id="codigo" required formControlName="codigo" placeholder="Código Dirección" />
@@ -85,7 +187,45 @@
               <label for="comunidad">Comunidad</label>
               <input pInputText id="comunidad" required formControlName="comunidad" placeholder="Comunidad" />
             </div>
+          </div> -->
+          <div formGroupName="direccion">
+            <!-- Autocompletado para seleccionar la ubicación -->
+            <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalidD('direccion', 'codigo') }">
+              <label for="ubicacion">Departamento y Municipio</label>
+              <p-autoComplete
+              id="ubicacion"
+              [suggestions]="filteredUbicaciones"
+              (completeMethod)="buscarUbicaciones($event)"
+              (onSelect)="onUbicacionSeleccionada($event)"
+              field="nombreCompleto"
+              [forceSelection]="true"
+              placeholder="Selecciona el departamento y municipio"
+              [minLength]="1"
+              [dropdown]="true">
+            </p-autoComplete>
+
+
+              <div class="error-message" *ngIf="isFieldInvalidD('direccion', 'codigo')">
+                <ng-container *ngIf="personaForm.get('direccion.codigo')?.errors?.['required']">
+                  El campo Dirección es obligatorio.
+                </ng-container>
+              </div>
+            </div>
+
+            <!-- Campo manual para comunidad -->
+            <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalidD('direccion', 'comunidad') }">
+              <label for="comunidad">Comunidad</label>
+              <input pInputText id="comunidad" formControlName="comunidad" placeholder="Comunidad" />
+              <div class="error-message" *ngIf="isFieldInvalidD('direccion', 'comunidad')">
+                <ng-container *ngIf="personaForm.get('direccion.comunidad')?.errors?.['required']">
+                  El campo Comunidad es obligatorio.
+                </ng-container>
+              </div>
+            </div>
           </div>
+
+
+
 
           <!-- dicapacidad -->
 <!-- Discapacidad -->
@@ -104,33 +244,71 @@
 
 
           <!-- Estado Civil -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="estadoCivil">Estado Civil</label>
             <input pInputText id="estadoCivil" required formControlName="estadoCivil" placeholder="Estado Civil" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('estadoCivil') }">
+            <label for="estadoCivil">Estado Civil</label>
+            <input pInputText id="estadoCivil" required formControlName="estadoCivil" placeholder="Estado Civil" />
+            <div class="error-message" *ngIf="isFieldInvalid('estadoCivil')">
+              El campo Estado Civil es obligatorio.
+            </div>
           </div>
 
           <!-- Número de Hijos -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="numeroHijos">Número de Hijos</label>
             <input type="number" pInputText id="numeroHijos" required formControlName="numeroHijos" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('numeroHijos') }">
+            <label for="numeroHijos">Número de Hijos</label>
+            <input type="number" pInputText id="numeroHijos" required formControlName="numeroHijos" />
+            <div class="error-message" *ngIf="isFieldInvalid('numeroHijos')">
+              El campo Número de Hijos es obligatorio.
+            </div>
           </div>
 
+
           <!-- Comunidad Lingüística -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="comunidadLinguistica">Comunidad Lingüística</label>
             <input pInputText id="comunidadLinguistica" required formControlName="comunidadLinguistica" placeholder="Comunidad Lingüística" />
+          </div> -->
+
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('comunidadLinguistica') }">
+            <label for="comunidadLinguistica">Comunidad Lingüística</label>
+            <input pInputText id="comunidadLinguistica" required formControlName="comunidadLinguistica" placeholder="Comunidad Lingüística" />
+            <div class="error-message" *ngIf="isFieldInvalid('comunidadLinguistica')">
+              El campo Comunidad Lingüística es obligatorio.
+            </div>
           </div>
 
           <!-- Área -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="area">Área</label>
             <input pInputText id="area" required formControlName="area" placeholder="Área" />
+          </div> -->
+
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('area') }">
+            <label for="area">Área</label>
+            <input pInputText id="area" required formControlName="area" placeholder="Área" />
+            <div class="error-message" *ngIf="isFieldInvalid('area')">
+              El campo Área es obligatorio.
+            </div>
           </div>
 
           <!-- Cultivo -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="cultivo">Cultivo</label>
             <input pInputText id="cultivo" required formControlName="cultivo" placeholder="Cultivo" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('cultivo') }">
+            <label for="cultivo">Cultivo</label>
+            <input pInputText id="cultivo" required formControlName="cultivo" placeholder="Cultivo" />
+            <div class="error-message" *ngIf="isFieldInvalid('cultivo')">
+              El campo Cultivo es obligatorio.
+            </div>
           </div>
 
           <!-- Vende Excedente Cosecha -->
@@ -140,28 +318,77 @@
           </div>
 
           <!-- Tipo de Productor -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="tipoProductor">Tipo de Productor</label>
-            <p-dropdown id="tipoProductor" formControlName="tipoProductor" [options]="tiposProductor" placeholder="Selecciona un tipo de productor"></p-dropdown>
+            <p-dropdown id="tipoProductor" formControlName="tipoProductor" [options]="tiposProductor"   class="w-full" placeholder="Selecciona un tipo de productor"></p-dropdown>
+          </div> -->
+
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('tipoProductor') }">
+            <label for="tipoProductor">Tipo de Productor</label>
+            <p-dropdown
+              id="tipoProductor"
+              formControlName="tipoProductor"
+              [options]="tiposProductor"
+              class="w-full"
+              placeholder="Selecciona un tipo de productor">
+            </p-dropdown>
+            <div class="error-message" *ngIf="isFieldInvalid('tipoProductor')">
+              El campo Tipo de Productor es obligatorio.
+            </div>
           </div>
 
           <!-- Responsable -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="responsable">Responsable</label>
             <input pInputText id="responsable" required formControlName="responsable" placeholder="Responsable" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('responsable') }">
+            <label for="responsable">Responsable</label>
+            <input pInputText
+                  id="responsable"
+                  required
+                  formControlName="responsable"
+                  placeholder="Responsable" />
+            <div class="error-message" *ngIf="isFieldInvalid('responsable')">
+              El campo Responsable es obligatorio.
+            </div>
           </div>
 
           <!-- Organización -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="organizacion">Organización</label>
-            <p-dropdown id="organizacion" formControlName="organizacion" [options]="organizaciones" placeholder="Selecciona una organización"></p-dropdown>
-            <!-- <input pInputText id="organizacion" required formControlName="organizacion" placeholder="Organización" /> -->
+            <p-dropdown id="organizacion" formControlName="organizacion" [options]="organizaciones" placeholder="Selecciona una organización"  class="w-full"  ></p-dropdown>
+            <input pInputText id="organizacion" required formControlName="organizacion" placeholder="Organización" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('organizacion') }">
+            <label for="organizacion">Organización</label>
+            <p-dropdown
+              id="organizacion"
+              formControlName="organizacion"
+              [options]="organizaciones"
+              placeholder="Selecciona una organización"
+              class="w-full">
+            </p-dropdown>
+            <div class="error-message" *ngIf="isFieldInvalid('organizacion')">
+              El campo Organización es obligatorio.
+            </div>
           </div>
 
           <!-- Tipo de Vivienda -->
-          <div class="col-12 form-field">
+          <!-- <div class="col-12 form-field">
             <label for="tipoVivienda">Tipo de Vivienda</label>
             <input pInputText id="tipoVivienda" required formControlName="tipoVivienda" placeholder="Tipo de Vivienda" />
+          </div> -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('tipoVivienda') }">
+            <label for="tipoVivienda">Tipo de Vivienda</label>
+            <input pInputText
+                  id="tipoVivienda"
+                  required
+                  formControlName="tipoVivienda"
+                  placeholder="Tipo de Vivienda" />
+            <div class="error-message" *ngIf="isFieldInvalid('tipoVivienda')">
+              El campo Tipo de Vivienda es obligatorio.
+            </div>
           </div>
 
           <!-- Botón para guardar -->

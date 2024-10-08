@@ -27,6 +27,8 @@ import { ChartModule } from 'primeng/chart';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ConfirmDialogModule  } from 'primeng/confirmdialog';
+
 
 
 
@@ -58,8 +60,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     ChartModule,
     CalendarModule,
     CheckboxModule,
-    MultiSelectModule
-
+    MultiSelectModule,
+    ConfirmDialogModule
   ]
 })
 export class MaterialModule { }

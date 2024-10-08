@@ -38,4 +38,6 @@ export class PersonService {
     return this.http.post<Persona>(`${this.apiUrl}/registrar`, persona);
   }
 
+  
+
 }
