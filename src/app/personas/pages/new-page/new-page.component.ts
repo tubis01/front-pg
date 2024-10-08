@@ -7,6 +7,7 @@ import { Persona } from '../../interfaces/persona.interface';
 import { MessageService } from 'primeng/api';
 import { HateoasResponse, Responsable } from '../../../responsables/interfaces/responsable.interface';
 import { ResponsableService } from '../../../responsables/services/responsable.service';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 
 @Component({
@@ -103,13 +104,13 @@ export class NewPageComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
-
     this.cargarResponsables();
     // Esta parte se ejecuta una sola vez cuando el componente es inicializado
     if (this.personToEdit) {
       this.isEditMode = true;
       this.personaForm.patchValue(this.personToEdit);
     }
+
 }
 
 cargarResponsables(): void {
@@ -120,7 +121,7 @@ cargarResponsables(): void {
       ...response._embedded.datosDetalleResponsableList.map(responsable => {
         return {
           ...responsable,
-          nombreCompleto: `${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
+          nombreCompleto:  `${responsable.id}. ${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
         };
       })
     ];
@@ -137,7 +138,7 @@ cargarMasResponsables(): void {
       this.responsables.push(...data._embedded.datosDetalleResponsableList.map(responsable => {
         return {
           ...responsable,
-          nombreCompleto: `${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
+          nombreCompleto: `${responsable.id} ${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
         };
       }));
       // Actualizar el nextPageUrl para la siguiente carga, si existe
@@ -147,7 +148,7 @@ cargarMasResponsables(): void {
 }
 
 // Método para buscar responsables en la lista completa de responsables cargados
-buscarResponsables(event: any) {
+buscarResponsables(event: AutoCompleteCompleteEvent): void {
   const query = event.query.toLowerCase();
   this.filteredResponsables = this.responsables.filter(responsable =>
     responsable.nombre.toLowerCase().includes(query)
@@ -171,14 +172,6 @@ buscarResponsables(event: any) {
       }
     }
 
-
-
-
-
-
-
-
-
   ngOnChanges(changes: SimpleChanges): void {
     // Detectar cambios en la propiedad de entrada personToEdit
     if (changes['personToEdit'] && changes['personToEdit'].currentValue) {
@@ -191,7 +184,7 @@ buscarResponsables(event: any) {
     }
   }
 
-  buscarUbicaciones(event: any) {
+  buscarUbicaciones(event: AutoCompleteCompleteEvent): void {
     const query = event.query.toLowerCase();
     this.filteredUbicaciones = this.direcciones.filter(ubicacion =>
       ubicacion.nombreCompleto.toLowerCase().includes(query)

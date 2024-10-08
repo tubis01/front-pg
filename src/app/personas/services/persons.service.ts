@@ -13,9 +13,6 @@ export class PersonService {
   constructor( private http: HttpClient) { }
 
 
-  // public getPersons(page: number = 0, size: number = 20): Observable<HateoasResponse<DatosDetallePersonaList>> {
-  //   return this.http.get<HateoasResponse<DatosDetallePersonaList>>(`${this.apiUrl}/listar?page=${page}&size=${size}`);
-  // }
 
   public getPersons(page: number = 0, size: number = 20): Observable<HateoasResponse<Persona>> {
     return this.http.get<HateoasResponse<Persona>>(`${this.apiUrl}/listar?page=${page}&size=${size}`);
@@ -38,6 +35,6 @@ export class PersonService {
     return this.http.post<Persona>(`${this.apiUrl}/registrar`, persona);
   }
 
-  
+
 
 }

@@ -34,8 +34,8 @@ export class PersonTableComponent implements OnInit {
 
   // Método para cargar personas según la página actual
   loadPersons(page: number): void {
-    this.personService.getPersons(page, this.pageSize).subscribe(
-      (response: HateoasResponse<Persona>) => {
+    this.personService.getPersons(page, this.pageSize).subscribe({
+      next: (response: HateoasResponse<Persona>) => {
         if (response._embedded && response._embedded.datosDetallePersonaList) {
           this.persons = response._embedded.datosDetallePersonaList;
         }
@@ -44,13 +44,13 @@ export class PersonTableComponent implements OnInit {
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
         console.log('Persons loaded', this.persons);
-
       },
-      error => {
+      error: (error) => {
         console.error('Error fetching persons', error);
       }
-    );
+    });
   }
+
 
 
 
@@ -82,17 +82,20 @@ onEdit(person: Persona): void {
   // Método para enviar los cambios al backend
   onSubmitUpdate(): void {
     if (this.selectedPerson) {
-      this.personService.updatePerson( this.selectedPerson).subscribe(
-        (response) => {
+      console.log('Updating person', this.selectedPerson);
+
+      this.personService.updatePerson(this.selectedPerson).subscribe({
+        next: (response) => {
           this.loadPersons(this.currentPage); // Recargar la lista de personas
           this.selectedPerson = null; // Limpiar la selección
         },
-        (error) => {
+        error: (error) => {
           console.error('Error updating person', error);
         }
-      );
+      });
     }
   }
+
 
 
     // Método para mostrar el mensaje de confirmación antes de eliminar
@@ -102,21 +105,22 @@ onEdit(person: Persona): void {
         header: 'Confirmar Eliminación',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.personService.deletePerson(person.DPI).subscribe(
-            () => {
+          this.personService.deletePerson(person.DPI).subscribe({
+            next: () => {
               this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Persona eliminada con éxito' });
               this.loadPersons(this.currentPage); // Recargar la lista de personas
             },
-            (error) => {
+            error: (error) => {
               this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
             }
-          );
+          });
         },
         reject: () => {
           this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Eliminación cancelada' });
         }
       });
     }
+
 
     confirmUpdate(): void {
       this.confirmationService.confirm({
@@ -162,8 +166,8 @@ onEdit(person: Persona): void {
 
   // Método para cargar desde un enlace
   loadFromLink(url: string): void {
-    this.personService.getPersonsByUrl(url).subscribe(
-      (response: HateoasResponse<Persona>) => {
+    this.personService.getPersonsByUrl(url).subscribe({
+      next: (response: HateoasResponse<Persona>) => {
         if (response._embedded && response._embedded.datosDetallePersonaList) {
           this.persons = response._embedded.datosDetallePersonaList;
         }
@@ -172,11 +176,12 @@ onEdit(person: Persona): void {
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
       },
-      error => {
+      error: (error) => {
         console.error('Error fetching persons from link', error);
       }
-    );
+    });
   }
+
 
 
 }
