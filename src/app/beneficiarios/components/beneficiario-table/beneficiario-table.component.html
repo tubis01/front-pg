@@ -33,8 +33,12 @@
       <td>{{ beneficiario.fechaNacimiento | date: 'shortDate' }}</td>
       <td>{{ beneficiario.NombreProyecto }}</td>
       <td class="fixed-column">
-        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(beneficiario)"></button>
-        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(beneficiario)"></button>
+
+        <div class="button-container">
+
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(beneficiario)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(beneficiario)"></button>
+        </div>
       </td>
     </tr>
   </ng-template>

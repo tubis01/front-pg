@@ -1,11 +1,14 @@
 .form-scroll-container {
   min-width: 370px;
   box-sizing: border-box;
-  max-height: 560px; /* Ajusta esto según necesites */
+  min-height: 440px; /* Ajusta esto según necesites */
+  max-height: 900px; /* Ajusta esto según necesites */
   overflow-y: auto; /* Permite el scroll vertical */
-  padding: 25px; /* Añade espacio interno para evitar que los elementos queden pegados al scrollbar */
+  padding: 30px; /* Añade espacio interno para evitar que los elementos queden pegados al scrollbar */
   width: 100%;
 }
+
+
 
 /* Adaptación para pantallas pequeñas */
 @media (max-width: 768px) {
@@ -14,6 +17,7 @@
     padding: 15px; /* Reducir el padding un poco para pantallas pequeñas */
   }
 }
+
 
 .has-error input, .has-error textarea, .has-error p-calendar {
   border: 1px solid red;

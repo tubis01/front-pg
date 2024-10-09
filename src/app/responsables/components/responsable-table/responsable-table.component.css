@@ -11,3 +11,9 @@
   background: white;
   z-index: 1;
 }
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
