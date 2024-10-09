@@ -1,12 +1,16 @@
 
-<div class="grid">
+<div class="layout-container">
   <!-- Columna de la tabla de proyectos -->
-  <div class=" col-12 md:col-8">
-    <app-project-table (editProyecto)="onEditProyecto($event)"></app-project-table>
+  <div class="table-container">
+    <p-card>
+
+      <app-project-table (editProyecto)="onEditProyecto($event)"></app-project-table>
+    </p-card>
+
   </div>
 
   <!-- Columna del formulario de registro/actualización -->
-  <div class=" col-12 md:col-4">
+  <div class=" form-container">
     <p-card>
       <app-new-project
         [proyectoToEdit]="selectedProyecto"

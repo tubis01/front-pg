@@ -1,47 +1,67 @@
-<h1>{{ responsableToEdit ? 'Actualizar Responsable' : 'Registrar Responsable' }}</h1>
+<h1>{{ responsableToEdit ? 'Actualizar ' : 'Registrar Responsable' }}</h1>
 
 <p-divider></p-divider>
+<div class="grid ">
+  <div class="col-12 sm:col-6 md:col-3">
 
-<div class="grid justify-content-center align-items-center">
-  <div class="col-12 sm:col-8 md:col-6">
-    <p-card class="grid">
-      <div class="grid">
-        <!-- Formulario para agregar o editar un responsable -->
-        <form [formGroup]="responsableForm" (ngSubmit)="onSubmit()" class="p-fluid grid ">
+      <div class="form-scroll-container">
+        <form [formGroup]="responsableForm" (ngSubmit)="onSubmit()" class="p-fluid grid fromgrid">
+
           <!-- Campo Nombre -->
-          <div class="col-12 ">
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('nombre') }">
             <label for="nombre">Nombre</label>
             <input pInputText id="nombre" formControlName="nombre" placeholder="Nombre" required />
+            <div *ngIf="isFieldInvalid('nombre')" class="error-message">
+              El campo Nombre es obligatorio.
+            </div>
           </div>
 
           <!-- Campo Apellido -->
-          <div class="col-12  ">
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('apellido') }">
             <label for="apellido">Apellido</label>
             <input pInputText id="apellido" formControlName="apellido" placeholder="Apellido" required />
+            <div *ngIf="isFieldInvalid('apellido')" class="error-message">
+              El campo Apellido es obligatorio.
+            </div>
           </div>
 
           <!-- Campo Género -->
-          <div class="col-12 ">
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('genero') }">
             <label for="genero">Género</label>
-            <p-dropdown id="genero" formControlName="genero" [options]="generos" placeholder="Selecciona un género" required></p-dropdown>
+            <p-dropdown id="genero" formControlName="genero" [options]="generos" placeholder="Selecciona un género"
+              required></p-dropdown>
+            <div *ngIf="isFieldInvalid('genero')" class="error-message">
+              El campo Género es obligatorio.
+            </div>
           </div>
 
           <!-- Campo Correo -->
-          <div class="col-12 ">
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('correo') }">
             <label for="correo">Correo Electrónico</label>
-            <input pInputText id="correo" formControlName="correo" placeholder="Correo Electrónico" required type="email" />
+            <input pInputText id="correo" formControlName="correo" placeholder="Correo Electrónico" required
+              type="email" />
+            <div *ngIf="isFieldInvalid('correo')" class="error-message">
+              <ng-container *ngIf="responsableForm.get('correo')?.errors?.['required']">El campo Correo es
+                obligatorio.</ng-container>
+              <ng-container *ngIf="responsableForm.get('correo')?.errors?.['email']">El formato del correo es
+                incorrecto.</ng-container>
+            </div>
           </div>
 
           <!-- Campo Teléfono -->
-          <div class="col-12 ">
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('telefono') }">
             <label for="telefono">Teléfono</label>
             <input pInputText id="telefono" formControlName="telefono" placeholder="Teléfono" required />
+            <div *ngIf="isFieldInvalid('telefono')" class="error-message">El campo Teléfono es obligatorio.</div>
           </div>
 
           <!-- Campo Fecha de Nacimiento -->
-          <div class="col-12 ">
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaNacimiento') }">
             <label for="fechaNacimiento">Fecha de Nacimiento</label>
-            <p-calendar id="fechaNacimiento" formControlName="fechaNacimiento" [showIcon]="true" placeholder="Fecha de Nacimiento" required></p-calendar>
+            <p-calendar id="fechaNacimiento" formControlName="fechaNacimiento" [showIcon]="true"
+              placeholder="Fecha de Nacimiento" required></p-calendar>
+            <div *ngIf="isFieldInvalid('fechaNacimiento')" class="error-message">El campo Fecha de Nacimiento es
+              obligatorio.</div>
           </div>
 
           <!-- Botón para guardar -->
@@ -49,7 +69,8 @@
             <button pButton type="submit" label="{{ responsableToEdit ? 'Actualizar' : 'Guardar' }}"></button>
           </div>
         </form>
+
       </div>
-    </p-card>
+
   </div>
 </div>

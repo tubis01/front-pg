@@ -4,7 +4,7 @@ import { Beneficiario } from '../../interfaces/beneficiario.interface';
 @Component({
   selector: 'app-list-page',
   templateUrl: './list-page.component.html',
-  styles: ``
+  styleUrl: './list-page.component.css'
 })
 export class ListPageComponent {
   public selectedBeneficiario: Beneficiario | null = null;

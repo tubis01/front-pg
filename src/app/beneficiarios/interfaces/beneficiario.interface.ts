@@ -33,6 +33,7 @@ export interface Beneficiario {
   responsable:            string;
   organizacion:           string;
   tipoVivienda:           string;
+  idProyecto:             number;
   NombreProyecto:         string;
 }
 

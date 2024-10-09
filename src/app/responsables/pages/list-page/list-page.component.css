@@ -1,0 +1,64 @@
+.layout-container {
+  display: flex;
+  gap: 20px; /* Espacio entre la tabla y el formulario */
+}
+
+.table-container {
+  flex: 2; /* La tabla ocupará más espacio */
+  min-width: 500px; /* Define un ancho mínimo para evitar la reducción */
+}
+
+.form-container {
+  flex: 1; /* El formulario ocupará menos espacio */
+  max-width: 400px;
+  min-width: 300px;
+}
+
+/* Adaptación para pantallas medianas */
+@media (max-width: 1024px) {
+  .layout-container {
+    flex-direction: column; /* Cambia a columnas para una mejor visualización en pantallas medianas */
+    gap: 10px;
+  }
+
+  .table-container, .form-container {
+    width: 100%; /* Ambas columnas ocupan el 100% del ancho en pantallas medianas */
+    min-width: auto; /* Deshabilitar el ancho mínimo para permitir la flexibilidad */
+  }
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column; /* Cambia a disposición vertical en pantallas pequeñas */
+    gap: 10px;
+  }
+
+  .table-container, .form-container {
+    width: 100%; /* Ambas columnas ocupan el 100% del ancho en pantallas pequeñas */
+    min-width: auto;
+  }
+}
+
+.form-container {
+  flex: 1;
+  max-width: 400px; /* Mantén el ancho máximo para pantallas grandes */
+  min-width: 300px; /* Define un ancho mínimo para pantallas grandes */
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+  .form-container {
+    min-width: auto; /* Eliminar el ancho mínimo para permitir flexibilidad */
+    width: 100%; /* Ocupa el ancho completo del contenedor */
+    max-width: 100%; /* Evitar el desbordamiento */
+  }
+
+  .form-container {
+    order: 1; /* El formulario será el primero en pantallas pequeñas */
+  }
+
+  .table-container {
+    order: 2; /* La tabla se mostrará después del formulario */
+  }
+}

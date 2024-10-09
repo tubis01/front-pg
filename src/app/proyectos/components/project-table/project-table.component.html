@@ -5,7 +5,7 @@
   [lazy]="true"
   (onPage)="onPageChange($event)"
   [scrollable]="true"
-  scrollHeight="670px"
+  scrollHeight="510px"
   class="proyecto-table"
 >
   <ng-template pTemplate="header">
@@ -15,7 +15,7 @@
       <th style="width:20%">Descripción</th>
       <th style="width:10%">Fecha Inicio</th>
       <th style="width:10%">Fecha Fin</th>
-      <th style="width:10%">Acciones</th>
+      <th style="width:10%" class="fixed-column" >Acciones</th>
     </tr>
   </ng-template>
 
@@ -24,11 +24,18 @@
       <td>{{ currentPage * pageSize + i + 1 }}</td>
       <td>{{ proyecto.nombre }}</td>
       <td>{{ proyecto.descripcion }}</td>
-      <td>{{ proyecto.fechaInicio | date: 'shortDate' }}</td>
-      <td>{{ proyecto.fechaFin | date: 'shortDate' }}</td>
-      <td>
-        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(proyecto)"></button>
-        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(proyecto)"></button>
+      <td>{{ proyecto.fechaInicio }}</td>
+      <td>{{ proyecto.fechaFin }}</td>
+      <td class="fixed-column">
+        <div class="button-container">
+
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info"
+          (click)="onEdit(proyecto)">
+        </button>
+        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
+        (click)="confirmDelete(proyecto)">
+      </button>
+    </div>
       </td>
     </tr>
   </ng-template>

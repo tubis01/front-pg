@@ -2,42 +2,50 @@
 
 <p-divider></p-divider>
 
-<div class="grid justify-content-center align-items-center">
+<div class="grid">
   <div class="col-12 sm:col-8 md:col-6">
-    <p-card class="">
-    <div class="grid">
-      <!-- Formulario para agregar o editar un proyecto -->
-      <form [formGroup]="proyectoForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
-        <!-- Campo Nombre -->
-        <div class="col-12">
-          <label for="nombre">Nombre del Proyecto</label>
-          <input pInputText id="nombre" formControlName="nombre" placeholder="Nombre del Proyecto" required />
-        </div>
+    <div class="form-scroll-container">
+        <!-- Formulario para agregar o editar un proyecto -->
+        <form [formGroup]="proyectoForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
 
-        <!-- Campo Descripción -->
-        <div class="col-12">
-          <label for="descripcion">Descripción</label>
-          <textarea pInputTextarea id="descripcion" formControlName="descripcion" placeholder="Descripción" rows="3" required></textarea>
-        </div>
+          <!-- Campo Nombre -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('nombre') }">
+            <label for="nombre">Nombre del Proyecto</label>
+            <input pInputText id="nombre" formControlName="nombre" placeholder="Nombre del Proyecto" required />
+            <div class="error-message" *ngIf="isFieldInvalid('nombre')">
+              El campo Nombre del Proyecto es obligatorio.
+            </div>
+          </div>
 
-        <!-- Campo Fecha de Inicio -->
-        <div class="col-12">
-          <label for="fechaInicio">Fecha de Inicio</label>
-          <p-calendar id="fechaInicio" formControlName="fechaInicio" [showIcon]="true" placeholder="Fecha de Inicio" required></p-calendar>
-        </div>
+          <!-- Campo Descripción -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('descripcion') }">
+            <label for="descripcion">Descripción</label>
+            <textarea pInputTextarea id="descripcion" formControlName="descripcion" placeholder="Descripción" rows="3" required></textarea>
+            <div class="error-message" *ngIf="isFieldInvalid('descripcion')">
+              El campo Descripción es obligatorio.
+            </div>
+          </div>
 
-        <!-- Campo Fecha de Fin -->
-        <div class="col-12">
-          <label for="fechaFin">Fecha de Fin (opcional)</label>
-          <p-calendar id="fechaFin" formControlName="fechaFin" [showIcon]="true" placeholder="Fecha de Fin"></p-calendar>
-        </div>
+          <!-- Campo Fecha de Inicio -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaInicio') }">
+            <label for="fechaInicio">Fecha de Inicio</label>
+            <p-calendar id="fechaInicio" formControlName="fechaInicio" [showIcon]="true" placeholder="Fecha de Inicio" required></p-calendar>
+            <div class="error-message" *ngIf="isFieldInvalid('fechaInicio')">
+              El campo Fecha de Inicio es obligatorio.
+            </div>
+          </div>
 
-        <!-- Botón para guardar -->
-        <div class="col-12">
-          <button pButton type="submit" label="{{ proyectoToEdit ? 'Actualizar' : 'Guardar' }}"></button>
-        </div>
-      </form>
-    </div>
-    </p-card>
+          <!-- Campo Fecha de Fin -->
+          <div class="col-12 form-field">
+            <label for="fechaFin">Fecha de Fin (opcional)</label>
+            <p-calendar id="fechaFin" formControlName="fechaFin" [showIcon]="true" placeholder="Fecha de Fin"></p-calendar>
+          </div>
+
+          <!-- Botón para guardar -->
+          <div class="col-12">
+            <button pButton type="submit" label="{{ proyectoToEdit ? 'Actualizar' : 'Guardar' }}"></button>
+          </div>
+        </form>
+      </div>
   </div>
 </div>

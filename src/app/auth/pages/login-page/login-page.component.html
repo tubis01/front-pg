@@ -4,6 +4,8 @@
 
     <div class="flex flex-column md:flex-row">
       <div class="w-full md:w-5 flex flex-column align-items-center justify-content-center gap-3 py-5">
+
+        <!-- Campo Usuario -->
         <div class="flex flex-wrap justify-content-center align-items-center gap-2">
           <label class="w-6rem">Usuario</label>
           <p-inputGroup>
@@ -12,8 +14,15 @@
             </p-inputGroupAddon>
             <input pInputText placeholder="Username" formControlName="usuario" />
           </p-inputGroup>
+          <small class="error-message" *ngIf="loginForm.get('usuario')?.invalid && loginForm.get('usuario')?.touched">
+            <ng-container *ngIf="loginForm.get('usuario')?.errors?.['required']">El usuario es obligatorio.</ng-container>
+            <ng-container *ngIf="loginForm.get('usuario')?.errors?.['minlength']">
+              El usuario debe tener al menos 3 caracteres.
+            </ng-container>
+          </small>
         </div>
 
+        <!-- Campo Contraseña -->
         <div class="flex flex-wrap justify-content-center align-items-center gap-2">
           <label class="w-6rem">Password</label>
           <p-inputGroup>
@@ -22,9 +31,19 @@
             </p-inputGroupAddon>
             <input pInputText type="password" placeholder="Password" formControlName="contrasena" />
           </p-inputGroup>
+          <small class="error-message" *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
+            <ng-container *ngIf="loginForm.get('contrasena')?.errors?.['required']">
+              La contraseña es obligatoria.
+            </ng-container>
+            <ng-container *ngIf="loginForm.get('contrasena')?.errors?.['minlength']">
+              La contraseña debe tener al menos 6 caracteres.
+            </ng-container>
+          </small>
         </div>
 
-        <button pButton label="Iniciar sesión" icon="pi pi-user" styleClass="w-13rem mx-auto" type="submit" [disabled]="loginForm.invalid"></button>
+        <!-- Botón de inicio de sesión -->
+        <button pButton label="Iniciar sesión" icon="pi pi-user" styleClass="w-13rem mx-auto" type="submit"
+          [disabled]="loginForm.invalid"></button>
       </div>
 
       <div class="w-full md:w-2">

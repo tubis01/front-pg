@@ -1,13 +1,11 @@
 .form-scroll-container {
-  min-width: 370px;
+  min-width: 220px;
   box-sizing: border-box;
   max-height: 560px; /* Ajusta esto según necesites */
   overflow-y: auto; /* Permite el scroll vertical */
   padding: 25px; /* Añade espacio interno para evitar que los elementos queden pegados al scrollbar */
   width: 100%;
 }
-
-
 
 /* Adaptación para pantallas pequeñas */
 @media (max-width: 768px) {
@@ -17,8 +15,7 @@
   }
 }
 
-
-.has-error input{
+.has-error input, .has-error textarea, .has-error p-calendar {
   border: 1px solid red;
 }
 

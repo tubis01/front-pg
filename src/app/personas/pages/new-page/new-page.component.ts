@@ -180,7 +180,7 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
 
 // Parchar los valores excepto el responsable
     const { idResponsable, responsable, ...restOfPerson } = changes['personToEdit'].currentValue;
-    
+
     this.personaForm.patchValue(restOfPerson);
 
     // Asigna el idResponsable al campo responsable del formulario
@@ -253,11 +253,7 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
       return;
     }
 
-    const formData = { ...this.personaForm.value };
-
     if (this.isEditMode) {
-
-      const currentResposbleId = this.personaForm.get('responsable')?.value;
 
       this.personaService.updatePerson(this.personaForm.value).subscribe({
           next: () => {
@@ -265,6 +261,7 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
               this.formSubmit.emit();
               this.isEditMode = false;
               this.personaForm.reset();
+
           },
           error: (error) => {
               // Aquí manejas los errores específicos que devuelve el backend

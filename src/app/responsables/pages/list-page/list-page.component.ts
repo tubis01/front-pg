@@ -4,7 +4,7 @@ import { Responsable } from '../../interfaces/responsable.interface';
 @Component({
   selector: 'app-list-page',
   templateUrl: './list-page.component.html',
-  styles: ``
+  styleUrl: `./list-page.component.css`
 })
 export class ListPageComponent {
 

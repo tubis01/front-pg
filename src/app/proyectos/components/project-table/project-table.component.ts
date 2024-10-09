@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { HateoasResponse, Links, Proyecto } from '../../interfaces/proyecto.interface';
 import { ProjectServiceService } from '../../services/projects.service';
 import { Observer } from 'rxjs';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-project-table',
@@ -11,7 +12,7 @@ import { Observer } from 'rxjs';
 export class ProjectTableComponent implements OnInit{
   public proyectos: Proyecto[] = [];
 
-  public links : Links | undefined;
+  public links: Links | undefined;
   public currentPage: number = 0;
   public totalPages: number = 1;
   public totalElements: number = 0;
@@ -19,7 +20,13 @@ export class ProjectTableComponent implements OnInit{
 
   @Output() editProyecto = new EventEmitter<Proyecto>();
 
-  constructor(private proyectoService: ProjectServiceService) {}
+  private isProcessing: boolean = false;
+
+  constructor(
+    private proyectoService: ProjectServiceService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.loadProyectos(this.currentPage);
@@ -27,44 +34,67 @@ export class ProjectTableComponent implements OnInit{
 
   // Cargar proyectos según la página actual
   loadProyectos(page: number): void {
-    const observer: Observer<HateoasResponse<Proyecto>> = {
-      next: (response) => {
+    this.proyectoService.listarProyectos(page, this.pageSize).subscribe({
+      next: (response: HateoasResponse<Proyecto>) => {
         if (response._embedded?.datosDetalleProyectoList) {
           this.proyectos = response._embedded.datosDetalleProyectoList;
         }
-        this.links = response._links; // Asignar los enlaces HATEOAS aquí
+        this.links = response._links;
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
       },
       error: (error) => {
         console.error('Error fetching projects', error);
-      },
-      complete: () => {
-        console.log('Load projects complete');
       }
-    };
-
-    this.proyectoService.listarProyectos(page, this.pageSize).subscribe(observer);
+    });
   }
-
 
   // Método para editar un proyecto
   onEdit(proyecto: Proyecto): void {
-    console.log('Editing project', proyecto);
+    if (this.isProcessing) return; // Evitar que se llame más de una vez
+    this.isProcessing = true;
 
-    this.editProyecto.emit(proyecto);
+    this.confirmationService.confirm({
+      message: `¿Deseas editar al responsable ${proyecto.nombre} ${proyecto.descripcion}?`,
+      header: 'Confirmación de Edición',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.editProyecto.emit(proyecto);
+        this.messageService.add({ severity: 'success', summary: 'Operación Exitosa', detail: `Edición del proyecto ${proyecto.nombre} iniciada.` });
+        this.isProcessing = false;
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: `Edición del proyecto ${proyecto.nombre} cancelada.` });
+        this.isProcessing = false;
+      }
+    }); // Emitir el proyecto para editar
   }
 
   // Método para eliminar un proyecto
-  onDelete(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
-      this.proyectoService.finalizarProyecto(id).subscribe(
-        () => this.loadProyectos(this.currentPage),
-        (error) => console.error('Error deleting project', error)
-      );
-    }
+  confirmDelete(proyecto: Proyecto): void {
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de que deseas eliminar el proyecto ${proyecto.nombre}?`,
+      header: 'Confirmar Eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.proyectoService.finalizarProyecto(proyecto.id).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: `El proyecto ${proyecto.nombre} ha sido eliminado.` });
+            this.loadProyectos(this.currentPage); // Recargar la lista de proyectos
+          },
+          error: (error) => {
+            console.error('Error al eliminar el proyecto', error);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el proyecto.' });
+          }
+        });
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Eliminación cancelada.' });
+      }
+    });
   }
+
 
   // Métodos para la paginación
   onPageChange(event: any): void {
@@ -114,15 +144,5 @@ loadFromLink(url: string): void {
 }
 
 
-  confirmDelete(proyecto: Proyecto): void {
-    if (confirm(`¿Estás seguro de que deseas eliminar el proyecto ${proyecto.nombre}?`)) {
-      this.proyectoService.finalizarProyecto(proyecto.id).subscribe({
-        next: () => {
-          this.loadProyectos(this.currentPage);
-        },
-        error: (error) => console.error('Error al eliminar el proyecto', error)
-      });
-    }
-  }
 
 }

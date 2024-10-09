@@ -4,7 +4,7 @@ import { Proyecto } from '../../interfaces/proyecto.interface';
 @Component({
   selector: 'app-list-page',
   templateUrl: './list-page.component.html',
-  styles: ``
+  styleUrl: './list-page.component.css'
 })
 export class ListPageComponent {
   public selectedProyecto: Proyecto | null = null;

@@ -1,11 +1,11 @@
-<div class="grid">
+<div class="layout-container">
   <!-- Columna de la tabla de beneficiarios -->
-  <div class="table-container col-12 md:col-8">
+  <div class="table-container">
     <app-beneficiario-table (editBeneficiario)="onEditBeneficiario($event)"></app-beneficiario-table>
   </div>
 
   <!-- Columna del formulario para registrar o actualizar un beneficiario -->
-  <div class="form-container col-12 md:col-4">
+  <div class="form-container">
     <p-card>
       <app-new-beneficiario
         [beneficiarioToEdit]="selectedBeneficiario"

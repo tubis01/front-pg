@@ -7,8 +7,6 @@
   width: 100%;
 }
 
-
-
 /* Adaptación para pantallas pequeñas */
 @media (max-width: 768px) {
   .form-scroll-container {
@@ -17,8 +15,7 @@
   }
 }
 
-
-.has-error input{
+.has-error input, .has-error textarea, .has-error p-calendar {
   border: 1px solid red;
 }
 

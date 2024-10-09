@@ -1,14 +1,18 @@
-<div class="grid">
-  <div class="table-container col-12 md:col-8">
-    <responsable-table (editResponsable)="onEditResponsable($event)"></responsable-table>
-  </div>
-  <div class="form-container col-12 md:col-4">
+<div class="layout-container">
+  <!-- Contenedor de la tabla de responsables -->
+  <div class="table-container ">
     <p-card>
+    <responsable-table (editResponsable)="onEditResponsable($event)"></responsable-table>
+    </p-card>
+  </div>
 
+  <!-- Contenedor del formulario de responsables -->
+  <div class="form-container">
+    <p-card>
       <app-new-responsable
-      [responsableToEdit]="selectedResponsable"
-      (formSubmit)="onFormSubmit()"
+        [responsableToEdit]="selectedResponsable"
+        (formSubmit)="onFormSubmit()"
       ></app-new-responsable>
     </p-card>
-    </div>
+  </div>
 </div>

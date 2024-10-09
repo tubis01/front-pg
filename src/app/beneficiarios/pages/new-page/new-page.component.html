@@ -5,27 +5,47 @@
 <div class="grid justify-content-center align-items-center">
   <div class="col-12 sm:col-8 md:col-6">
     <p-card class="grid">
-    <div class="grid">
-      <!-- Formulario para agregar o editar un beneficiario -->
-      <form [formGroup]="beneficiarioForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
-        <!-- Campo DPI -->
-        <div class="col-12">
-          <label for="dpi">DPI</label>
-          <input pInputText id="dpi" formControlName="dpi" placeholder="DPI" required />
-        </div>
+      <div class="grid form-scroll-container">
+        <form [formGroup]="beneficiarioForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
 
-        <!-- Campo Proyecto -->
-        <div class="col-12">
-          <label for="proyecto">ID del Proyecto</label>
-          <input pInputText id="proyecto" formControlName="proyecto" placeholder="ID del Proyecto" required />
-        </div>
+          <!-- Campo DPI -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('dpi') }">
+            <label for="dpi">DPI</label>
+            <input pInputText id="dpi" formControlName="dpi" placeholder="DPI" required />
+            <div class="error-message" *ngIf="isFieldInvalid('dpi')">
+              El campo DPI es obligatorio.
+            </div>
+          </div>
 
-        <!-- Botón para guardar -->
-        <div class="col-12">
-          <button pButton type="submit" label="{{ beneficiarioToEdit ? 'Actualizar' : 'Guardar' }}"></button>
-        </div>
-      </form>
-    </div>
+          <!-- Autocomplete para Proyecto -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('proyecto') }">
+            <label for="proyecto">Proyecto</label>
+            <p-autoComplete
+              [suggestions]="filteredProjects"
+              (completeMethod)="buscarProyectos($event)"
+              (onSelect)="onProyectoSeleccionado($event)"
+              formControlName="proyecto"
+              field="nombreCompleto"
+              [forceSelection]="true"
+              placeholder="Selecciona un proyecto"
+              [minLength]="1">
+            </p-autoComplete>
+            <div class="error-message" *ngIf="isFieldInvalid('proyecto')">
+              El campo Proyecto es obligatorio.
+            </div>
+          </div>
+
+          <!-- Botón para cargar más proyectos -->
+          <div class="col-12">
+            <button pButton label="Cargar más proyectos" (click)="cargarMasProyectos()" type="button"></button>
+          </div>
+
+          <!-- Botón para guardar -->
+          <div class="col-12">
+            <button pButton type="submit" label="{{ beneficiarioToEdit ? 'Actualizar' : 'Guardar' }}"></button>
+          </div>
+        </form>
+      </div>
     </p-card>
   </div>
 </div>
