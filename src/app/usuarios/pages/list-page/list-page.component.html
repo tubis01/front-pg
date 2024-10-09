@@ -1,13 +1,15 @@
-<div class="grid">
-  <div class="table-container col-12 md:col-8">
-    <app-user-table (editUsuario)="onEditUsuario($event)"></app-user-table>
-  </div>
-  <div class="form-container col-12 md:col-4">
+<div class="layout-container">
+  <div class="table-container ">
     <p-card>
+
+      <app-user-table (editUsuario)="onEditUsuario($event)"></app-user-table>
+    </p-card>
+  </div>
+
+  <div class="form-container">
       <app-new-usuario
         [usuarioToEdit]="selectedUsuario"
         (formSubmit)="onFormSubmit()"
       ></app-new-usuario>
-    </p-card>
   </div>
 </div>

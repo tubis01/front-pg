@@ -2,49 +2,70 @@
 
 <p-divider></p-divider>
 
-<div class="grid justify-content-center align-items-center">
+<div class="grid">
   <div class="col-12 sm:col-8 md:col-6">
     <p-card class="grid">
 
-    <div class="grid">
-      <!-- Formulario para agregar o editar un usuario -->
-      <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
-        <!-- Campo Email -->
-        <div class="col-12">
-          <label for="email">Email</label>
-          <input pInputText id="email" formControlName="email" placeholder="Email" required type="email" />
-        </div>
+      <div class="form-scroll-container">
+        <!-- Formulario para agregar o editar un usuario -->
+        <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
 
-        <!-- Campo Usuario -->
-        <div class="col-12">
-          <label for="usuario">Usuario</label>
-          <input pInputText id="usuario" formControlName="usuario" placeholder="Usuario" required />
-        </div>
+          <!-- Campo Email -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('email') }">
+            <label for="email">Email</label>
+            <input pInputText id="email" formControlName="email" placeholder="Email" required type="email" />
+            <div *ngIf="isFieldInvalid('email')" class="error-message">
+              El correo es requerido y debe ser válido.
+            </div>
+          </div>
 
-        <!-- Campo Clave -->
-        <div class="col-12">
-          <label for="clave">Clave</label>
-          <input pInputText type="password" id="clave" formControlName="clave" placeholder="Clave" required />
-        </div>
+          <!-- Campo Confirmar Email -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('confirmEmail') }">
+            <label for="confirmEmail">Confirmar Email</label>
+            <input pInputText id="confirmEmail" formControlName="confirmEmail" placeholder="Confirmar Email" required type="email" />
+            <div *ngIf="isFieldInvalid('confirmEmail')" class="error-message">
+              Debes confirmar el correo correctamente.
+            </div>
+            <div *ngIf="!emailsMatch()" class="error-message">
+              Los correos no coinciden.
+            </div>
+          </div>
 
-        <!-- Campo Rol -->
-        <div class="col-12">
-          <label for="rol">Rol</label>
-          <p-multiSelect
-          id="rol"
-          formControlName="rol"
-          [options]="roles"
-          placeholder="Selecciona uno o más roles"
-          required>
-        </p-multiSelect>
-        </div>
+          <!-- Campo Usuario -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('usuario') }">
+            <label for="usuario">Usuario</label>
+            <input pInputText id="usuario" formControlName="usuario" placeholder="Usuario" required />
+          </div>
 
-        <!-- Botón para guardar -->
-        <div class="col-12">
-          <button pButton type="submit" label="{{ usuarioToEdit ? 'Actualizar' : 'Guardar' }}"></button>
-        </div>
-      </form>
-    </div>
+          <!-- Campo Clave -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('clave') }">
+            <label for="clave">Clave</label>
+            <input pInputText type="password" id="clave" formControlName="clave" placeholder="Clave" required />
+          </div>
+
+          <!-- Campo Rol (Dropdown para selección de un solo rol) -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('rol') }">
+            <label for="rol">Rol</label>
+            <p-dropdown
+              id="rol"
+              formControlName="rol"
+              [options]="roles"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Selecciona un rol"
+              required>
+            </p-dropdown>
+            <div *ngIf="isFieldInvalid('rol')" class="error-message">
+              Debes seleccionar un rol.
+            </div>
+          </div>
+
+          <!-- Botón para guardar -->
+          <div class="col-12">
+            <button pButton type="submit" label="{{ usuarioToEdit ? 'Actualizar' : 'Guardar' }}"></button>
+          </div>
+        </form>
+      </div>
     </p-card>
   </div>
 </div>
