@@ -37,6 +37,12 @@ export interface Beneficiario {
   NombreProyecto:         string;
 }
 
+export interface UpdateBeneficiario {
+  id:                    number;
+  dpi:                 string;
+  proyecto:          number;
+}
+
 
 export interface Direccion {
   codigoDepartamento: string;

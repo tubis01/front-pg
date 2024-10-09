@@ -241,16 +241,14 @@
           <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('responsable') }">
             <label for="responsable">Responsable</label>
             <p-autoComplete
-
-            [inputStyle]="{'width': '100%'}"
-            [suggestions]="filteredResponsables"
-            (completeMethod)="buscarResponsables($event)"
-            (onSelect)="onResponsableSeleccionado($event)"
-            [forceSelection]="true"
-            [dropdown]="true"
-            field="nombreCompleto"
-            [minLength]="1"
-            [value]="selectedResponsableNombre"
+              [inputStyle]="{'width': '100%'}"
+              [suggestions]="filteredResponsables"
+              (completeMethod)="buscarResponsables($event)"
+              (onSelect)="onResponsableSeleccionado($event)"
+              [forceSelection]="true"
+              [dropdown]="true"
+              field="nombreCompleto"
+              [minLength]="1"
               placeholder="Selecciona un responsable">
             </p-autoComplete>
 
@@ -263,8 +261,8 @@
               </ng-container>
             </div>
           </div>
-          <div *ngIf="nextPageUrl">
-            <button pButton label="Cargar más responsables" (click)="cargarMasResponsables()"></button>
+          <div class="col-12" *ngIf="nextPageUrl">
+            <button pButton label="Cargar más responsables" (click)="cargarMasResponsables()" type="button"  ></button>
           </div>
 
           <!-- Organización -->

@@ -105,16 +105,19 @@ export class NewPageComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
-    this.cargarResponsables();
     // Esta parte se ejecuta una sola vez cuando el componente es inicializado
     if (this.personToEdit) {
       this.isEditMode = true;
       this.personaForm.patchValue(this.personToEdit);
     }
+    this.cargarResponsables();
+
 
 }
 
 cargarResponsables(): void {
+  console.log('Cargando responsables...');
+
   this.responsableService.getResponsable().subscribe(response => {
     // Concatenar los responsables previamente cargados con los nuevos
     this.responsables = [
@@ -133,15 +136,19 @@ cargarResponsables(): void {
 
 // Método para cargar más responsables
 cargarMasResponsables(): void {
+  console.log('Cargando más responsables...');
+
   if (this.nextPageUrl) {
     this.responsableService.getResponsableByUrl(this.nextPageUrl).subscribe((data: HateoasResponse<Responsable>) => {
-      // Concatenar los nuevos responsables a los que ya tienes
+      // Concatenar los nuevos responsables a los que ya tienes sin afectar la validación
       this.responsables.push(...data._embedded.datosDetalleResponsableList.map(responsable => {
         return {
           ...responsable,
           nombreCompleto: `${responsable.id} ${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
         };
       }));
+      console.log('Responsables cargados:', this.responsables);
+
       // Actualizar el nextPageUrl para la siguiente carga, si existe
       this.nextPageUrl = data._links.next?.href || null;
     });
@@ -178,7 +185,6 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
     if (changes['personToEdit'] && changes['personToEdit'].currentValue) {
       this.isEditMode = true;
 
-// Parchar los valores excepto el responsable
     const { idResponsable, responsable, ...restOfPerson } = changes['personToEdit'].currentValue;
 
     this.personaForm.patchValue(restOfPerson);
@@ -234,23 +240,16 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
 
   onSubmit(): void {
 
-    console.log('Formulario a enviar:', this.personaForm.value);
     if (this.personaForm.invalid) {
-      // Mostrar errores específicos
+      this.personaForm.markAllAsTouched();  // Esto solo se ejecuta si el formulario está siendo enviado
+      // Mostrar mensajes de alerta para los campos que no cumplen con los validadores
       Object.keys(this.personaForm.controls).forEach(field => {
         const control = this.personaForm.get(field);
-        if (control && control.invalid) {
-          // Mostrar los errores de cada campo
-          if (control.errors?.['required']) {
-            this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio` });
-          } else if (control.errors?.['pattern']) {
-            this.messageService.add({ severity: 'warn', summary: 'Formato Incorrecto', detail: `El campo ${field} tiene un formato incorrecto` });
-          } else if (control.errors?.['minlength'] || control.errors?.['maxlength']) {
-            this.messageService.add({ severity: 'warn', summary: 'Longitud Incorrecta', detail: `El campo ${field} no tiene la longitud correcta` });
-          }
+        if (control?.invalid) {
+          this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio.` });
         }
       });
-      return;
+      return; // Salir si el formulario es inválido
     }
 
     if (this.isEditMode) {

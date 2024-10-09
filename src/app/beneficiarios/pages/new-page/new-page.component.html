@@ -8,35 +8,42 @@
       <div class="grid form-scroll-container">
         <form [formGroup]="beneficiarioForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
 
+          <input type="hidden" formControlName="id" />
+
           <!-- Campo DPI -->
           <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('dpi') }">
             <label for="dpi">DPI</label>
-            <input pInputText id="dpi" formControlName="dpi" placeholder="DPI" required />
+            <input pInputText id="dpi" formControlName="dpi" placeholder="DPI" required  [readOnly]="beneficiarioToEdit ? true : false" />
             <div class="error-message" *ngIf="isFieldInvalid('dpi')">
               El campo DPI es obligatorio.
             </div>
           </div>
 
           <!-- Autocomplete para Proyecto -->
-          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('proyecto') }">
-            <label for="proyecto">Proyecto</label>
-            <p-autoComplete
-              [suggestions]="filteredProjects"
-              (completeMethod)="buscarProyectos($event)"
-              (onSelect)="onProyectoSeleccionado($event)"
-              formControlName="proyecto"
-              field="nombreCompleto"
-              [forceSelection]="true"
-              placeholder="Selecciona un proyecto"
-              [minLength]="1">
-            </p-autoComplete>
-            <div class="error-message" *ngIf="isFieldInvalid('proyecto')">
+        <!-- Autocomplete para Proyecto -->
+        <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('proyecto') }">
+          <label for="proyecto">Proyecto</label>
+          <p-autoComplete
+            [inputStyle]="{'width': '100%'}"
+            [suggestions]="filteredProjects"
+            (completeMethod)="buscarProyectos($event)"
+            (onSelect)="onProyectoSeleccionado($event)"
+            [forceSelection]="true"
+            [dropdown]="true"
+            field="nombreCompleto"
+            [minLength]="1"
+            placeholder="Selecciona un proyecto">
+          </p-autoComplete>
+          <!-- Campo oculto para enviar solo el ID del proyecto -->
+          <input type="hidden" formControlName="proyecto">
+          <div class="error-message" *ngIf="isFieldInvalid('proyecto')">
+            <ng-container *ngIf="beneficiarioForm.get('proyecto')?.errors?.['required']">
               El campo Proyecto es obligatorio.
-            </div>
+            </ng-container>
           </div>
-
+        </div>
           <!-- Botón para cargar más proyectos -->
-          <div class="col-12">
+          <div class="col-12" *ngIf="nextPageUrl">
             <button pButton label="Cargar más proyectos" (click)="cargarMasProyectos()" type="button"></button>
           </div>
 

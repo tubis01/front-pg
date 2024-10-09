@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Beneficiario, HateoasResponse } from '../interfaces/beneficiario.interface';
+import { Beneficiario, HateoasResponse, UpdateBeneficiario } from '../interfaces/beneficiario.interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -21,7 +21,7 @@ export class BeneficiarioService {
     return this.http.post<Beneficiario>(`${this.apiUrl}/registrar`, beneficiario);
   }
 
-  public updateBeneficiario(beneficiario: Beneficiario): Observable<Beneficiario> {
+  public updateBeneficiario(beneficiario: UpdateBeneficiario): Observable<Beneficiario> {
     return this.http.put<Beneficiario>(`${this.apiUrl}/modificar`, beneficiario);
   }
 

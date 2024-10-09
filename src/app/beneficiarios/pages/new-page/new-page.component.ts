@@ -1,10 +1,10 @@
+import { Proyecto } from './../../../proyectos/interfaces/proyecto.interface';
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { Beneficiario } from '../../interfaces/beneficiario.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BeneficiarioService } from '../../services/beneficiario.service';
-import { Proyecto } from '../../../proyectos/interfaces/proyecto.interface';
 import { ProjectServiceService } from '../../../proyectos/services/projects.service';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 
 @Component({
@@ -21,15 +21,16 @@ export class NewPageComponent {
   public allLoadedProjects: Proyecto[] = []; // Todos los proyectos cargados
   public nextPageUrl: string | null = null;  // Para cargar más proyectos
 
-  public selectedProyectoNombre: string = '';  // Para mostrar el nombre en el autocompletado
 
   constructor(
     private fb: FormBuilder,
     private beneficiarioService: BeneficiarioService,
     private projectService: ProjectServiceService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private ConfirmationService: ConfirmationService
   ) {
     this.beneficiarioForm = this.fb.group({
+      id: [''],
       dpi: ['', Validators.required],
       proyecto: ['', Validators.required], // Aquí almacenamos el ID del proyecto
     });
@@ -38,6 +39,7 @@ export class NewPageComponent {
   ngOnInit(): void {
     if (this.beneficiarioToEdit) {
       this.beneficiarioForm.patchValue({
+        id: this.beneficiarioToEdit.id,
         dpi: this.beneficiarioToEdit.DPI,
         proyecto: this.beneficiarioToEdit.idProyecto// Asignamos el ID del proyecto si existe
       });
@@ -48,14 +50,63 @@ export class NewPageComponent {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['beneficiarioToEdit'] && changes['beneficiarioToEdit'].currentValue) {
       this.beneficiarioForm.patchValue({
-        dpi: changes['beneficiarioToEdit'].currentValue.dpi,
+        id: changes['beneficiarioToEdit'].currentValue.id,
+        dpi: changes['beneficiarioToEdit'].currentValue.DPI,
         proyecto: changes['beneficiarioToEdit'].currentValue.proyecto?.id
       });
     }
   }
 
   onSubmit(): void {
+    this.validarFormulario();
+    if (this.beneficiarioToEdit?.id) {
+      this.updateBeneficiario();
+    } else {
+      this.ConfirmationService.confirm({
+        message: `¿Deseas registrar al beneficiario con DPI ${this.beneficiarioForm.value.dpi} al proyecto ${ this.selectedProyectoNombre}?`,
+        header: 'Confirmar Registro',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.registerBeneficiario();
+        }
+      });
+    }
+  }
+
+  registerBeneficiario(): void {
+    this.beneficiarioService.addBeneficiario(this.beneficiarioForm.value).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Beneficiario registrado exitosamente' });
+        this.formSubmit.emit();
+        this.resetForm();
+      },
+      error: (error) => {
+        if (error.status === 404 || error.status === 400) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
+      }
+      console.error('Error al registrar el beneficiario', error);
+      }
+    });
+  }
+
+  updateBeneficiario(): void {
+
+    this.beneficiarioService.updateBeneficiario(this.beneficiarioForm.value).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Beneficiario actualizado exitosamente' });
+        this.formSubmit.emit();
+        this.resetForm();
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el beneficiario' });
+        console.error('Error al actualizar el beneficiario', err);
+      }
+    });
+  }
+
+  validarFormulario(): void {
     if (this.beneficiarioForm.invalid) {
+      this.beneficiarioForm.markAllAsTouched();
       Object.keys(this.beneficiarioForm.controls).forEach(field => {
         const control = this.beneficiarioForm.get(field);
         if (control?.invalid) {
@@ -63,32 +114,6 @@ export class NewPageComponent {
         }
       });
       return;
-    }
-
-    if (this.beneficiarioToEdit?.id) {
-      this.beneficiarioService.updateBeneficiario(this.beneficiarioForm.value).subscribe({
-        next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Beneficiario actualizado exitosamente' });
-          this.formSubmit.emit();
-          this.resetForm();
-        },
-        error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el beneficiario' });
-          console.error('Error al actualizar el beneficiario', err);
-        }
-      });
-    } else {
-      this.beneficiarioService.addBeneficiario(this.beneficiarioForm.value).subscribe({
-        next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Beneficiario registrado exitosamente' });
-          this.formSubmit.emit();
-          this.resetForm();
-        },
-        error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar el beneficiario' });
-          console.error('Error al registrar el beneficiario', err);
-        }
-      });
     }
   }
 
@@ -103,8 +128,9 @@ export class NewPageComponent {
       (this.beneficiarioForm.get(field)?.dirty || this.beneficiarioForm.get(field)?.touched);
   }
 
-  // Método para cargar los proyectos iniciales
   cargarProyectos(): void {
+    console.log('Cargando proyectos...');
+
     this.projectService.listarProyectos().subscribe(response => {
       this.allLoadedProjects = [
         ...this.allLoadedProjects, // Mantener los ya cargados
@@ -122,6 +148,8 @@ export class NewPageComponent {
 
   // Método para cargar más proyectos
   cargarMasProyectos(): void {
+    console.log('Cargando más proyectos...');
+
     if (this.nextPageUrl) {
       this.projectService.getProyectoByUrl(this.nextPageUrl).subscribe((data) => {
         this.allLoadedProjects.push(
@@ -129,9 +157,12 @@ export class NewPageComponent {
             return {
               ...proyecto,
               nombreCompleto: `${proyecto.id} ${proyecto.nombre} - ${proyecto.descripcion}`
+
             };
           })
         );
+        console.log('Proyectos cargados:', this.allLoadedProjects);
+
         // Actualizar la siguiente URL
         this.nextPageUrl = data._links.next?.href || null;
       });
@@ -145,6 +176,8 @@ export class NewPageComponent {
       proyecto.nombre.toLowerCase().includes(query)
     );
   }
+
+  public selectedProyectoNombre = ''; // Nombre del proyecto seleccionado
 
   // Método para seleccionar un proyecto
   onProyectoSeleccionado(event: any): void {
