@@ -28,6 +28,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule  } from 'primeng/confirmdialog';
+import { RadioButtonModule  } from 'primeng/radiobutton';
 
 
 
@@ -61,7 +62,8 @@ import { ConfirmDialogModule  } from 'primeng/confirmdialog';
     CalendarModule,
     CheckboxModule,
     MultiSelectModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    RadioButtonModule
   ]
 })
 export class MaterialModule { }

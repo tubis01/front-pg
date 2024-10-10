@@ -1,0 +1,32 @@
+<p-dialog header="Exportar Beneficiarios" [(visible)]="visible" modal="true" [closable]="false" [responsive]="true">
+  <div class="p-fluid">
+    <form [formGroup]="exportForm">
+      <!-- Dropdown para seleccionar el proyecto -->
+      <div class="p-field">
+        <label for="proyecto">Seleccionar Proyecto</label>
+        <p-dropdown
+          id="proyecto"
+          formControlName="proyecto"
+          [options]="proyectos"
+          optionLabel="nombre"
+          placeholder="Selecciona un proyecto"
+        ></p-dropdown>
+        <div *ngIf="exportForm.get('proyecto')?.invalid && exportForm.get('proyecto')?.touched" class="error-message">
+          Proyecto es obligatorio.
+        </div>
+      </div>
+
+      <!-- RadioButtons para seleccionar el estado (activo/inactivo) -->
+      <div class="p-field">
+        <label>Estado</label>
+        <p-radioButton formControlName="activo" [value]="true" label="Activos"></p-radioButton>
+        <p-radioButton formControlName="activo" [value]="false" label="Inactivos"></p-radioButton>
+      </div>
+
+      <!-- Botones de confirmación y cancelación -->
+      <div class="p-dialog-footer">
+        <button pButton label="Exportar" icon="pi pi-check" (click)="onConfirm()" [disabled]="exportForm.invalid"></button>
+      </div>
+    </form>
+  </div>
+</p-dialog>

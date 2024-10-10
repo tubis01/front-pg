@@ -4,6 +4,9 @@ import { Error404PageComponent } from './pages/error404-page/error404-page.compo
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { MaterialModule } from '../material/material.module';
 import { MenuComponent } from './components/menu/menu.component';
+import { SearchBoxComponent } from './components/search-box/search-box.component';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -11,16 +14,21 @@ import { MenuComponent } from './components/menu/menu.component';
   declarations: [
     Error404PageComponent,
     ToolBarComponent,
-    MenuComponent
+    MenuComponent,
+    SearchBoxComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ],
   exports: [
     Error404PageComponent,
     ToolBarComponent,
-    MenuComponent
+    MenuComponent,
+    SearchBoxComponent,
+    LoadingSpinnerComponent
   ]
 })
 export class SharedModule { }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Beneficiario, HateoasResponse, UpdateBeneficiario } from '../interfaces/beneficiario.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -27,5 +27,16 @@ export class BeneficiarioService {
 
   public deleteBeneficiario(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/eliminar/${id}`);
+  }
+
+  // para bucar por dpi
+
+  buscarPorDpiParcial(dpi: string, page: number, size: number): Observable<Beneficiario[]> {
+    const params = new HttpParams()
+      .set('dpi', dpi)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Beneficiario[]>(`${this.apiUrl}/buscarDpiParcial`, { params });
   }
 }

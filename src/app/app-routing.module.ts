@@ -2,8 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Error404PageComponent } from './shared/pages/error404-page/error404-page.component';
 import { AuthGuard } from './auth/services/auth.guard';
+import { SearchBoxComponent } from './shared/components/search-box/search-box.component';
 
 const routes: Routes = [
+  {
+    path: 'search',
+    component: SearchBoxComponent
+  },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then (m => m.AuthModule)

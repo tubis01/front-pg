@@ -10,6 +10,7 @@ import { BeneficiarioTableComponent } from './components/beneficiario-table/bene
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ExporDialogComponent } from './components/expor-dialog/expor-dialog.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { SharedModule } from '../shared/shared.module';
     NewPageComponent,
     ListPageComponent,
     BeneficiarioPageComponent,
-    BeneficiarioTableComponent
+    BeneficiarioTableComponent,
+    ExporDialogComponent
   ],
   imports: [
     CommonModule,

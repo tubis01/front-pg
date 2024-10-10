@@ -16,6 +16,12 @@ export class BeneficiarioTableComponent {
   public pageSize: number = 20;
   public links: Links | undefined;
 
+  public beneficiarioSearch: Beneficiario[] = [];
+  public isLoading: boolean = false;
+
+  public searchTerm: string = '';
+
+
   @Output() editBeneficiario = new EventEmitter<Beneficiario>();
 
 
@@ -39,8 +45,10 @@ export class BeneficiarioTableComponent {
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
+        this.isLoading = false;
       },
       error: (error) => {
+        this.isLoading = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los beneficiarios.' });
         console.error('Error fetching beneficiarios', error);
       }
@@ -87,6 +95,30 @@ export class BeneficiarioTableComponent {
         }
       });
     }
+
+    onSearch(term: string): void {
+      this.isLoading = true;
+
+      if (term && term.trim().length > 0) {
+        this.beneficiarioService.buscarPorDpiParcial(term, this.currentPage, this.pageSize)
+        .subscribe({
+          next: (data) => {
+            this.isLoading = false;
+            this.beneficiarios = data; // Mostrar los beneficiarios filtrados
+          },
+          error: (err) => {
+            this.isLoading = false;
+            console.error('Error al buscar beneficiarios por DPI parcial:', err);
+          }
+        });
+      } else {
+        // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
+        this.loadBeneficiarios(this.currentPage);
+        this.isLoading = false;
+      }
+    }
+
+
 
   // Maneja el cambio de página
   onPageChange(event: any): void {

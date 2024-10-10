@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'shared-menu',
   templateUrl: './menu.component.html',
-  styles: ``
+  styleUrl: './menu.component.css'
 })
 export class MenuComponent implements OnInit, OnDestroy {
 

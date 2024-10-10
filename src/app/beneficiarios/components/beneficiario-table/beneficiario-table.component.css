@@ -17,3 +17,22 @@
   align-items: center;
 }
 
+
+.toolbar-container {
+  padding: 1rem;
+}
+
+.search-and-export {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-and-export button {
+  margin-left: 1rem;
+}
+
+.beneficiario-table {
+  margin-top: 1rem;
+}
