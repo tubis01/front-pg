@@ -28,6 +28,9 @@ import { SharedModule } from '../shared/shared.module';
     MaterialModule,
     ReactiveFormsModule,
     SharedModule
+  ],
+  exports: [
+    NewPageComponent
   ]
 })
 export class VoluntariosModule { }

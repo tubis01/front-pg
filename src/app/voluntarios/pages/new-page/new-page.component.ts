@@ -6,7 +6,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { DatosDetalleVoluntarioList } from '../../interfaces/voluntario.interface';
 
 @Component({
-  selector: 'app-new-page',
+  selector: 'app-new-volunario',
   templateUrl: './new-page.component.html',
   styles: ``
 })

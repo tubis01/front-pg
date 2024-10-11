@@ -6,8 +6,8 @@ import { SearchBoxComponent } from './shared/components/search-box/search-box.co
 
 const routes: Routes = [
   {
-    path: 'search',
-    component: SearchBoxComponent
+    path: 'home',
+    loadChildren: () => import('./home/home.module').then (m => m.HomeModule),
   },
   {
     path: 'auth',

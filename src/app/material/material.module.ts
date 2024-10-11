@@ -31,6 +31,8 @@ import { ConfirmDialogModule  } from 'primeng/confirmdialog';
 import { RadioButtonModule  } from 'primeng/radiobutton';
 import { DynamicDialogModule  } from 'primeng/dynamicdialog';
 import { MessageModule  } from 'primeng/message';
+import { CarouselModule  } from 'primeng/carousel';
+import { MenubarModule  } from 'primeng/menubar';
 
 
 
@@ -66,7 +68,9 @@ import { MessageModule  } from 'primeng/message';
     ConfirmDialogModule,
     RadioButtonModule,
     DynamicDialogModule,
-    MessageModule
+    MessageModule,
+    CarouselModule,
+    MenubarModule
   ]
 })
 export class MaterialModule { }
