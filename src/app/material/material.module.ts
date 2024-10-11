@@ -33,6 +33,7 @@ import { DynamicDialogModule  } from 'primeng/dynamicdialog';
 import { MessageModule  } from 'primeng/message';
 import { CarouselModule  } from 'primeng/carousel';
 import { MenubarModule  } from 'primeng/menubar';
+import { ImageModule  } from 'primeng/image';
 
 
 
@@ -70,7 +71,8 @@ import { MenubarModule  } from 'primeng/menubar';
     DynamicDialogModule,
     MessageModule,
     CarouselModule,
-    MenubarModule
+    MenubarModule,
+    ImageModule
   ]
 })
 export class MaterialModule { }

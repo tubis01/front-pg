@@ -6,6 +6,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { LayaoutPageComponent } from './pages/layaout-page/layaout-page.component';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from "../shared/shared.module";
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     AuthRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    SharedModule
+]
 })
 export class AuthModule { }

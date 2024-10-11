@@ -1,22 +1,6 @@
-<p-toolbar class="p-1 ">
-  <div class="p-toolbar-group-start">
-
-    <div class="p-toolbar-group-center">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input pInputText placeholder="Search" />
-      </span>
-    </div>
-
+<div class="menu-container">
+  <div class="logo">
   </div>
-  <div class="p-toolbar-group-end">
-    <p-button class="mr-2" (onClick)="('name')" label="Excel" icon="pi pi-file-excel" styleClass="p-button-success">
-    </p-button>
+  <p-menubar [model]="menuItems"></p-menubar>
 
-    <p-button class="mr-2" (onClick)="('canFly')" l label="PDF " icon="pi pi-file-pdf"
-      styleClass="p-button-danger">
-    </p-button>
-
-
-  </div>
-</p-toolbar>
+</div>

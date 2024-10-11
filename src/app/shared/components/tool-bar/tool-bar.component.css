@@ -1,0 +1,11 @@
+.menu-container {
+  position: fixed;         /* Hace que el menú sea fijo en la pantalla */
+  top: 0;                  /* Fija el menú en la parte superior */
+  left: 0;
+  width: 100%;             /* Ocupa todo el ancho de la pantalla */
+  z-index: 1000;           /* Asegura que esté por encima del resto del contenido */
+  background-color: white; /* Asegúrate de que tenga fondo para ser visible */
+}
+
+
+

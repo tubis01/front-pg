@@ -1,0 +1,70 @@
+.main-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.carousel {
+  margin-bottom: 40px;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.info-section {
+  margin-top: 30px;
+}
+
+.info-card {
+  margin: 15px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.access-buttons {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.p-button-lg {
+  margin: 15px;
+}
+
+.p-dialog .p-dialog-content {
+  text-align: center;
+}
+
+.logo-img {
+  height: 60px;  /* Ajustar el tamaño del logo si es necesario */
+  width: auto;
+}
+
+
+/* Estilos para mejorar el tamaño del diálogo en pantallas pequeñas */
+@media (max-width: 768px) {
+  p-dialog {
+    width: 90vw !important;  /* Hacer que el diálogo ocupe el 90% del ancho de la pantalla */
+    max-width: none;         /* Quitar el límite máximo de ancho */
+    min-width: none;         /* Quitar el límite mínimo de ancho */
+  }
+
+  .p-dialog-content {
+    padding: 10px; /* Ajustar el padding en pantallas pequeñas */
+  }
+
+  .p-dialog .ui-button {
+    width: 100%; /* Asegurar que los botones dentro del diálogo también sean responsivos */
+  }
+}
+
+/* Opcionalmente, puedes hacer ajustes en pantallas más grandes */
+@media (min-width: 769px) {
+  p-dialog {
+    width: 50vw !important;
+    max-width: 600px;
+    min-width: 300px;
+  }
+}

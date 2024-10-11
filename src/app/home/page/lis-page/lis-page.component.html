@@ -1,0 +1,107 @@
+<div class="main-container grid">
+  <!-- Columna principal: Menú y contenido principal -->
+  <div class="content col-12 md:col-8">
+    <!-- Aquí va tu contenido actual como el carrusel, tarjetas informativas y botones -->
+
+    <!-- Carrusel de imágenes -->
+    <p-carousel [value]="imagenesCarrusel" circular="true" autoplayInterval="3000">
+      <ng-template pTemplate="item" let-imagen>
+        <img src="{{imagen}}" class="carousel-image" alt="Imagen ONG" />
+      </ng-template>
+    </p-carousel>
+
+    <!-- Sección de Información con Tarjetas -->
+    <div class="info-section grid">
+      <div class="col-12 md:col-4">
+        <p-card title="Nuestra Misión" class="info-card">
+          <p>Transformar la vida de las personas a través de la educación, el apoyo comunitario y el acceso a oportunidades para un futuro mejor.</p>
+        </p-card>
+      </div>
+      <div class="col-12 md:col-4">
+        <p-card title="Nuestra Visión" class="info-card">
+          <p>Una sociedad justa y equitativa, donde cada individuo tenga acceso a las herramientas necesarias para lograr su máximo potencial.</p>
+        </p-card>
+      </div>
+      <div class="col-12 md:col-4">
+        <p-card title="Nuestro Impacto" class="info-card">
+          <p>Más de 5000 personas beneficiadas en los últimos 5 años a través de nuestros programas de educación, salud y bienestar.</p>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Botones de Acceso Rápido -->
+
+
+    <p-dialog
+    header="Formulario de Voluntarios"
+    [(visible)]="showVoluntarioDialog"
+    [modal]="true"
+    [closable]="true"
+    [style]="{'width': '50vw', 'max-width': '600px', 'min-width': '300px'}"
+    [baseZIndex]="10000"
+    [responsive]="true"
+  >
+    <app-voluntario-form></app-voluntario-form>
+  </p-dialog>
+
+    <!-- Diálogo para Formulario de Donadores -->
+    <p-dialog header="Formulario de Donadores"
+    [(visible)]="showDonadorDialog"
+    [modal]="true"
+    [closable]="true"
+    [style]="{'width': '50vw', 'max-width': '600px', 'min-width': '300px'}"
+    [baseZIndex]="10000"
+    [responsive]="true">
+      <app-donador-form></app-donador-form>
+    </p-dialog>
+
+    <div class="access-buttons grid">
+      <div class="col-12 md:col-4">
+        <button pButton label="Hazte Voluntario" class="p-button-lg p-button-success" (click)="openVoluntarioForm()"></button>
+      </div>
+      <div class="col-12 md:col-4">
+        <button pButton label="Hazte Donador" class="p-button-lg p-button-warning" (click)="openDonadorForm()"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Columna lateral derecha: Sección informativa -->
+  <div class="sidebar col-12 md:col-4">
+    <p-card title="Acerca de Nuestra ONG" class="info-card">
+      <p>Somos una organización no gubernamental comprometida con brindar apoyo a las personas más necesitadas en Guatemala, ofreciendo asistencia en varias áreas.</p>
+    </p-card>
+
+    <p-card title="Objetivos">
+      <ul>
+        <li>Fomentar el desarrollo sostenible.</li>
+        <li>Mejorar el acceso a la educación.</li>
+        <li>Brindar apoyo económico a familias en situación vulnerable.</li>
+        <li>Facilitar programas de capacitación.</li>
+      </ul>
+    </p-card>
+
+    <p-card title="Cobertura Nacional">
+      <p>Trabajamos en todos los departamentos de Guatemala:</p>
+      <ul>
+        <li>Guatemala</li>
+        <li>Huehuetenango</li>
+        <li>Quetzaltenango</li>
+        <li>Chiquimula</li>
+        <li>Alta Verapaz</li>
+        <li>...</li>
+        <!-- Puedes completar con los demás departamentos -->
+      </ul>
+    </p-card>
+
+    <p-card title="Tipos de Ayuda">
+      <p>Ofrecemos diversos tipos de apoyo a las comunidades:</p>
+      <ul>
+        <li>Ayuda económica</li>
+        <li>Entrega de alimentos</li>
+        <li>Materiales de construcción</li>
+        <li>Capacitaciones</li>
+        <li>Distribución de abono agrícola</li>
+      </ul>
+    </p-card>
+  </div>
+</div>

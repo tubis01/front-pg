@@ -4,21 +4,26 @@ import { CommonModule } from '@angular/common';
 import { HomeRoutingModule } from './home-routing.module';
 import { LisPageComponent } from './page/lis-page/lis-page.component';
 import { LayoutPageComponent } from './page/layout-page/layout-page.component';
-import { SharedModule } from 'primeng/api';
 import { MaterialModule } from '../material/material.module';
-import { DonadoresModule } from '../donadores/donadores.module';
-import { VoluntariosModule } from '../voluntarios/voluntarios.module';
+import { NewPageVoluntarioComponent } from './page/new-page-voluntario/new-page-voluntario.component';
+import { NewPageDonadorComponent } from './page/new-page-donador/new-page-donador.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
   declarations: [
     LisPageComponent,
-    LayoutPageComponent
+    LayoutPageComponent,
+    NewPageVoluntarioComponent,
+    NewPageDonadorComponent
   ],
   imports: [
     CommonModule,
     HomeRoutingModule,
     MaterialModule,
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class HomeModule { }

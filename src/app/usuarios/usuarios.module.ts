@@ -9,6 +9,7 @@ import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 import { UserTableComponent } from './components/user-table/user-table.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { MaterialModule } from '../material/material.module';
     CommonModule,
     UsuariosRoutingModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    SharedModule
   ]
 })
 export class UsuariosModule { }
