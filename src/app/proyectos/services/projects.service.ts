@@ -1,5 +1,5 @@
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HateoasResponse, Proyecto } from '../interfaces/proyecto.interface';
@@ -14,6 +14,15 @@ export class ProjectServiceService {
   // Obtener la lista de proyectos activos
   public listarProyectos(page: number = 0, size: number = 20): Observable<HateoasResponse<Proyecto>> {
     return this.http.get<HateoasResponse<Proyecto>>(`${this.apiUrl}/listar?page=${page}&size=${size}`);
+  }
+
+  public buscarPorNombre(termi: string, page: number, size: number ): Observable<Proyecto[]> {
+    const params = new HttpParams()
+      .set('term', termi)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Proyecto[]>(`${this.apiUrl}/buscarPorNombre`, { params });
   }
 
   // Obtener la lista de proyectos inactivos

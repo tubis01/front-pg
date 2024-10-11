@@ -30,6 +30,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule  } from 'primeng/confirmdialog';
 import { RadioButtonModule  } from 'primeng/radiobutton';
 import { DynamicDialogModule  } from 'primeng/dynamicdialog';
+import { MessageModule  } from 'primeng/message';
+
 
 
 
@@ -63,7 +65,8 @@ import { DynamicDialogModule  } from 'primeng/dynamicdialog';
     MultiSelectModule,
     ConfirmDialogModule,
     RadioButtonModule,
-    DynamicDialogModule
+    DynamicDialogModule,
+    MessageModule
   ]
 })
 export class MaterialModule { }

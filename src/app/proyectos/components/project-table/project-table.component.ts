@@ -10,6 +10,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   styleUrl: './project-table.component.css'
 })
 export class ProjectTableComponent implements OnInit{
+  
   public proyectos: Proyecto[] = [];
 
   public links: Links | undefined;
@@ -17,6 +18,8 @@ export class ProjectTableComponent implements OnInit{
   public totalPages: number = 1;
   public totalElements: number = 0;
   public pageSize: number = 20;
+
+  public isLoading: boolean = false;
 
   @Output() editProyecto = new EventEmitter<Proyecto>();
 
@@ -93,6 +96,28 @@ export class ProjectTableComponent implements OnInit{
         this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Eliminación cancelada.' });
       }
     });
+  }
+
+  onSearch(term: string): void {
+    this.isLoading = true;
+
+    if (term && term.trim().length > 0) {
+      this.proyectoService.buscarPorNombre(term, this.currentPage, this.pageSize)
+      .subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          this.proyectos = data; // Mostrar los beneficiarios filtrados
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error('Error al buscar beneficiarios por DPI parcial:', err);
+        }
+      });
+    } else {
+      // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
+      this.loadProyectos(this.currentPage);
+      this.isLoading = false;
+    }
   }
 
 

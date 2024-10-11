@@ -23,6 +23,8 @@ export class PersonTableComponent implements OnInit {
   public totalElements: number = 0; // Total de registros
   public pageSize: number = 20; // Tamaño de página
 
+  public isLoading: boolean = false;
+
   constructor(private personService: PersonService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
@@ -131,6 +133,28 @@ onEdit(person: Persona): void {
           this.onSubmitUpdate(); // Llama a la función de actualización
         }
       });
+    }
+
+    onSearch(term: string): void {
+      this.isLoading = true;
+
+      if (term && term.trim().length > 0) {
+        this.personService.buscarPorDpiParcial(term, this.currentPage, this.pageSize)
+        .subscribe({
+          next: (data) => {
+            this.isLoading = false;
+            this.persons = data; // Mostrar los beneficiarios filtrados
+          },
+          error: (err) => {
+            this.isLoading = false;
+            console.error('Error al buscar beneficiarios por DPI parcial:', err);
+          }
+        });
+      } else {
+        // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
+        this.loadPersons(this.currentPage);
+        this.isLoading = false;
+      }
     }
 
   // Método para manejar el cambio de página en la tabla

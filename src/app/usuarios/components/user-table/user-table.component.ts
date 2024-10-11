@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { HateoasResponse, Links, Usuario } from '../../interfaces/user.interface';
 import { UsuarioService } from '../../service/user.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { catchError, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-user-table',
@@ -27,8 +28,9 @@ export class UserTableComponent {
   }
 
   loadUsuarios(page: number): void {
-    this.usuarioService.listarUsuarios(page, this.pageSize).subscribe({
-      next: (response: HateoasResponse<Usuario>) => {
+    this.usuarioService.listarUsuarios(page, this.pageSize).pipe(
+      tap((response: HateoasResponse<Usuario>) => {
+        // Procesa la respuesta aquí
         if (response._embedded?.datosDetalleUsuarioList) {
           this.usuarios = response._embedded.datosDetalleUsuarioList;
         }
@@ -36,14 +38,15 @@ export class UserTableComponent {
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
-      },
-      error: (error) => {
+      }),
+      catchError(error => {
+        // Manejo de errores aquí
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los usuarios.' });
         console.error('Error fetching usuarios', error);
-      }
-    });
+        return of(); // Retornar un observable vacío para no romper el flujo
+      })
+    ).subscribe();
   }
-
 
   onEdit(usuario: Usuario): void {
     this.confirmationService.confirm({

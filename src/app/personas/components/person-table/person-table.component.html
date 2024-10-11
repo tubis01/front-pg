@@ -1,11 +1,18 @@
 
+<div class="search-and-export">
+  <shared-search-box
+    [placeHolder]="'Buscar persona por DPI'"
+  (onDebounce)="onSearch($event)"></shared-search-box>
+</div>
+
+
 <p-table
 [value]="persons"
 [rows]="pageSize"
 [totalRecords]="totalElements"
 (onPageChange)="onPageChange($event)"
 [scrollable]="true"
-scrollHeight="590px"
+scrollHeight="495px"
 [frozenWidth]= "'600px'"
 >
     <ng-template pTemplate="header">
@@ -84,6 +91,11 @@ scrollHeight="590px"
     </ng-template>
     <button></button>
 </p-table>
+
+
+<div *ngIf="!persons?.length && !isLoading" class="alert alert-warning text-center">
+  No se encontraron personas.
+</div>
 <div class="pagination-container">
   <button pButton class="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>
   <button pButton class="pi pi-angle-left" (click)="loadPrevPage()" *ngIf="links?.prev"></button>

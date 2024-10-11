@@ -17,6 +17,15 @@
   align-items: center;
 }
 
+.alert-warning{
+  margin-top: 10px;
+  background-color: #ffeb3b;
+  color: #000;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
 
 .toolbar-container {
   padding: 1rem;
@@ -27,6 +36,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+
+  border: 1px solid #ccc; /* Borde gris alrededor */
+  background-color: #f9f9f9; /* Fondo claro */
+  padding: 1rem; /* Espacio interno alrededor del contenido */
+  border-radius: 8px; /* Bordes redondeados */
 }
 
 .search-and-export button {

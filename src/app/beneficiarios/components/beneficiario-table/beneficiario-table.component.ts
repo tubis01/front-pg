@@ -6,6 +6,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ExportService } from '../../services/export.service';
 import { ExporDialogComponent } from '../expor-dialog/expor-dialog.component';
 import { Proyecto } from '../../../proyectos/interfaces/proyecto.interface';
+import { catchError, of, tap } from 'rxjs';
 @Component({
   selector: 'app-beneficiario-table',
   templateUrl: './beneficiario-table.component.html',
@@ -43,23 +44,27 @@ export class BeneficiarioTableComponent {
   }
 
   loadBeneficiarios(page: number): void {
-    this.beneficiarioService.getBeneficiarios(page, this.pageSize).subscribe({
-      next: (response: HateoasResponse<Beneficiario>) => {
-        if (response._embedded && response._embedded.datosDetalleBeneficiarioList) {
-          this.beneficiarios = response._embedded.datosDetalleBeneficiarioList;
-        }
-        this.links = response._links;
-        this.currentPage = response.page.number;
-        this.totalPages = response.page.totalPages;
-        this.totalElements = response.page.totalElements;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los beneficiarios.' });
-        console.error('Error fetching beneficiarios', error);
-      }
-    });
+    this.isLoading = true; // Iniciar la carga
+    this.beneficiarioService.getBeneficiarios(page, this.pageSize)
+      .pipe(
+        tap((response: HateoasResponse<Beneficiario>) => {
+          if (response._embedded && response._embedded.datosDetalleBeneficiarioList) {
+            this.beneficiarios = response._embedded.datosDetalleBeneficiarioList;
+          }
+          this.links = response._links;
+          this.currentPage = response.page.number;
+          this.totalPages = response.page.totalPages;
+          this.totalElements = response.page.totalElements;
+          this.isLoading = false; // Finalizar la carga
+        }),
+        catchError((error) => {
+          this.isLoading = false;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los beneficiarios.' });
+          console.error('Error fetching beneficiarios', error);
+          return of(); // Devolver un observable vacío para continuar con el flujo
+        })
+      )
+      .subscribe();
   }
     // Método para editar un beneficiario
     onEdit(beneficiario: Beneficiario): void {

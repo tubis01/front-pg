@@ -5,7 +5,7 @@ import { debounceTime, Subject, Subscription } from 'rxjs';
 @Component({
   selector: 'shared-search-box',
   templateUrl: './search-box.component.html',
-  styles: ``
+  styleUrl: './search-box.component.css'
 })
 export class SearchBoxComponent implements OnInit, OnDestroy {
 
@@ -16,7 +16,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   public initialValue:string = '';
 
   @Input()
-  public placeHolder:string = '';
+  public placeHolder:string = 'Buscar...';
 
   @Output()
   public onValue: EventEmitter<string> = new EventEmitter();

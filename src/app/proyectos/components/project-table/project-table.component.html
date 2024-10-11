@@ -1,3 +1,10 @@
+<div class="search-and-export">
+  <shared-search-box
+    [placeHolder]="'Buscar persona por nombre'"
+  (onDebounce)="onSearch($event)"></shared-search-box>
+</div>
+
+
 <p-table
   [value]="proyectos"
   [rows]="pageSize"
@@ -29,10 +36,12 @@
       <td class="fixed-column">
         <div class="button-container">
 
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info"
+          <button
+          pButton icon="pi pi-pencil" class="p-button-rounded p-button-info"
           (click)="onEdit(proyecto)">
         </button>
-        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
+        <button
+        pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
         (click)="confirmDelete(proyecto)">
       </button>
     </div>
@@ -40,6 +49,10 @@
     </tr>
   </ng-template>
 </p-table>
+
+<div *ngIf="!proyectos?.length && !isLoading" class="alert alert-warning text-center">
+  No se encontraron proyectos.
+</div>
 
 <!-- Sección de Paginación -->
 <div class="pagination-container">

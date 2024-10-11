@@ -35,6 +35,10 @@ export class PersonService {
     return this.http.post<Persona>(`${this.apiUrl}/registrar`, persona);
   }
 
+  buscarPorDpiParcial(dpi: string, page: number, size: number): Observable<Persona[]> {
+    return this.http.get<Persona[]>(`${this.apiUrl}/buscarDpiParcial?dpi=${dpi}&page=${page}&size=${size}`);
+  }
+
 
 
 }

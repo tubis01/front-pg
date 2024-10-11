@@ -3,7 +3,9 @@
   gap: 20px; /* Espacio entre la tabla y el formulario */
 }
 
-.table-container {
+
+
+.table-container { /* Ajusta el margen superior según necesites */
   flex: 2; /* La tabla ocupará más espacio */
   min-width: 500px; /* Define un ancho mínimo para evitar la reducción */
 }

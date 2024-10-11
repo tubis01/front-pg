@@ -15,6 +15,10 @@ export class VoluntarioService {
     return this.http.get<HateoasResponse<DatosDetalleVoluntarioList>>(`${this.apiUrl}/listar?page=${page}&size=${size}`);
   }
 
+  public getVoluntarioByUrl(url: string): Observable<HateoasResponse<DatosDetalleVoluntarioList>> {
+    return this.http.get<HateoasResponse<DatosDetalleVoluntarioList>>(url);
+  }
+
     // Agregar un donador
     public addDonador(donador: DatosDetalleVoluntarioList): Observable<DatosDetalleVoluntarioList> {
       return this.http.post<DatosDetalleVoluntarioList>(`${this.apiUrl}/registrar`, donador);

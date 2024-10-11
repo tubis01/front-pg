@@ -1,11 +1,14 @@
-
-<div class="" >
+<div class="p-inputgroup">
+  <!-- Ícono de búsqueda -->
+  <span class="p-inputgroup-addon">
+    <i class="pi pi-search"></i>
+  </span>
+  <!-- Campo de búsqueda -->
   <input
-  pInputText
-  [placeholder]="placeHolder"
-  [value]="initialValue"
-  class="form-control"
-  (keypress)="onKeyPress(txtInput.value)"
-  #txtInput
+    pInputText
+    [placeholder]="placeHolder"
+    [value]="initialValue"
+    (keypress)="onKeyPress(txtInput.value)"
+    #txtInput
   >
 </div>

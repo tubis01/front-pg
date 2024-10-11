@@ -15,6 +15,11 @@ export class DonadoresService {
     return this.http.get<HateoasResponse<DatosDetalleDonadorList>>(`${this.apirUrl}/listar?page=${page}&size=${size}`);
   }
 
+  public getDonadorByUrl(url: string): Observable<HateoasResponse<DatosDetalleDonadorList>> {
+    return this.http.get<HateoasResponse<DatosDetalleDonadorList>>(url);
+  }
+
+
 
   // Agregar un donador
   public addDonador(donador: DatosDetalleDonadorList): Observable<DatosDetalleDonadorList> {
