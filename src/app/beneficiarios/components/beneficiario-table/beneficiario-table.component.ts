@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Beneficiario, HateoasResponse, Links } from '../../interfaces/beneficiario.interface';
 import { BeneficiarioService } from '../../services/beneficiario.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
+import { DialogService } from 'primeng/dynamicdialog';
+import { ExportService } from '../../services/export.service';
+import { ExporDialogComponent } from '../expor-dialog/expor-dialog.component';
+import { Proyecto } from '../../../proyectos/interfaces/proyecto.interface';
 @Component({
   selector: 'app-beneficiario-table',
   templateUrl: './beneficiario-table.component.html',
@@ -21,6 +24,8 @@ export class BeneficiarioTableComponent {
 
   public searchTerm: string = '';
 
+  @Input() proyectos: Proyecto[] = [];
+
 
   @Output() editBeneficiario = new EventEmitter<Beneficiario>();
 
@@ -28,7 +33,9 @@ export class BeneficiarioTableComponent {
   constructor(
     private beneficiarioService: BeneficiarioService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private dialogService: DialogService,
+    private exporService: ExportService
   ) {}
 
   ngOnInit(): void {
@@ -117,6 +124,54 @@ export class BeneficiarioTableComponent {
         this.isLoading = false;
       }
     }
+
+
+    openExportDialog(): void {
+      const ref = this.dialogService.open(ExporDialogComponent, {
+        header: 'Exportar Beneficiarios',
+        data: {
+          proyectos: this.proyectos  // Pasamos los proyectos al diálogo
+        }
+      });
+
+      ref.onClose.subscribe((exportData) => {
+        console.log("Diálogo cerrado, datos de exportación:", exportData);
+        if (exportData) {
+          this.exportToExcel(exportData.idProyecto, exportData.activo);
+        }
+      });
+
+      console.log('Diálogo de exportación abierto');
+    }
+
+    exportToExcel(idProyecto: number, activo: boolean): void {
+      console.log('Exportando beneficiarios:', idProyecto, activo);
+
+      this.exporService.exportBeneficiarios(idProyecto, activo).subscribe({
+        next: (response) => {
+          // Crear un Blob con la respuesta del backend
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+          // Crear una URL temporal para el archivo y disparar la descarga
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+
+          // Nombrar el archivo de salida
+          a.download = `beneficiarios_proyecto_${idProyecto}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+
+          // Eliminar el objeto URL creado
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error('Error al exportar beneficiarios', err);
+        }
+      });
+    }
+
+
 
 
 

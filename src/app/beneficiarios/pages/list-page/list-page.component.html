@@ -2,7 +2,9 @@
   <!-- Columna de la tabla de beneficiarios -->
   <div class="table-container">
     <p-card>
-      <app-beneficiario-table (editBeneficiario)="onEditBeneficiario($event)"></app-beneficiario-table>
+      <app-beneficiario-table
+      [proyectos]="proyectos"
+      (editBeneficiario)="onEditBeneficiario($event)"></app-beneficiario-table>
     </p-card>
   </div>
 

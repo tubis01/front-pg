@@ -7,9 +7,13 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+
 import { ConfirmationService, MessageService } from 'primeng/api';
+
 import { AuthInterceptor } from './auth/services/auth.interceptor';
 import { MaterialModule } from './material/material.module';
+import { DialogService, DynamicDialogConfig, DynamicDialogModule } from 'primeng/dynamicdialog';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,16 +25,15 @@ import { MaterialModule } from './material/material.module';
     HttpClientModule,
 
     SharedModule,
-    MaterialModule
+    MaterialModule,
 
-
-
-
+    DynamicDialogModule
 
   ],
   providers: [
     MessageService,
     ConfirmationService,
+    DialogService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

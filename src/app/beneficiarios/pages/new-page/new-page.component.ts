@@ -1,6 +1,6 @@
 import { Proyecto } from './../../../proyectos/interfaces/proyecto.interface';
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { Beneficiario } from '../../interfaces/beneficiario.interface';
+import { Beneficiario, Links } from '../../interfaces/beneficiario.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BeneficiarioService } from '../../services/beneficiario.service';
 import { ProjectServiceService } from '../../../proyectos/services/projects.service';
@@ -18,6 +18,7 @@ export class NewPageComponent {
 
   public beneficiarioForm: FormGroup;
   public filteredProjects: Proyecto[] = [];  // Proyectos filtrados para autocompletar
+  
   public allLoadedProjects: Proyecto[] = []; // Todos los proyectos cargados
   public nextPageUrl: string | null = null;  // Para cargar más proyectos
 
@@ -129,8 +130,6 @@ export class NewPageComponent {
   }
 
   cargarProyectos(): void {
-    console.log('Cargando proyectos...');
-
     this.projectService.listarProyectos().subscribe(response => {
       this.allLoadedProjects = [
         ...this.allLoadedProjects, // Mantener los ya cargados
@@ -148,8 +147,6 @@ export class NewPageComponent {
 
   // Método para cargar más proyectos
   cargarMasProyectos(): void {
-    console.log('Cargando más proyectos...');
-
     if (this.nextPageUrl) {
       this.projectService.getProyectoByUrl(this.nextPageUrl).subscribe((data) => {
         this.allLoadedProjects.push(
@@ -161,7 +158,6 @@ export class NewPageComponent {
             };
           })
         );
-        console.log('Proyectos cargados:', this.allLoadedProjects);
 
         // Actualizar la siguiente URL
         this.nextPageUrl = data._links.next?.href || null;

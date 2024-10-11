@@ -29,8 +29,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule  } from 'primeng/confirmdialog';
 import { RadioButtonModule  } from 'primeng/radiobutton';
-
-
+import { DynamicDialogModule  } from 'primeng/dynamicdialog';
 
 
 
@@ -63,7 +62,8 @@ import { RadioButtonModule  } from 'primeng/radiobutton';
     CheckboxModule,
     MultiSelectModule,
     ConfirmDialogModule,
-    RadioButtonModule
+    RadioButtonModule,
+    DynamicDialogModule
   ]
 })
 export class MaterialModule { }

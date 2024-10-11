@@ -1,0 +1,59 @@
+
+.p-dialog-footer {
+  margin-top: 1.5rem;     /* Espacio entre el formulario y el botón */
+  display: flex;
+  justify-content: flex-end; /* Colocar el botón a la derecha en pantallas más grandes */
+}
+
+.error-message {
+  color: red; /* Color del mensaje de error */
+  font-size: 0.8rem; /* Tamaño de fuente más pequeño */
+}
+
+button {
+  width: 100%;            /* Hacer que el botón ocupe todo el ancho */
+  padding: 0.75rem;       /* Aumentar el tamaño del botón */
+}
+
+/* Responsive: Para pantallas pequeñas */
+@media (max-width: 600px) {
+  .p-field {
+    margin-bottom: 0.5rem;
+    padding: 0.3rem;
+  }
+
+  .p-dialog-footer {
+    margin-top: 0.5rem;
+  }
+
+  button {
+    width: 100%;
+    padding: 0.5rem;
+  }
+
+  .p-dialog .p-dialog-content {
+    padding: 0.5rem; /* Reduce el padding en pantallas pequeñas */
+  }
+}
+
+/* Pantallas medianas */
+@media (min-width: 601px) and (max-width: 1200px) {
+  .p-field {
+    margin-bottom: 1.2rem;
+  }
+
+  .p-dialog-footer {
+    margin-top: 1.2rem;
+  }
+}
+
+/* Pantallas grandes */
+@media (min-width: 1201px) {
+  .p-field {
+    margin-bottom: 1.5rem;
+  }
+
+  .p-dialog-footer {
+    margin-top: 1.5rem;
+  }
+}

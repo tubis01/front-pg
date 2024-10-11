@@ -11,6 +11,7 @@ import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ExporDialogComponent } from './components/expor-dialog/expor-dialog.component';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 
 
 @NgModule({
@@ -27,7 +28,10 @@ import { ExporDialogComponent } from './components/expor-dialog/expor-dialog.com
     BeneficiariosRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+  ],
+  exports:[
+    ExporDialogComponent
   ]
 })
 export class BeneficiariosModule { }

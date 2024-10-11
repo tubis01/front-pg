@@ -2,9 +2,9 @@
   <!-- Barra de búsqueda y botón de exportar -->
   <div class="search-and-export">
     <shared-search-box (onDebounce)="onSearch($event)"></shared-search-box>
-    <button pButton icon="pi pi-file-excel" label="Exportar"  ></button>
+    <button pButton icon="pi pi-file-excel" label="Exportar" (click)="openExportDialog()"  ></button>
   </div>
-  
+
 <p-table
   [value]="beneficiarios"
   [rows]="pageSize"
