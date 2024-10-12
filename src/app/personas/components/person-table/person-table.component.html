@@ -81,10 +81,12 @@ scrollHeight="495px"
             <td>{{ person.responsable }}</td>
             <td class="fixed-column">
               <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info"
-                (click)="onEdit(person)">
+              *ngIf="canEdit"
+              (click)="onEdit(person)">
               </button>
               <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                (click)="confirmDelete(person)">
+              *ngIf="canEdit"
+              (click)="confirmDelete(person)">
               </button>
             </td>
         </tr>

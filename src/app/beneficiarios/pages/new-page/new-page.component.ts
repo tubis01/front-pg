@@ -6,6 +6,7 @@ import { BeneficiarioService } from '../../services/beneficiario.service';
 import { ProjectServiceService } from '../../../proyectos/services/projects.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-new-beneficiario',
@@ -18,17 +19,20 @@ export class NewPageComponent {
 
   public beneficiarioForm: FormGroup;
   public filteredProjects: Proyecto[] = [];  // Proyectos filtrados para autocompletar
-  
+
   public allLoadedProjects: Proyecto[] = []; // Todos los proyectos cargados
   public nextPageUrl: string | null = null;  // Para cargar más proyectos
 
+
+  public isDigitador: boolean = false
 
   constructor(
     private fb: FormBuilder,
     private beneficiarioService: BeneficiarioService,
     private projectService: ProjectServiceService,
     private messageService: MessageService,
-    private ConfirmationService: ConfirmationService
+    private ConfirmationService: ConfirmationService,
+    private authserVice: AuthService
   ) {
     this.beneficiarioForm = this.fb.group({
       id: [''],
@@ -46,6 +50,7 @@ export class NewPageComponent {
       });
     }
     this.cargarProyectos(); // Cargar los proyectos al iniciar el componente
+    this.checkRole();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -186,5 +191,10 @@ export class NewPageComponent {
     } else {
       console.error('El proyecto seleccionado no tiene un ID válido.');
     }
+  }
+
+  checkRole(): void{
+    const roles = this.authserVice.getRoles();
+    this.isDigitador = roles.includes('ROLE_DIGITADOR');
   }
 }

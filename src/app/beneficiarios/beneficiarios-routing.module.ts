@@ -4,6 +4,7 @@ import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 import { ListPageComponent } from './pages/list-page/list-page.component';
 import { NewPageComponent } from './pages/new-page/new-page.component';
 import { BeneficiarioPageComponent } from './pages/beneficiario-page/beneficiario-page.component';
+import { authGuard } from '../auth/services/auth.guard';
 
 const routes: Routes = [
   {
@@ -16,7 +17,11 @@ const routes: Routes = [
       },
       {
         path: 'new-beneficiario',
-        component: NewPageComponent
+        component: NewPageComponent,
+        canActivate: [authGuard],
+        data: {
+          roles: ['ROLE_DIGITADOR', 'ROLE_ADMIN']
+        }
       },
       {
         path: 'edit/:id',

@@ -3,6 +3,7 @@ import { Beneficiario } from '../../interfaces/beneficiario.interface';
 import { Proyecto } from '../../../proyectos/interfaces/proyecto.interface';
 import { HttpClient } from '@angular/common/http';
 import { ProjectServiceService } from '../../../proyectos/services/projects.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-list-page',
@@ -12,12 +13,27 @@ import { ProjectServiceService } from '../../../proyectos/services/projects.serv
 export class ListPageComponent implements OnInit{
 
   public proyectos: Proyecto[] = [];
+  public selectedBeneficiario: Beneficiario | null = null;
 
-  constructor( private projectService: ProjectServiceService) { }
+
+
+  // implementacion de permisos para usuarios
+  public canEdit: boolean =  false;
+  public canViewTable: boolean = false;
+  public canViewForm: boolean = false;
+
+
+
+
+  constructor(
+    private projectService: ProjectServiceService,
+    private AuthService: AuthService
+  ) { }
 
 
   ngOnInit(): void {
     this.loadProjects();
+    this.setPermission();
   }
 
   loadProjects(): void {
@@ -34,10 +50,25 @@ export class ListPageComponent implements OnInit{
 
   }
 
+  setPermission(): void{
+    const roles = this.AuthService.getRoles();
+    if(roles.includes('ROLE_ADMIN')){
+      this.canEdit = true;
+      this.canViewTable = true;
+      this.canViewForm = true;
+    }else if(roles.includes('ROLE_USER')){
+      this.canViewTable = true;
+    }else if(roles.includes('ROLE_DIGITADOR')){
+      this.canViewForm = true;
+  }
+
+  console.log('roles', roles);
+
+}
 
 
 
-  public selectedBeneficiario: Beneficiario | null = null;
+
 
   onEditBeneficiario(beneficiario: Beneficiario): void {
     // Al hacer clic en editar, se asigna el beneficiario para editar al formulario

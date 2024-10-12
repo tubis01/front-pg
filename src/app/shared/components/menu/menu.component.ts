@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Sidebar } from 'primeng/sidebar';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Router } from '@angular/router';
@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 })
 export class MenuComponent implements OnInit, OnDestroy {
 
+  public isDigitador: boolean = false;
+  public isUser: boolean = false;
 
   public userName: string | null = '';
   public isLoggedIn: boolean = false;
@@ -29,6 +31,8 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.userName = this.authService.getUserName(); // Obtener el nombre del usuario si está logueado
       }
     });
+
+    this.setPermission();
   }
 
   logout(): void {
@@ -47,6 +51,15 @@ export class MenuComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe(); // Desuscribirse para evitar pérdidas de memoria
+    }
+  }
+
+  setPermission(): void{
+    const roles = this.authService.getRoles();
+    if(roles.includes('ROLE_DIGITADOR')){
+      this.isDigitador = true;
+    }else if(roles.includes('ROLE_USER')){
+      this.isUser = true;
     }
   }
 

@@ -2,14 +2,16 @@
 
 <div class="layout-container">
   <!-- Contenedor de la tabla de responsables -->
-  <div class="table-container ">
+  <div class="table-container " *ngIf="canViewTable">
     <p-card>
-    <responsable-table (editResponsable)="onEditResponsable($event)"></responsable-table>
+    <responsable-table
+    [canEdit]="canEdit"
+    (editResponsable)="onEditResponsable($event)"></responsable-table>
     </p-card>
   </div>
 
   <!-- Contenedor del formulario de responsables -->
-  <div class="form-container">
+  <div class="form-container" *ngIf="canViewForm">
       <app-new-responsable
         [responsableToEdit]="selectedResponsable"
         (formSubmit)="onFormSubmit()"

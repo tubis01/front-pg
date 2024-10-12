@@ -3,15 +3,16 @@
 
 <div class="layout-container">
   <!-- Columna de la tabla de personas -->
-  <div class="table-container">
+  <div class="table-container" *ngIf="canViewTable">
     <p-card>
-
-      <person-table (editPerson)="onEditPerson($event)"></person-table>
+      <person-table
+      [canEdit]="canEdit"
+      (editPerson)="onEditPerson($event)"></person-table>
     </p-card>
   </div>
 
   <!-- Columna del formulario de registro/actualización -->
-  <div class="form-container">
+  <div class="form-container" *ngIf="canViewForm">
     <person-new-page
       [personToEdit]="selectedPerson"
       (formSubmit)="onFormSubmit()">

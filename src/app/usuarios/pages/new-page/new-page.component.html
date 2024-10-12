@@ -37,13 +37,6 @@
             <input pInputText id="usuario" formControlName="usuario" placeholder="Usuario" required />
           </div>
 
-          <!-- Campo Clave -->
-          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('clave') }">
-            <label for="clave">Clave</label>
-            <input pInputText type="password" id="clave" formControlName="clave" placeholder="Clave" required />
-          </div>
-
-          <!-- Campo Rol (Dropdown para selección de un solo rol) -->
           <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('rol') }">
             <label for="rol">Rol</label>
             <p-dropdown
@@ -59,6 +52,15 @@
               Debes seleccionar un rol.
             </div>
           </div>
+
+          <!-- Campo Clave -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('clave') }">
+            <label for="clave">Clave</label>
+            <input pInputText type="password" id="clave" formControlName="clave" placeholder="Clave" required />
+          </div>
+
+          <!-- Campo Rol (Dropdown para selección de un solo rol) -->
+
 
           <!-- Botón para guardar -->
           <div class="col-12">

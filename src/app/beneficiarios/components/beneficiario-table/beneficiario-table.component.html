@@ -4,7 +4,7 @@
     <shared-search-box
     [placeHolder]="'Buscar beneficiario por DPI'"
     (onDebounce)="onSearch($event)"></shared-search-box>
-    <button pButton icon="pi pi-file-excel" label="Exportar" (click)="openExportDialog()"  ></button>
+    <button  *ngIf="canEdit" pButton icon="pi pi-file-excel" label="Exportar" (click)="openExportDialog()"  ></button>
   </div>
 
 <p-table
@@ -27,7 +27,7 @@
       <th style="width:10%">Teléfono</th>
       <th style="width:15%">Fecha de Nacimiento</th>
       <th style="width:15%">Nombre del Proyecto</th>
-      <th style="width:10%">Acciones</th>
+      <th *ngIf="canEdit" style="width:10%">Acciones</th>
     </tr>
   </ng-template>
 
@@ -40,12 +40,12 @@
       <td>{{ beneficiario.telefono }}</td>
       <td>{{ beneficiario.fechaNacimiento | date: 'shortDate' }}</td>
       <td>{{ beneficiario.NombreProyecto }}</td>
-      <td class="fixed-column">
+      <td *ngIf="canEdit" class="fixed-column">
 
         <div class="button-container">
 
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(beneficiario)"></button>
-          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(beneficiario)"></button>
+          <button  pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(beneficiario)"></button>
+          <button  pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(beneficiario)"></button>
         </div>
       </td>
     </tr>

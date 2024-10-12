@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { Responsable } from '../../interfaces/responsable.interface';
 
+
 @Component({
   selector: 'app-new-responsable',
   templateUrl: './new-page.component.html',
@@ -50,6 +51,7 @@ export class NewPageComponent implements OnInit, OnChanges {
       this.responsableForm.patchValue(this.responsableToEdit);
     }
   }
+
 
   // Detecta los cambios en el `@Input()` responsableToEdit para actualizar el formulario cuando cambia
   ngOnChanges(changes: SimpleChanges): void {

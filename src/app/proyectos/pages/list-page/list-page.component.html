@@ -2,15 +2,17 @@
 
 <div class="layout-container">
   <!-- Columna de la tabla de proyectos -->
-  <div class="table-container">
+  <div class="table-container" *ngIf="canViewTable">
     <p-card>
-      <app-project-table (editProyecto)="onEditProyecto($event)"></app-project-table>
+      <app-project-table
+      [canEdit]="canEdit"
+      (editProyecto)="onEditProyecto($event)"></app-project-table>
     </p-card>
 
   </div>
 
   <!-- Columna del formulario de registro/actualización -->
-  <div class=" form-container">
+  <div class=" form-container" *ngIf="canViewForm">
       <app-new-project
         [proyectoToEdit]="selectedProyecto"
         (formSubmit)="onFormSubmit()"

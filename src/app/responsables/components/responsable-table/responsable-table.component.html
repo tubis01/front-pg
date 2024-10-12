@@ -33,9 +33,8 @@
       <td>{{ responsable.fechaNacimiento }}</td>
       <td class="fixed-column">
         <div class="button-container">
-
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(responsable)"></button>
-          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(responsable)"></button>
+          <button  *ngIf="canEdit" pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(responsable)"></button>
+          <button  *ngIf="canEdit" pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(responsable)"></button>
         </div>
         </td>
     </tr>

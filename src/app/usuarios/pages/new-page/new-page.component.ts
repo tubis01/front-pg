@@ -13,7 +13,8 @@ export class NewPageComponent  implements OnInit, OnChanges {
 
   public roles = [
     { label: 'ADMIN', value: 'admin' },
-    { label: 'USER', value: 'user' }
+    { label: 'USER', value: 'user' },
+    { label: 'DIGITADOR', value: 'digitador' }
   ];
 
   @Input() usuarioToEdit: Usuario | null = null;

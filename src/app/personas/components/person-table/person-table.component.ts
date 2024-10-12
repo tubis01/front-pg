@@ -16,6 +16,7 @@ export class PersonTableComponent implements OnInit {
 
   @Output()
   editPerson = new EventEmitter<Persona>();
+  @Input() canEdit: boolean = false;
 
   public links: Links | undefined;
   public currentPage: number = 0; // Página actual

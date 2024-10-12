@@ -26,6 +26,7 @@ export class BeneficiarioTableComponent {
   public searchTerm: string = '';
 
   @Input() proyectos: Proyecto[] = [];
+  @Input() canEdit: boolean = false;
 
 
   @Output() editBeneficiario = new EventEmitter<Beneficiario>();

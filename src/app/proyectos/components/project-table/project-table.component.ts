@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HateoasResponse, Links, Proyecto } from '../../interfaces/proyecto.interface';
 import { ProjectServiceService } from '../../services/projects.service';
 import { Observer } from 'rxjs';
@@ -10,7 +10,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   styleUrl: './project-table.component.css'
 })
 export class ProjectTableComponent implements OnInit{
-  
+
   public proyectos: Proyecto[] = [];
 
   public links: Links | undefined;
@@ -22,6 +22,7 @@ export class ProjectTableComponent implements OnInit{
   public isLoading: boolean = false;
 
   @Output() editProyecto = new EventEmitter<Proyecto>();
+  @Input() canEdit: boolean = false;
 
   private isProcessing: boolean = false;
 

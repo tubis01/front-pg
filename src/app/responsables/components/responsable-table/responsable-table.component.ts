@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Responsable, HateoasResponse, Links } from '../../interfaces/responsable.interface';
 import { ResponsableService } from '../../services/responsable.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -21,7 +21,7 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
 
   // Evento para emitir el responsable seleccionado para editar
   @Output() editResponsable = new EventEmitter<Responsable>();
-
+  @Input() canEdit: boolean = false;
   // Bandera de control para evitar llamadas múltiples
   private isProcessing: boolean = false;
 

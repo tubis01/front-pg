@@ -32,15 +32,17 @@
       <td>{{ proyecto.nombre }}</td>
       <td>{{ proyecto.descripcion }}</td>
       <td>{{ proyecto.fechaInicio }}</td>
-      <td>{{ proyecto.fechaFin }}</td>
+      <td >{{ proyecto.fechaFin }}</td>
       <td class="fixed-column">
         <div class="button-container">
 
           <button
+          *ngIf="canEdit"
           pButton icon="pi pi-pencil" class="p-button-rounded p-button-info"
           (click)="onEdit(proyecto)">
         </button>
         <button
+        *ngIf="canEdit"
         pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
         (click)="confirmDelete(proyecto)">
       </button>

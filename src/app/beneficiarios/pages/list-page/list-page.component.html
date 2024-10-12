@@ -3,16 +3,18 @@
 
 <div class="layout-container">
   <!-- Columna de la tabla de beneficiarios -->
-  <div class="table-container">
+  <div class="table-container"  *ngIf="canViewTable">
     <p-card class="card-margin">
       <app-beneficiario-table
+      [canEdit]="canEdit"
+
       [proyectos]="proyectos"
       (editBeneficiario)="onEditBeneficiario($event)"></app-beneficiario-table>
     </p-card>
   </div>
 
   <!-- Columna del formulario para registrar o actualizar un beneficiario -->
-  <div class="form-container">
+  <div class="form-container" *ngIf="canViewForm">
       <app-new-beneficiario
         [beneficiarioToEdit]="selectedBeneficiario"
         (formSubmit)="onFormSubmit()"
