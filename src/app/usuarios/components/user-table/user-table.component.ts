@@ -17,6 +17,9 @@ export class UserTableComponent {
   public pageSize: number = 20;
   public links: Links | undefined;
 
+
+  public isLoading: boolean = false;
+
   @Output() editUsuario = new EventEmitter<Usuario>();
 
   constructor(private usuarioService: UsuarioService,
@@ -85,6 +88,30 @@ export class UserTableComponent {
       }
     });
   }
+
+
+  onSearch(term: string): void {
+    this.isLoading = true;
+
+    if (term && term.trim().length > 0) {
+      this.usuarioService.buscarPorUsuario(term, this.currentPage, this.pageSize)
+      .subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          this.usuarios = data; // Mostrar los beneficiarios filtrados
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error('Error al buscar beneficiarios por DPI parcial:', err);
+        }
+      });
+    } else {
+      // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
+      this.loadUsuarios(this.currentPage);
+      this.isLoading = false;
+    }
+  }
+
 
   onPageChange(event: any): void {
     const page = event.page;

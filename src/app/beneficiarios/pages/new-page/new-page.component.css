@@ -1,10 +1,10 @@
 .form-scroll-container {
   min-width: 370px;
   box-sizing: border-box;
-  min-height: 440px; /* Ajusta esto según necesites */
-  max-height: 900px; /* Ajusta esto según necesites */
-  overflow-y: auto; /* Permite el scroll vertical */
-  padding: 30px; /* Añade espacio interno para evitar que los elementos queden pegados al scrollbar */
+  min-height: 520px; /* Ajusta esto según necesites */
+  max-height: 570px; /* Ajusta esto según necesites */
+  overflow-y: visible; /* Permite el scroll vertical */
+  padding: 25px; /* Añade espacio interno para evitar que los elementos queden pegados al scrollbar */
   width: 100%;
 }
 
@@ -28,3 +28,4 @@
   font-size: 0.8em;
   margin-top: 5px;
 }
+

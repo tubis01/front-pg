@@ -1,11 +1,16 @@
 <p-table
+[style]="{
+  border: '1px solid #162016',
+  borderRadius: '6px',
+  color: 'white'
+}"
   [value]="donadores"
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
   (onPage)="onPageChange($event)"
   [scrollable]="true"
-  scrollHeight="570px"
+  scrollHeight="470px"
   class="donador-table"
 >
   <ng-template pTemplate="header">
@@ -16,6 +21,8 @@
       <th style="width:10%">Género</th>
       <th style="width:20%">Correo</th>
       <th style="width:10%">Teléfono</th>
+      <th style="width:10%">Fecha Nacimiento</th>
+      <th style="width:10%">Comentarios</th>
       <th style="width:15%">Acciones</th>
     </tr>
   </ng-template>
@@ -28,6 +35,8 @@
       <td>{{ donador.genero }}</td>
       <td>{{ donador.correo }}</td>
       <td>{{ donador.telefono }}</td>
+      <td>{{ donador.fechaNacimiento }}</td>
+      <td>{{ donador.comentarios }}</td>
       <td class="fixed-column">
         <div class="button-container">
           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(donador)"></button>

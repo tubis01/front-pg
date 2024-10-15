@@ -60,7 +60,7 @@ export class ProjectTableComponent implements OnInit{
     this.isProcessing = true;
 
     this.confirmationService.confirm({
-      message: `¿Deseas editar al responsable ${proyecto.nombre} ${proyecto.descripcion}?`,
+      message: `¿Deseas editar el proyecto ${proyecto.nombre} ${proyecto.descripcion}?`,
       header: 'Confirmación de Edición',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

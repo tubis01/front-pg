@@ -1,13 +1,24 @@
+<div class="search-and-export">
+  <shared-search-box
+    [placeHolder]="'Buscar persona por nombre'"
+  (onDebounce)="onSearch($event)">
+</shared-search-box>
+</div>
+
+
 <p-table
+[style]="{
+  border: '1px solid #162016',
+  borderRadius: '6px',
+  color: 'white'
+}"
   [value]="usuarios"
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
   (onPage)="onPageChange($event)"
   [scrollable]="true"
-  scrollHeight="570px"
-  [frozenWidth]="'600px'"
-  class="usuario-table"
+  scrollHeight="470px"
 >
   <ng-template pTemplate="header">
     <tr>

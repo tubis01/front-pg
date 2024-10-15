@@ -1,0 +1,95 @@
+/* Paleta de colores */
+:root {
+  --primary-color: #005b96;      /* Azul oscuro */
+  --secondary-color: #6497b1;    /* Azul claro */
+  --accent-color: #03396c;       /* Azul más oscuro */
+  --background-color: #f0f4f8;   /* Gris claro */
+  --card-bg-color-1: #e1f5fe;    /* Fondo carta 1 (Azul claro) */
+  --card-bg-color-2: #ffecb3;    /* Fondo carta 2 (Amarillo claro) */
+  --card-bg-color-3: #3bef41;    /* Fondo carta 3 (Verde claro) */
+  --card-bg-color-4: #ffe0b2;    /* Fondo carta 4 (Naranja claro) */
+  --text-color: #333333;         /* Gris oscuro */
+}
+
+/* Cambios en los colores de fondo de las cartas */
+.card-1 {
+  background-color: var(--card-bg-color-1); /* Fondo azul claro */
+}
+
+.card-2 {
+  background-color: var(--card-bg-color-2); /* Fondo amarillo claro */
+}
+
+.card-3 {
+  background-color: var(--card-bg-color-3); /* Fondo verde claro */
+}
+
+.card-4 {
+  background-color: var(--card-bg-color-4); /* Fondo naranja claro */
+}
+
+/* Mantén los colores de los encabezados y el texto */
+.stat-card .p-card-header {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.stat-number {
+  color: var(--primary-color);
+}
+
+.stat-icon {
+  color: var(--secondary-color);
+}
+
+/* Colores para el filtro */
+.filter-card {
+  background-color: var(--white-color);
+}
+
+.filter-card .p-card-header {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.filter-button {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.filter-button:hover {
+  background-color: var(--accent-color);
+}
+
+/* Colores para la gráfica */
+.chart-card {
+  background-color: var(--white-color);
+}
+
+.chart-card .p-card-header {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+/* Colores para la tabla */
+.table-card {
+  background-color: var(--white-color);
+}
+
+.table-card .p-card-header {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.project-table th {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.project-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.project-table tr:hover {
+  background-color: #e0f7fa;
+}

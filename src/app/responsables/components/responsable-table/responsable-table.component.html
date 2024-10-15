@@ -1,12 +1,23 @@
 
+<div class="search-and-export">
+  <shared-search-box
+    [placeHolder]="'Buscar persona por nombre'"
+  (onDebounce)="onSearch($event)"></shared-search-box>
+</div>
+
 <p-table
+[style]="{
+  border: '1px solid #162016',
+  borderRadius: '6px',
+  color: 'white'
+}"
   [value]="responsables"
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
   (onPage)="onPageChange($event)"
   [scrollable]="true"
-  scrollHeight="600px"
+  scrollHeight="470px"
   class="responsable-table"
 >
   <ng-template pTemplate="header">
@@ -18,7 +29,7 @@
       <th style="width:10%">Correo</th>
       <th style="width:10%">Teléfono</th>
       <th style="width:15%">Fecha Nacimiento</th>
-      <th style="width:10%" class="fixed-column">Acciones</th>
+      <th style="width:10%">Acciones</th>
     </tr>
   </ng-template>
 
@@ -33,7 +44,15 @@
       <td>{{ responsable.fechaNacimiento }}</td>
       <td class="fixed-column">
         <div class="button-container">
-          <button  *ngIf="canEdit" pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(responsable)"></button>
+          <button
+          [style]="{
+            border: '1px solid black',
+            backgroundColor: '#FFB82D',
+            color: '#333333',
+            marginBottom: '5px'
+          }"
+
+          *ngIf="canEdit" pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(responsable)"></button>
           <button  *ngIf="canEdit" pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(responsable)"></button>
         </div>
         </td>

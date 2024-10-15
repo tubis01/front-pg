@@ -1,10 +1,104 @@
 .main-container {
-  padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #f9fafb;
+  padding: 30px;
+  font-family: 'Roboto', sans-serif;
 }
 
-.carousel {
-  margin-bottom: 40px;
+/* Estilos para la sección de Misión, Visión e Impacto */
+.about-us-section {
+  background-color: #ffffff;
+  padding: 40px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.about-us-section .section-title {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.about-us-content h3 {
+  color: #27ae60;
+  margin-bottom: 15px;
+}
+
+.about-us-content p {
+  color: #34495e;
+}
+
+/* Estilos para la sección de noticias */
+.news-section {
+  margin-top: 30px;
+}
+
+.news-section .section-title {
+  text-align: center;
+  color: #2c3e50;
+}
+
+.news-item {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.news-item h3 {
+  color: #2c3e50;
+}
+
+.news-item p {
+  color: #7f8c8d;
+  margin-bottom: 15px;
+}
+
+/* Estilos para la sección de Acceso Rápido */
+.quick-access-section {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.quick-access-section .section-title {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.quick-access-section button {
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* Estilos para la columna lateral */
+.sidebar {
+  padding: 30px;
+}
+
+.sidebar-section {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-section h3 {
+  color: #2c3e50;
+}
+
+.sidebar-section p, .sidebar-section ul {
+  color: #34495e;
+}
+
+.sidebar-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-section ul li {
+  margin-bottom: 10px;
 }
 
 .carousel-image {
@@ -13,58 +107,5 @@
   object-fit: cover;
 }
 
-.info-section {
-  margin-top: 30px;
-}
-
-.info-card {
-  margin: 15px;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.access-buttons {
-  margin-top: px;
-  text-align: center;
-}
-
-.p-button-lg {
-  margin: 15px;
-}
-
-.p-dialog .p-dialog-content {
-  text-align: center;
-}
-
-.logo-img {
-  height: 60px;  /* Ajustar el tamaño del logo si es necesario */
-  width: auto;
-}
 
 
-/* Estilos para mejorar el tamaño del diálogo en pantallas pequeñas */
-@media (max-width: 768px) {
-  p-dialog {
-    width: 90vw !important;  /* Hacer que el diálogo ocupe el 90% del ancho de la pantalla */
-    max-width: none;         /* Quitar el límite máximo de ancho */
-    min-width: none;         /* Quitar el límite mínimo de ancho */
-  }
-
-  .p-dialog-content {
-    padding: 10px; /* Ajustar el padding en pantallas pequeñas */
-  }
-
-  .p-dialog .ui-button {
-    width: 100%; /* Asegurar que los botones dentro del diálogo también sean responsivos */
-  }
-}
-
-/* Opcionalmente, puedes hacer ajustes en pantallas más grandes */
-@media (min-width: 769px) {
-  p-dialog {
-    width: 50vw !important;
-    max-width: 600px;
-    min-width: 300px;
-  }
-}

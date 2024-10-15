@@ -6,7 +6,7 @@ import { Proyecto } from '../../interfaces/proyecto.interface';
 @Component({
   selector: 'dashboard-layout-page',
   templateUrl: './layout-page.component.html',
-  styles: ``
+  styleUrl: './layout-page.component.scss'
 })
 export class LayoutPageComponent implements OnInit{
 

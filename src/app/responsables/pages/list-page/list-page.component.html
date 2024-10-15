@@ -3,7 +3,14 @@
 <div class="layout-container">
   <!-- Contenedor de la tabla de responsables -->
   <div class="table-container " *ngIf="canViewTable">
-    <p-card>
+    <p-card
+    [style]="{
+      border: '1px solid #162016',
+      borderRadius: '15px',
+      backgroundColor: '#ffffff',
+      color: 'white'
+  }"
+    >
     <responsable-table
     [canEdit]="canEdit"
     (editResponsable)="onEditResponsable($event)"></responsable-table>
@@ -12,9 +19,17 @@
 
   <!-- Contenedor del formulario de responsables -->
   <div class="form-container" *ngIf="canViewForm">
+    <p-card
+    [style]="{
+      border: '1px solid #162016',
+      borderRadius: '15px',
+      backgroundColor: '#ffffff',
+      color: '#333333'
+    }">
       <app-new-responsable
         [responsableToEdit]="selectedResponsable"
         (formSubmit)="onFormSubmit()"
       ></app-new-responsable>
+    </p-card>
   </div>
 </div>

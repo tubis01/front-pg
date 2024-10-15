@@ -1,7 +1,6 @@
 <div class="main-container grid">
-  <!-- Columna principal: Menú y contenido principal -->
+  <!-- Columna principal: Carrusel y contenido principal -->
   <div class="content col-12 md:col-8">
-    <!-- Aquí va tu contenido actual como el carrusel, tarjetas informativas y botones -->
 
     <!-- Carrusel de imágenes -->
     <p-carousel [value]="imagenesCarrusel" circular="true" autoplayInterval="3000">
@@ -10,96 +9,127 @@
       </ng-template>
     </p-carousel>
 
-    <!-- Sección de Información con Tarjetas -->
-    <div class="info-section grid">
-      <div class="col-12 md:col-4">
-        <p-card title="Nuestra Misión" class="info-card">
+    <!-- Sección de Información con Misión, Visión e Impacto -->
+    <section class="about-us-section">
+      <h2 class="section-title">Sobre Nosotros</h2>
+      <div class="grid about-us-content">
+        <div class="col-12 md:col-4 about-item">
+          <h3>Nuestra Misión</h3>
           <p>Transformar la vida de las personas a través de la educación, el apoyo comunitario y el acceso a oportunidades para un futuro mejor.</p>
-        </p-card>
-      </div>
-      <div class="col-12 md:col-4">
-        <p-card title="Nuestra Visión" class="info-card">
+        </div>
+        <div class="col-12 md:col-4 about-item">
+          <h3>Nuestra Visión</h3>
           <p>Una sociedad justa y equitativa, donde cada individuo tenga acceso a las herramientas necesarias para lograr su máximo potencial.</p>
-        </p-card>
+        </div>
+        <div class="col-12 md:col-4 about-item">
+          <h3>Nuestro Impacto</h3>
+          <p>Más de 5000 personas beneficiadas en los últimos 5 años, gracias a nuestros programas de educación, salud y bienestar comunitario.</p>
+        </div>
       </div>
-      <div class="col-12 md:col-4">
-        <p-card title="Nuestro Impacto" class="info-card">
-          <p>Más de 5000 personas beneficiadas en los últimos 5 años a través de nuestros programas de educación, salud y bienestar.</p>
-        </p-card>
+    </section>
+
+    <!-- Sección de Noticias y Actualizaciones -->
+    <section class="news-section">
+      <h2 class="section-title">Noticias y Actualizaciones</h2>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <article class="news-item">
+            <h3>Nuevas iniciativas de educación</h3>
+            <p>Estamos lanzando nuevas iniciativas educativas para niños y jóvenes en áreas rurales. Conoce más sobre cómo puedes apoyar estos programas.</p>
+            <button pButton label="Leer más" class="p-button-outlined"></button>
+          </article>
+        </div>
+        <div class="col-12 md:col-6">
+          <article class="news-item">
+            <h3>Donaciones de materiales de construcción</h3>
+            <p>Recibimos una donación importante de materiales de construcción para proyectos comunitarios. Ayúdanos a distribuir estos recursos donde más se necesitan.</p>
+            <button pButton label="Leer más" class="p-button-outlined"></button>
+          </article>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Botones de Acceso Rápido -->
-
-
-    <p-dialog
-    header="Formulario de Voluntarios"
-    [(visible)]="showVoluntarioDialog"
-    [modal]="true"
-    [closable]="true"
-    [style]="{'width': '50vw', 'max-width': '600px', 'min-width': '300px'}"
-    [baseZIndex]="10000"
-  >
-    <app-voluntario-form></app-voluntario-form>
-  </p-dialog>
-
-    <!-- Diálogo para Formulario de Donadores -->
-    <p-dialog header="Formulario de Donadores"
-    [(visible)]="showDonadorDialog"
-    [modal]="true"
-    [closable]="true"
-    [style]="{'width': '50vw', 'max-width': '600px', 'min-width': '300px'}"
-    [baseZIndex]="10000">
-      <app-donador-form></app-donador-form>
-    </p-dialog>
-
-    <div class="access-buttons grid">
-      <div class="col-12 md:col-4">
-        <button pButton label="Hazte Voluntario" class="p-button-lg p-button-success" (click)="openVoluntarioForm()"></button>
+    <!-- Sección de Acceso Rápido -->
+    <section class="quick-access-section">
+      <h2 class="section-title">Involúcrate con Nosotros</h2>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <button pButton label="Hazte Voluntario" class="p-button-lg p-button-success" (click)="openVoluntarioForm()"></button>
+        </div>
+        <div class="col-12 md:col-6">
+          <button pButton label="Hazte Donador" class="p-button-lg p-button-warning" (click)="openDonadorForm()"></button>
+        </div>
       </div>
-      <div class="col-12 md:col-4">
-        <button pButton label="Hazte Donador" class="p-button-lg p-button-warning" (click)="openDonadorForm()"></button>
-      </div>
-    </div>
+    </section>
   </div>
 
   <!-- Columna lateral derecha: Sección informativa -->
-  <div class="sidebar col-12 md:col-4">
-    <p-card title="Acerca de Nuestra ONG" class="info-card">
-      <p>Somos una organización no gubernamental comprometida con brindar apoyo a las personas más necesitadas en Guatemala, ofreciendo asistencia en varias áreas.</p>
-    </p-card>
+  <aside class="sidebar col-12 md:col-4">
+    <section class="sidebar-section">
+      <h3>Acerca de Nuestra ONG</h3>
+      <p>Somos una organización comprometida con el bienestar y desarrollo de las personas más vulnerables de Guatemala, brindando apoyo en áreas clave como educación y salud.</p>
+    </section>
 
-    <p-card title="Objetivos">
+    <section class="sidebar-section">
+      <h3>Objetivos</h3>
       <ul>
         <li>Fomentar el desarrollo sostenible.</li>
         <li>Mejorar el acceso a la educación.</li>
-        <li>Brindar apoyo económico a familias en situación vulnerable.</li>
+        <li>Brindar apoyo económico a familias vulnerables.</li>
         <li>Facilitar programas de capacitación.</li>
       </ul>
-    </p-card>
+    </section>
 
-    <p-card title="Cobertura Nacional">
-      <p>Trabajamos en todos los departamentos de Guatemala:</p>
+    <section class="sidebar-section">
+      <h3>Cobertura Nacional</h3>
+      <p>Trabajamos en todos los departamentos de Guatemala, llevando nuestro apoyo a las comunidades más necesitadas.</p>
       <ul>
         <li>Guatemala</li>
         <li>Huehuetenango</li>
         <li>Quetzaltenango</li>
         <li>Chiquimula</li>
         <li>Alta Verapaz</li>
-        <li>...</li>
-        <!-- Puedes completar con los demás departamentos -->
+        <li>Retalhuleu</li>
+        <li>Baja Verapaz</li>
+        <li>Chimaltenango</li>
+        <li>El Progreso</li>
+        <li>Escuintla</li>
+        <li>Izabal</li>
+        <li>Jalapa</li>
+        <li>Jutiapa</li>
+        <li>Peten</li>
+        <li>San Marcos</li>
+        <li>Sacatepequez</li>
+        <li>Santa Rosa</li>
+        <li>Solola</li>
+        <li>Suchitepequez</li>
+        <li>Totonicapan</li>
       </ul>
-    </p-card>
 
-    <p-card title="Tipos de Ayuda">
-      <p>Ofrecemos diversos tipos de apoyo a las comunidades:</p>
-      <ul>
-        <li>Ayuda económica</li>
-        <li>Entrega de alimentos</li>
-        <li>Materiales de construcción</li>
-        <li>Capacitaciones</li>
-        <li>Distribución de abono agrícola</li>
-      </ul>
-    </p-card>
-  </div>
+    </section>
+  </aside>
 </div>
+
+<!-- Dialogo para Voluntarios -->
+<p-dialog
+  header="Formulario de Voluntarios"
+  [(visible)]="showVoluntarioDialog"
+  [modal]="true"
+  [closable]="true"
+  [style]="{'width': '50vw', 'max-width': '600px', 'min-width': '300px'}"
+  [baseZIndex]="10000"
+>
+  <app-voluntario-form></app-voluntario-form>
+</p-dialog>
+
+<!-- Dialogo para Donadores -->
+<p-dialog
+  header="Formulario de Donadores"
+  [(visible)]="showDonadorDialog"
+  [modal]="true"
+  [closable]="true"
+  [style]="{'width': '50vw', 'max-width': '600px', 'min-width': '300px'}"
+  [baseZIndex]="10000"
+>
+  <app-donador-form></app-donador-form>
+</p-dialog>

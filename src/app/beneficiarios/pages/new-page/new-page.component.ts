@@ -89,6 +89,8 @@ export class NewPageComponent {
       error: (error) => {
         if (error.status === 404 || error.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
+      }else{
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error});
       }
       console.error('Error al registrar el beneficiario', error);
       }

@@ -26,7 +26,7 @@ export class NewPageComponent {
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
       fechaInicio: ['', Validators.required],
-      fechaFin: ['']
+      fechaFin: ['',Validators.required],
     });
   }
 
@@ -43,7 +43,17 @@ export class NewPageComponent {
   }
 
   onSubmit(): void {
-    if (this.proyectoForm.invalid) return;
+    if (this.proyectoForm.invalid) {
+      this.proyectoForm.markAllAsTouched();  // Esto solo se ejecuta si el formulario está siendo enviado
+      // Mostrar mensajes de alerta para los campos que no cumplen con los validadores
+      Object.keys(this.proyectoForm.controls).forEach(field => {
+        const control = this.proyectoForm.get(field);
+        if (control?.invalid) {
+          this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio.` });
+        }
+      });
+      return; // Salir si el formulario es inválido
+    }
 
     if (this.proyectoToEdit?.id) {
       // Mostrar diálogo de confirmación solo en la actualización
@@ -89,7 +99,7 @@ export class NewPageComponent {
       },
       error: (err) => {
         console.error('Error al crear el proyecto', err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el proyecto.' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error });
       }
     });
   }

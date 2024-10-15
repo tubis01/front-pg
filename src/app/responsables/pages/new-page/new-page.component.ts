@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResponsableService } from '../../services/responsable.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
+import {  ConfirmationService, MessageService } from 'primeng/api';
 import { Responsable } from '../../interfaces/responsable.interface';
-
+import { EncryptionService } from '../../../services/encryptData.service';
 
 @Component({
   selector: 'app-new-responsable',
@@ -26,12 +25,15 @@ export class NewPageComponent implements OnInit, OnChanges {
   @Output() formSubmit = new EventEmitter<void>();
 
   public responsableForm: FormGroup;
+  // private secretKey  = 'mysecretkey12345678901234567890'
+  private secretKey  = 'myesbale123456789012345678901234'
 
   constructor(
     private fb: FormBuilder,
     private responsableService: ResponsableService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    // private encryptionService: EncryptionService
   ) {
     // Inicializar el formulario con los campos requeridos
     this.responsableForm = this.fb.group({
@@ -51,6 +53,7 @@ export class NewPageComponent implements OnInit, OnChanges {
       this.responsableForm.patchValue(this.responsableToEdit);
     }
   }
+
 
 
   // Detecta los cambios en el `@Input()` responsableToEdit para actualizar el formulario cuando cambia
@@ -82,6 +85,7 @@ export class NewPageComponent implements OnInit, OnChanges {
       return;
     }
 
+
     // Si se está editando (existe id), mostrar el diálogo de confirmación para la actualización
     if (this.responsableToEdit?.id) {
       this.confirmationService.confirm({
@@ -97,7 +101,9 @@ export class NewPageComponent implements OnInit, OnChanges {
         }
       });
     } else {
+
       // Si es un registro nuevo, proceder sin confirmación
+      // this.createResponsable();
       this.createResponsable();
     }
   }
@@ -145,6 +151,27 @@ export class NewPageComponent implements OnInit, OnChanges {
       }
     });
   }
+
+  // Método para crear un responsable
+  // createResponsable(encryptData: string): void {
+  //   console.log("datos encriptados", encryptData);
+
+  //   this.responsableService.addResponsable(encryptData).subscribe({
+  //     next: () => {
+  //       this.messageService.add({ severity: 'success', summary: 'Registro Exitoso', detail: `El responsable ${this.responsableForm.value.nombre} ha sido registrado correctamente.` });
+  //       this.formSubmit.emit(); // Notificar al componente padre que el formulario ha sido enviado
+  //       this.resetForm(); // Restablecer el formulario
+  //     },
+  //     error: (err) => {
+  //       if(err.status === 409) {
+  //         this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error });
+  //       } else {
+  //         console.error('Error al registrar el responsable', err);
+  //         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el responsable.' });
+  //       }
+  //     }
+  //   });
+  // }
 
   // Método para restablecer el formulario y limpiar la selección actual
   resetForm(): void {

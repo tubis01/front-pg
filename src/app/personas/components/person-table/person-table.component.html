@@ -7,13 +7,17 @@
 
 
 <p-table
+[style]="{
+  border: '1px solid #162016',
+  borderRadius: '6px',
+  color: 'white'
+}"
 [value]="persons"
 [rows]="pageSize"
 [totalRecords]="totalElements"
 (onPageChange)="onPageChange($event)"
 [scrollable]="true"
-scrollHeight="495px"
-[frozenWidth]= "'600px'"
+scrollHeight="470px"
 >
     <ng-template pTemplate="header">
         <tr>
@@ -80,7 +84,14 @@ scrollHeight="495px"
             <td>{{ person.organizacion }}</td>
             <td>{{ person.responsable }}</td>
             <td class="fixed-column">
-              <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info"
+              <button
+              [style]="{
+                border: '1px solid black',
+                backgroundColor: '#FFB82D',
+                color: '#333333',
+                marginBottom: '5px'
+              }"
+              pButton icon="pi pi-pencil" class="p-button-rounded p-button-info"
               *ngIf="canEdit"
               (click)="onEdit(person)">
               </button>

@@ -4,8 +4,7 @@
 
 <div class="grid">
   <div class="col-12 sm:col-8 md:col-6">
-    <p-card class="grid">
-    <div class="form-scroll-container">
+    <div class=" grid form-scroll-container">
         <!-- Formulario para agregar o editar un proyecto -->
         <form [formGroup]="proyectoForm" (ngSubmit)="onSubmit()" class="p-fluid grid">
 
@@ -15,6 +14,22 @@
             <input pInputText id="nombre" formControlName="nombre" placeholder="Nombre del Proyecto" required />
             <div class="error-message" *ngIf="isFieldInvalid('nombre')">
               El campo Nombre del Proyecto es obligatorio.
+            </div>
+          </div>
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaInicio') }">
+            <label for="fechaInicio">Fecha de Inicio</label>
+              <p-calendar id="fechaInicio" formControlName="fechaInicio" [showIcon]="true" placeholder="10/02/2024"  appendTo="body"></p-calendar>
+            <div class="error-message" *ngIf="isFieldInvalid('fechaInicio')">
+              El campo Fecha de Inicio es obligatorio.
+            </div>
+          </div>
+
+          <!-- Campo Fecha de Fin -->
+          <div class="col-12 form-field " [ngClass]="{'has-error':isFieldInvalid('fechaFin')}">
+            <label for="fechaFin">Fecha de Fin </label>
+            <p-calendar id="fechaFin" formControlName="fechaFin" [showIcon]="true" placeholder="10/02/2024" appendTo="body"></p-calendar>
+            <div class="error-message" *ngIf="isFieldInvalid('fechaInicio')">
+              El campo Fecha de Fin es obligatorio.
             </div>
           </div>
 
@@ -28,26 +43,13 @@
           </div>
 
           <!-- Campo Fecha de Inicio -->
-          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaInicio') }">
-            <label for="fechaInicio">Fecha de Inicio</label>
-            <p-calendar id="fechaInicio" formControlName="fechaInicio" [showIcon]="true" placeholder="Fecha de Inicio" required></p-calendar>
-            <div class="error-message" *ngIf="isFieldInvalid('fechaInicio')">
-              El campo Fecha de Inicio es obligatorio.
-            </div>
-          </div>
 
-          <!-- Campo Fecha de Fin -->
-          <div class="col-12 form-field">
-            <label for="fechaFin">Fecha de Fin (opcional)</label>
-            <p-calendar id="fechaFin" formControlName="fechaFin" [showIcon]="true" placeholder="Fecha de Fin"></p-calendar>
-          </div>
 
           <!-- Botón para guardar -->
-          <div class="col-12">
+          <div class="col-12 mt-3">
             <button pButton type="submit" label="{{ proyectoToEdit ? 'Actualizar' : 'Guardar' }}"></button>
           </div>
         </form>
       </div>
-    </p-card>
   </div>
 </div>

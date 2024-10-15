@@ -4,7 +4,14 @@
 <div class="layout-container">
   <!-- Columna de la tabla de beneficiarios -->
   <div class="table-container"  *ngIf="canViewTable">
-    <p-card class="card-margin">
+    <p-card
+    [style]="{
+      border: '1px solid #162016',
+      borderRadius: '15px',
+      backgroundColor: '#ffffff',
+      color: 'white'
+  }"
+    >
       <app-beneficiario-table
       [canEdit]="canEdit"
 
@@ -15,9 +22,17 @@
 
   <!-- Columna del formulario para registrar o actualizar un beneficiario -->
   <div class="form-container" *ngIf="canViewForm">
+    <p-card
+[style]="{
+  border: '1px solid #162016',
+  borderRadius: '15px',
+  backgroundColor: '#ffffff',
+  color: '#333333'
+}">
       <app-new-beneficiario
         [beneficiarioToEdit]="selectedBeneficiario"
         (formSubmit)="onFormSubmit()"
       ></app-new-beneficiario>
+    </p-card>
   </div>
 </div>

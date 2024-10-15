@@ -4,16 +4,31 @@
 
 <div class="layout-container">
   <div class="table-container ">
-    <p-card>
+    <p-card
+    [style]="{
+      border: '1px solid #162016',
+      borderRadius: '15px',
+      backgroundColor: '#ffffff',
+      color: 'white'
+  }"
+    >
 
       <app-user-table (editUsuario)="onEditUsuario($event)"></app-user-table>
     </p-card>
   </div>
 
   <div class="form-container">
+    <p-card
+    [style]="{
+      border: '1px solid #162016',
+      borderRadius: '15px',
+      backgroundColor: '#ffffff',
+      color: '#333333'
+    }">
       <app-new-usuario
         [usuarioToEdit]="selectedUsuario"
         (formSubmit)="onFormSubmit()"
       ></app-new-usuario>
+    </p-card>
   </div>
 </div>

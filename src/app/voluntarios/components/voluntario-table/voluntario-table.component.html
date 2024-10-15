@@ -1,12 +1,16 @@
 <p-table
+[style]="{
+  border: '1px solid #162016',
+  borderRadius: '6px',
+  color: 'white'
+}"
   [value]="voluntarios"
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
   (onPage)="onPageChange($event)"
   [scrollable]="true"
-  scrollHeight="570px"
-  class="voluntario-table"
+  scrollHeight="470px"
 >
   <ng-template pTemplate="header">
     <tr>

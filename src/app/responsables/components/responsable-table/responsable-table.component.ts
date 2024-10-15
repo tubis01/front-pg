@@ -19,6 +19,8 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
   // Enlaces HATEOAS
   public links: Links | undefined;
 
+  public isLoading: boolean = false;
+
   // Evento para emitir el responsable seleccionado para editar
   @Output() editResponsable = new EventEmitter<Responsable>();
   @Input() canEdit: boolean = false;
@@ -100,6 +102,29 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
       }
     });
   }
+
+  onSearch(term: string): void {
+    this.isLoading = true;
+
+    if (term && term.trim().length > 0) {
+      this.responsableService.buscarPorNombre(term, this.currentPage, this.pageSize)
+      .subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          this.responsables = data; // Mostrar los beneficiarios filtrados
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error('Error al buscar beneficiarios por DPI parcial:', err);
+        }
+      });
+    } else {
+      // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
+      this.loadResponsable(this.currentPage);
+      this.isLoading = false;
+    }
+  }
+
 
   // Método para manejar el cambio de página en la tabla
   onPageChange(event: any): void {

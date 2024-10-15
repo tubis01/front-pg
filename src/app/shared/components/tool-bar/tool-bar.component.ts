@@ -9,8 +9,14 @@ import { MenuItem } from 'primeng/api';
 export class ToolBarComponent {
 
   menuItems: MenuItem[] = [
-    { label: 'Inicio', icon: 'pi pi-home', routerLink: '/home' },
-    { label: 'Iniciar Sesión', icon: 'pi pi-user', routerLink: '/auth/login' }
+    {
+      label: 'Inicio',
+      icon: 'pi pi-home',
+      routerLink: '/home'
+    },
+    { label: 'Iniciar Sesión',
+      icon: 'pi pi-user',
+      routerLink: '/auth/login' }
   ];
 
 }

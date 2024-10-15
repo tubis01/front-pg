@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Responsable, HateoasResponse } from '../interfaces/responsable.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
@@ -22,9 +22,23 @@ export class ResponsableService {
     return this.http.get<HateoasResponse<Responsable>>(url);
   }
 
+  public buscarPorNombre(termi: string, page: number, size: number ): Observable<Responsable[]> {
+    const params = new HttpParams()
+      .set('term', termi)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Responsable[]>(`${this.apiUrl}/buscarPorNombre`, { params });
+  }
+
+
   public addResponsable(responsable: Responsable): Observable<Responsable> {
     return this.http.post<Responsable>(`${this.apiUrl}/registrar`, responsable);
   }
+
+  //   public addResponsable(encryptedData: string): Observable<Responsable> {
+  //   return this.http.post<Responsable>(`${this.apiUrl}/registrar`, encryptedData);
+  // }
 
   public updateResponsable(responsable: Responsable): Observable<Responsable> {
     return this.http.put<Responsable>(`${this.apiUrl}/modificar`, responsable);
@@ -33,4 +47,6 @@ export class ResponsableService {
   public deleteResponsable(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/eliminar/${id}`);
   }
+
+
 }

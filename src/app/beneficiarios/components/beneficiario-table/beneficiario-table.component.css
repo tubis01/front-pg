@@ -1,3 +1,5 @@
+
+
 .pagination-container {
   display: flex;
   justify-content: center;
@@ -12,6 +14,7 @@
   z-index: 1;
 }
 .button-container {
+  /* separacion entre botones */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,26 +30,7 @@
 }
 
 
-.toolbar-container {
-  padding: 1rem;
-}
 
-.search-and-export {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
 
-  border: 1px solid #ccc; /* Borde gris alrededor */
-  background-color: #f9f9f9; /* Fondo claro */
-  padding: 1rem; /* Espacio interno alrededor del contenido */
-  border-radius: 8px; /* Bordes redondeados */
-}
+/* Añade estilos para la tabla */
 
-.search-and-export button {
-  margin-left: 1rem;
-}
-
-.beneficiario-table {
-  margin-top: 1rem;
-}

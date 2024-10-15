@@ -1,9 +1,9 @@
 .form-scroll-container {
   min-width: 370px;
   box-sizing: border-box;
-  min-height: 480px; /* Ajusta esto según necesites */
-  max-height: 590px; /* Ajusta esto según necesites */
-  overflow-y: auto; /* Permite el scroll vertical */
+  min-height: 520px; /* Ajusta esto según necesites */
+  max-height: 570px; /* Ajusta esto según necesites */
+  overflow-y: visible; /* Permite el scroll vertical */
   padding: 25px; /* Añade espacio interno para evitar que los elementos queden pegados al scrollbar */
   width: 100%;
 }
@@ -16,7 +16,8 @@
   }
 }
 
-.has-error input, .has-error textarea, .has-error p-calendar {
+
+.has-error input, .has-error textarea{
   border: 1px solid red;
 }
 
@@ -24,4 +25,10 @@
   color: red;
   font-size: 0.8em;
   margin-top: 5px;
+}
+
+/* Ajustar el ancho y mínimo ancho del cuadro de diálogo del calendario */
+.p-datepicker {
+  width: 300px !important; /* Ajusta el ancho a tu preferencia */
+  min-width: 200px !important; /* Ajusta el ancho mínimo */
 }

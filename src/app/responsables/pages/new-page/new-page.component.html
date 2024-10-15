@@ -3,8 +3,7 @@
 <p-divider></p-divider>
 <div class="grid ">
   <div class="col-12 sm:col-6 md:col-3">
-    <p-card class="grid">
-      <div class="form-scroll-container">
+      <div class="grid form-scroll-container">
         <form [formGroup]="responsableForm" (ngSubmit)="onSubmit()" class="p-fluid grid fromgrid">
 
           <!-- Campo Nombre -->
@@ -23,6 +22,15 @@
             <div *ngIf="isFieldInvalid('apellido')" class="error-message">
               El campo Apellido es obligatorio.
             </div>
+          </div>
+
+          <!-- Campo Fecha de Nacimiento -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaNacimiento') }">
+            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            <p-calendar id="fechaNacimiento" formControlName="fechaNacimiento" [showIcon]="true" appendTo="body"
+              placeholder="Fecha de Nacimiento" required></p-calendar>
+            <div *ngIf="isFieldInvalid('fechaNacimiento')" class="error-message">El campo Fecha de Nacimiento es
+              obligatorio.</div>
           </div>
 
           <!-- Campo Género -->
@@ -55,14 +63,6 @@
             <div *ngIf="isFieldInvalid('telefono')" class="error-message">El campo Teléfono es obligatorio.</div>
           </div>
 
-          <!-- Campo Fecha de Nacimiento -->
-          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaNacimiento') }">
-            <label for="fechaNacimiento">Fecha de Nacimiento</label>
-            <p-calendar id="fechaNacimiento" formControlName="fechaNacimiento" [showIcon]="true"
-              placeholder="Fecha de Nacimiento" required></p-calendar>
-            <div *ngIf="isFieldInvalid('fechaNacimiento')" class="error-message">El campo Fecha de Nacimiento es
-              obligatorio.</div>
-          </div>
 
           <!-- Botón para guardar -->
           <div class="col-12">
@@ -71,6 +71,5 @@
         </form>
 
       </div>
-    </p-card>
   </div>
 </div>

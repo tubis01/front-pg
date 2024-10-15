@@ -1,2 +1,51 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
+
+body {
+  background-color: #DEF0FB ; /* Cambia este color según tus necesidades */
+}
+
+.custom-card
+{
+  border: 2px solid #d9d9d9;
+
+}
+
+tr th {
+  background-color: #4E93FF; /* Fondo oscuro */
+  color: white; /* Texto blanco */
+}
+
+table{
+    border: '1px solid #162016',
+  }
+
+  .search-and-export {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    border: 1px solid black; /* Borde gris alrededor */
+    background-color: #f9f9f9; /* Fondo claro */
+    padding: 1rem; /* Espacio interno alrededor del contenido */
+    border-radius: 8px; /* Bordes redondeados */
+  }
+
+
+/* Cambiar la posición de los mensajes al centro-derecha */
+.p-toast {
+  position: fixed !important;
+  top: 25% !important; /* Posicionar en el centro verticalmente */
+  right: 20px !important; /* Separación desde el borde derecho */
+  transform: translateY(-50%); /* Ajuste para centrar el contenedor */
+  z-index: 9999 !important; /* Asegura que esté por encima de otros elementos */
+}
+
+/* Otras configuraciones de los mensajes (puedes ajustar según prefieras) */
+.p-toast .p-toast-message {
+  font-weight: bold;
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra */
+  padding: 1rem;
+}

@@ -4,18 +4,29 @@
     <shared-search-box
     [placeHolder]="'Buscar beneficiario por DPI'"
     (onDebounce)="onSearch($event)"></shared-search-box>
-    <button  *ngIf="canEdit" pButton icon="pi pi-file-excel" label="Exportar" (click)="openExportDialog()"  ></button>
+    <button
+    [style]="{
+      border: '1px solid black',
+      backgroundColor: '#27FA20',
+      color: '#333333'
+    }"
+    *ngIf="canEdit" pButton icon="pi pi-file-excel" label="Exportar" (click)="openExportDialog()"  ></button>
   </div>
 
 <p-table
+[style]="{
+  border: '1px solid #162016',
+  borderRadius: '6px',
+  backgroundColor: 'green',
+  color: 'white'
+}"
   [value]="beneficiarios"
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
   (onPage)="onPageChange($event)"
   [scrollable]="true"
-  scrollHeight="500px"
-  [frozenWidth]="'600px'"
+  scrollHeight="470px"
   class="beneficiario-table"
 >
   <ng-template pTemplate="header">
@@ -44,7 +55,14 @@
 
         <div class="button-container">
 
-          <button  pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(beneficiario)"></button>
+          <button
+          [style]="{
+            border: '1px solid black',
+            backgroundColor: '#FFB82D',
+            color: '#333333',
+            marginBottom: '5px'
+          }"
+          pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(beneficiario)"></button>
           <button  pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(beneficiario)"></button>
         </div>
       </td>

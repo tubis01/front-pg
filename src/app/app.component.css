@@ -1,0 +1,18 @@
+
+::ng-deep .p-datepicker table td > span {
+  width: 2.2rem;
+  height: 2.2rem;
+  line-height: 2.2rem; /* Mantén el texto centrado */
+  font-size: 1.1rem; /* Tamaño de fuente de los días */
+}
+
+::ng-deep .p-datepicker.p-component.ng-star-inserted {
+  transform: scale(0.8); /* Aumentar el tamaño general del calendario */
+}
+
+::ng-deep .p-datepicker .p-datepicker-header {
+  padding: 0.4rem; /* Aumentar el espacio en el encabezado */
+  font-size: 1.2rem; /* Aumentar el tamaño del mes/año */
+}
+
+

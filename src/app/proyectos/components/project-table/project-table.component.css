@@ -12,17 +12,6 @@
   z-index: 1;
 }
 
-.search-and-export {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-
-  border: 1px solid #ccc; /* Borde gris alrededor */
-  background-color: #f9f9f9; /* Fondo claro */
-  padding: 1rem; /* Espacio interno alrededor del contenido */
-  border-radius: 8px; /* Bordes redondeados */
-}
 
 .button-container {
   display: flex;

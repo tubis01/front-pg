@@ -3,7 +3,14 @@
 <div class="layout-container">
   <!-- Columna de la tabla de proyectos -->
   <div class="table-container" *ngIf="canViewTable">
-    <p-card>
+    <p-card
+    [style]="{
+      border: '1px solid #162016',
+      borderRadius: '15px',
+      backgroundColor: '#ffffff',
+      color: 'white'
+  }"
+    >
       <app-project-table
       [canEdit]="canEdit"
       (editProyecto)="onEditProyecto($event)"></app-project-table>
@@ -13,9 +20,17 @@
 
   <!-- Columna del formulario de registro/actualización -->
   <div class=" form-container" *ngIf="canViewForm">
+    <p-card
+[style]="{
+  border: '1px solid #162016',
+  borderRadius: '15px',
+  backgroundColor: '#ffffff',
+  color: '#333333'
+}">
       <app-new-project
         [proyectoToEdit]="selectedProyecto"
         (formSubmit)="onFormSubmit()"
       ></app-new-project>
+    </p-card>
   </div>
 </div>

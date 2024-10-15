@@ -269,7 +269,7 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
               } else if (error.status === 409) {
                   this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
               } else {
-                  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar la persona' });
+                  this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
               }
           }
       });

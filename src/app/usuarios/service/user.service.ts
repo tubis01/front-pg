@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario, HateoasResponse } from '../interfaces/user.interface';
 
@@ -32,4 +32,14 @@ export class UsuarioService {
   public listarUsuariosByUrl(url: string): Observable<HateoasResponse<Usuario>> {
     return this.http.get<HateoasResponse<Usuario>>(url);
   }
+
+  public buscarPorUsuario(termi: string, page: number, size: number ): Observable<Usuario[]> {
+    const params = new HttpParams()
+      .set('term', termi)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Usuario[]>(`${this.apiUrl}/buscarPorNombre`, { params });
+  }
+
 }

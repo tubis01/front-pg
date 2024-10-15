@@ -1,0 +1,21 @@
+::ng-deep .p-datepicker.p-component.ng-star-inserted {
+  transform: scale(0.8);
+}
+
+::ng-deep .p-datepicker table td {
+  padding: 0.13rem; /* Reducir el relleno entre las celdas */
+}
+
+::ng-deep .p-datepicker table td > span {
+  width: 1.7rem; /* Ajustar el tamaño de los días */
+  height: 1.7rem;
+}
+
+::ng-deep .p-datepicker .p-datepicker-header {
+  padding: 0.2rem; /* Reducir el espacio del encabezado */
+}
+
+::ng-deep .p-datepicker table {
+  font-size: 10pt; /* Ajustar el tamaño de la fuente de la tabla */
+  margin: -0.143rem 0;
+}
