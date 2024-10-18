@@ -25,8 +25,7 @@ export class NewPageComponent implements OnInit, OnChanges {
   @Output() formSubmit = new EventEmitter<void>();
 
   public responsableForm: FormGroup;
-  // private secretKey  = 'mysecretkey12345678901234567890'
-  private secretKey  = 'myesbale123456789012345678901234'
+
 
   constructor(
     private fb: FormBuilder,
@@ -152,26 +151,6 @@ export class NewPageComponent implements OnInit, OnChanges {
     });
   }
 
-  // Método para crear un responsable
-  // createResponsable(encryptData: string): void {
-  //   console.log("datos encriptados", encryptData);
-
-  //   this.responsableService.addResponsable(encryptData).subscribe({
-  //     next: () => {
-  //       this.messageService.add({ severity: 'success', summary: 'Registro Exitoso', detail: `El responsable ${this.responsableForm.value.nombre} ha sido registrado correctamente.` });
-  //       this.formSubmit.emit(); // Notificar al componente padre que el formulario ha sido enviado
-  //       this.resetForm(); // Restablecer el formulario
-  //     },
-  //     error: (err) => {
-  //       if(err.status === 409) {
-  //         this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error });
-  //       } else {
-  //         console.error('Error al registrar el responsable', err);
-  //         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el responsable.' });
-  //       }
-  //     }
-  //   });
-  // }
 
   // Método para restablecer el formulario y limpiar la selección actual
   resetForm(): void {

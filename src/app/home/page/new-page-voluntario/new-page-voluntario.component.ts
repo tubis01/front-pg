@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VoluntarioService } from '../../../voluntarios/services/voluntario.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DatosDetalleVoluntarioList } from '../../../voluntarios/interfaces/voluntario.interface';
 
@@ -27,7 +27,6 @@ export class NewPageVoluntarioComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private voluntarioService: VoluntarioService ,
-    private activatedRoute: ActivatedRoute,
     private router: Router,
     private messageService: MessageService, // Servicio para mostrar notificaciones
     private confirmationService: ConfirmationService // Servicio para confirmación
@@ -39,19 +38,6 @@ export class NewPageVoluntarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Verificar si estamos en modo edición
-    this.activatedRoute.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.voluntarioService.getDonadorById(id).subscribe(donador => {
-          if (donador) {
-            this.voluntarioForm.patchValue(donador);
-          } else {
-            this.router.navigateByUrl('/donadores');
-          }
-        });
-      }
-    });
   }
 
   // Método para guardar o actualizar un donador
@@ -59,8 +45,8 @@ export class NewPageVoluntarioComponent implements OnInit {
 
       // Si no hay id, agregar un nuevo donador
       this.voluntarioService.addDonador(this.currentDonador).subscribe(
-        donador => {
-          this.showMessage(`Donador ${donador.nombre} creado!`);
+        voluntario => {
+          this.showMessage(`Donador ${voluntario.nombre} creado!`);
           this.router.navigate(['/home']);
         },
         error => {

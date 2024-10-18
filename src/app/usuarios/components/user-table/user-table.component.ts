@@ -3,11 +3,12 @@ import { HateoasResponse, Links, Usuario } from '../../interfaces/user.interface
 import { UsuarioService } from '../../service/user.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { catchError, of, tap } from 'rxjs';
+import { CacheService } from '../../../dashboard/services/cache.service';
 
 @Component({
   selector: 'app-user-table',
   templateUrl: './user-table.component.html',
-  styleUrl: './user-table.component.css'
+  styles: ''
 })
 export class UserTableComponent {
   public usuarios: Usuario[] = [];
@@ -24,14 +25,17 @@ export class UserTableComponent {
 
   constructor(private usuarioService: UsuarioService,
       private confirmationService: ConfirmationService,
-      private messageService: MessageService) {}
+      private messageService: MessageService,
+      private cacheService: CacheService
+    ) {}
 
   ngOnInit(): void {
-    this.loadUsuarios(this.currentPage);
+    this.loadUsuarios();
   }
 
-  loadUsuarios(page: number): void {
-    this.usuarioService.listarUsuarios(page, this.pageSize).pipe(
+  loadUsuarios(): void {
+    this.isLoading = true;
+    this.usuarioService.listarUsuarios().pipe(
       tap((response: HateoasResponse<Usuario>) => {
         // Procesa la respuesta aquí
         if (response._embedded?.datosDetalleUsuarioList) {
@@ -41,6 +45,7 @@ export class UserTableComponent {
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
+        this.isLoading = false;
       }),
       catchError(error => {
         // Manejo de errores aquí
@@ -52,6 +57,7 @@ export class UserTableComponent {
   }
 
   onEdit(usuario: Usuario): void {
+    this.isLoading = true;
     this.confirmationService.confirm({
       message: `¿Estás seguro de que deseas editar al usuario ${usuario.usuario}?`,
       header: 'Confirmar Edición',
@@ -59,14 +65,17 @@ export class UserTableComponent {
       accept: () => {
         this.editUsuario.emit(usuario);
         this.messageService.add({ severity: 'info', summary: 'Edición Confirmada', detail: 'Editando usuario.' });
+        this.isLoading = false;
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: 'La edición fue cancelada.' });
+        this.isLoading = false;
       }
     })
   }
 
   confirmDelete(usuario: Usuario): void {
+    this.isLoading = true;
     this.confirmationService.confirm({
       message: `¿Estás seguro de que deseas deshabilitar al usuario ${usuario.usuario}?`,
       header: 'Confirmar Deshabilitación',
@@ -75,7 +84,8 @@ export class UserTableComponent {
         this.usuarioService.deshabilitarUsuario(usuario.id).subscribe({
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Usuario Deshabilitado', detail: 'El usuario fue deshabilitado correctamente.' });
-            this.loadUsuarios(this.currentPage);
+            this.cacheService.delete('usuarios_lista'); // Eliminar la caché
+            this.loadUsuarios();
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo deshabilitar al usuario.' });
@@ -85,6 +95,7 @@ export class UserTableComponent {
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: 'La deshabilitación fue cancelada.' });
+        this.isLoading = false;
       }
     });
   }
@@ -107,16 +118,12 @@ export class UserTableComponent {
       });
     } else {
       // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
-      this.loadUsuarios(this.currentPage);
+      this.loadUsuarios();
       this.isLoading = false;
     }
   }
 
 
-  onPageChange(event: any): void {
-    const page = event.page;
-    this.loadUsuarios(page);
-  }
 
   loadFirstPage(): void {
     if (this.links?.first) {
@@ -143,6 +150,7 @@ export class UserTableComponent {
   }
 
   loadFromLink(url: string): void {
+    this.isLoading = true;
     this.usuarioService.listarUsuariosByUrl(url).subscribe({
       next: (response: HateoasResponse<Usuario>) => {
         if (response._embedded?.datosDetalleUsuarioList) {
@@ -152,6 +160,7 @@ export class UserTableComponent {
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
+        this.isLoading = false;
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los usuarios desde el enlace.' });

@@ -3,14 +3,15 @@ import { Beneficiario, HateoasResponse, Links } from '../../interfaces/beneficia
 import { BeneficiarioService } from '../../services/beneficiario.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ExportService } from '../../services/export.service';
+import { ExportService } from '../../../services/export.service';
 import { ExporDialogComponent } from '../expor-dialog/expor-dialog.component';
 import { Proyecto } from '../../../proyectos/interfaces/proyecto.interface';
 import { catchError, of, tap } from 'rxjs';
+import { CacheService } from '../../../dashboard/services/cache.service';
 @Component({
   selector: 'app-beneficiario-table',
   templateUrl: './beneficiario-table.component.html',
-  styleUrl: './beneficiario-table.component.css'
+  styles:''
 })
 export class BeneficiarioTableComponent {
   public beneficiarios: Beneficiario[] = [];
@@ -26,7 +27,11 @@ export class BeneficiarioTableComponent {
   public searchTerm: string = '';
 
   @Input() proyectos: Proyecto[] = [];
+
   @Input() canEdit: boolean = false;
+  @Input() canDelete: boolean = false;
+
+  @Input() public nextPageUrl: string | null = null;
 
 
   @Output() editBeneficiario = new EventEmitter<Beneficiario>();
@@ -37,16 +42,17 @@ export class BeneficiarioTableComponent {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private dialogService: DialogService,
-    private exporService: ExportService
+    private exporService: ExportService,
+    private cacheService: CacheService
   ) {}
 
   ngOnInit(): void {
-    this.loadBeneficiarios(this.currentPage);
+    this.loadBeneficiarios();
   }
 
-  loadBeneficiarios(page: number): void {
+  loadBeneficiarios(): void {
     this.isLoading = true; // Iniciar la carga
-    this.beneficiarioService.getBeneficiarios(page, this.pageSize)
+    this.beneficiarioService.getBeneficiarios()
       .pipe(
         tap((response: HateoasResponse<Beneficiario>) => {
           if (response._embedded && response._embedded.datosDetalleBeneficiarioList) {
@@ -95,7 +101,8 @@ export class BeneficiarioTableComponent {
           this.beneficiarioService.deleteBeneficiario(beneficiario.id).subscribe({
             next: () => {
               this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Beneficiario eliminado correctamente' });
-              this.loadBeneficiarios(this.currentPage);
+              this.cacheService.delete('beneficiarios_listar'); // Eliminar la caché
+              this.loadBeneficiarios();
             },
             error: (err) => {
               this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el beneficiario.' });
@@ -126,7 +133,7 @@ export class BeneficiarioTableComponent {
         });
       } else {
         // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
-        this.loadBeneficiarios(this.currentPage);
+        this.loadBeneficiarios();
         this.isLoading = false;
       }
     }
@@ -136,9 +143,13 @@ export class BeneficiarioTableComponent {
       const ref = this.dialogService.open(ExporDialogComponent, {
         header: 'Exportar Beneficiarios',
         data: {
-          proyectos: this.proyectos  // Pasamos los proyectos al diálogo
+          proyectos: this.proyectos, // Pasamos los proyectos al diálogo
+          nextPageUrl: this.nextPageUrl
+
         }
       });
+
+
 
       ref.onClose.subscribe((exportData) => {
         console.log("Diálogo cerrado, datos de exportación:", exportData);
@@ -177,15 +188,6 @@ export class BeneficiarioTableComponent {
       });
     }
 
-
-
-
-
-  // Maneja el cambio de página
-  onPageChange(event: any): void {
-    const page = event.page;
-    this.loadBeneficiarios(page);
-  }
 
   // Métodos para la paginación con enlaces HATEOAS
   loadFirstPage(): void {

@@ -15,12 +15,9 @@
               <ng-container *ngIf="personaForm.get('DPI')?.errors?.['required']">
                 El campo DPI es obligatorio.
               </ng-container>
-              <ng-container *ngIf="personaForm.get('DPI')?.errors?.['pattern']">
-                El DPI debe contener exactamente 13 dígitos numéricos.
-              </ng-container>
               <ng-container
                 *ngIf="personaForm.get('DPI')?.errors?.['minlength'] || personaForm.get('DPI')?.errors?.['maxlength']">
-                El DPI debe tener 13 caracteres.
+                El DPI debe tener 13 caracteres numéricos.
               </ng-container>
             </div>
           </div>
@@ -30,7 +27,11 @@
             <label for="NIT">NIT</label>
             <input pInputText id="NIT" formControlName="NIT" placeholder="NIT" />
             <div class="error-message" *ngIf="isFieldInvalid('NIT')">
-              El campo NIT no tiene un formato válido.
+              <ng-container
+                *ngIf="personaForm.get('NIT')?.errors?.['pattern'] || personaForm.get('NIT')?.errors?.['minlength'] || personaForm.get('NIT')?.errors?.['maxlength']">
+                El NIT debe tener 9 caracteres numéricos.
+              </ng-container>
+
             </div>
           </div>
 
@@ -79,14 +80,30 @@
               El campo Segundo Apellido no tiene un formato válido.
             </div>
           </div>
+          <!-- Apellido de casada -->
+          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('apellidoCasada') }">
+            <label for="apellidoCasada">Apellido de casada</label>
+            <input pInputText id="apellidoCasada" formControlName="apellidoCasada" placeholder="Apellido de casada" />
+            <div class="error-message" *ngIf="isFieldInvalid('apellidoCasada')">
+              El campo Segundo Apellido no tiene un formato válido.
+            </div>
+          </div>
 
           <!-- Teléfono -->
           <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('telefono') }">
             <label for="telefono">Teléfono</label>
             <input pInputText id="telefono" required formControlName="telefono" placeholder="Teléfono" />
             <div class="error-message" *ngIf="isFieldInvalid('telefono')">
-              El campo Teléfono es obligatorio.
+              <ng-container *ngIf="personaForm.get('telefono')?.errors?.['required']">
+                El campo telefono es obligatorio.
+              </ng-container>
+              <ng-container
+                *ngIf="personaForm.get('telefono')?.errors?.['pattern'] || personaForm.get('telefono')?.errors?.['minlength'] || personaForm.get('telefono')?.errors?.['maxlength']">
+                El teléfono debe tener 8 caracteres numéricos.
+              </ng-container>
+
             </div>
+
           </div>
 
           <!-- Fecha de Nacimiento -->
@@ -124,6 +141,7 @@
             <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalidD('direccion', 'codigo') }">
               <label for="ubicacion">Departamento y Municipio</label>
               <p-autoComplete
+                appendTo="body"
                 class="form-field col-12"
                 id="ubicacion"
                 [suggestions]="filteredUbicaciones"
@@ -240,16 +258,18 @@
           <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('responsable') }">
             <label for="responsable">Responsable</label>
             <p-autoComplete
-              [inputStyle]="{'width': '100%'}"
-              [suggestions]="filteredResponsables"
-              (completeMethod)="buscarResponsables($event)"
-              (onSelect)="onResponsableSeleccionado($event)"
-              [forceSelection]="true"
-              [dropdown]="true"
-              field="nombreCompleto"
-              [minLength]="1"
-              placeholder="Selecciona un responsable">
-            </p-autoComplete>
+            appendTo="body"
+            [inputStyle]="{'width': '100%'}"
+            [suggestions]="filteredResponsables"
+            (completeMethod)="buscarResponsables($event)"
+            (onSelect)="onResponsableSeleccionado($event)"
+            [forceSelection]="true"
+            [dropdown]="true"
+            field="nombreCompleto"
+            [minLength]="1"
+            placeholder="Selecciona un responsable">
+          </p-autoComplete>
+
 
             <!-- Campo oculto para enviar solo el ID del responsable -->
             <input type="hidden" formControlName="responsable">

@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { AuthResponse, LoginRequest } from '../interfaces/AuthResponse.types';
 import { jwtDecode } from 'jwt-decode';
+import { environments } from '../../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class AuthService  {
-  private apiUrl: string = 'http://localhost:8081/auth/login'; // URL del endpoint para autenticación
+  private apiUrl: string = environments.baseUrl + '/auth/login'; // URL del endpoint para autenticación
   private tokenKey: string = 'authToken';
   private rolesKey: string = 'userRoles';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.checkTokenValidity());

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Proyecto } from '../../../proyectos/interfaces/proyecto.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ProjectServiceService } from '../../../proyectos/services/projects.service';
 
 @Component({
   selector: 'app-expor-dialog',
@@ -15,10 +16,12 @@ export class ExporDialogComponent {
   public exportForm: FormGroup; // Formulario reactivo
   public visible: boolean = false; // Controla la visibilidad del diálogo
   public proyectos: Proyecto[] = [];  // Proyectos disponibles para el dropdown
+  public nextPageUrl: string | null = null; // URL para la siguiente página de beneficiarios
 
   constructor(private fb: FormBuilder,
       private config: DynamicDialogConfig,
-      private ref:  DynamicDialogRef
+      private ref:  DynamicDialogRef,
+      private projectService: ProjectServiceService
     ) {
     this.exportForm = this.fb.group({
       proyecto: ['', Validators.required], // Control para seleccionar proyecto
@@ -29,9 +32,13 @@ export class ExporDialogComponent {
   ngOnInit(): void {
     // Recibimos los proyectos desde el data pasado en el Dialog
     this.proyectos = this.config.data.proyectos || [];
+    this.nextPageUrl = this.config.data.nextPageUrl || null;
     console.log('Proyectos en export dialog', this.proyectos);
+    console.log('URL de la siguiente página:', this.nextPageUrl);
+
 
   }
+
 
 
   onConfirm(): void {
@@ -49,7 +56,21 @@ export class ExporDialogComponent {
     }
   }
 
+  cargarMasProyectos(): void {
+    if (this.nextPageUrl) {
+      this.projectService.getProyectoByUrl(this.nextPageUrl).subscribe((response) => {
+        const nuevosProyectos = response._embedded.datosDetalleProyectoList;
 
+        // Añadir los nuevos proyectos a la lista de proyectos ya existentes
+        this.proyectos = [...this.proyectos, ...nuevosProyectos];
+
+        // Actualizar la URL del siguiente enlace, si lo hay
+        this.nextPageUrl = response._links?.next?.href || null;
+      }, (error) => {
+        console.error('Error al cargar más proyectos:', error);
+      });
+    }
+  }
 
 
 

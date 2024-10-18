@@ -24,7 +24,6 @@
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
-  (onPage)="onPageChange($event)"
   [scrollable]="true"
   scrollHeight="470px"
   class="beneficiario-table"
@@ -34,11 +33,13 @@
       <th style="width:5%">#</th>
       <th style="width:10%">DPI</th>
       <th style="width:10%">Nombre</th>
-      <th style="width:10%">Apellido</th>
+      <th style="width:10%">Primer Apellido</th>
+      <th style="width:10%">segundo Apellido</th>
       <th style="width:10%">Teléfono</th>
-      <th style="width:15%">Fecha de Nacimiento</th>
+      <th style="width:10%">Responsable</th>
+      <th style="width:10%">Organizacion</th>
       <th style="width:15%">Nombre del Proyecto</th>
-      <th *ngIf="canEdit" style="width:10%">Acciones</th>
+      <th *ngIf="canEdit || canDelete" style="width:10%">Acciones</th>
     </tr>
   </ng-template>
 
@@ -48,10 +49,13 @@
       <td>{{ beneficiario.DPI}}</td>
       <td>{{ beneficiario.primerNombre }}</td>
       <td>{{ beneficiario.primerApellido }}</td>
+      <td>{{ beneficiario.segundoApellido }}</td>
       <td>{{ beneficiario.telefono }}</td>
-      <td>{{ beneficiario.fechaNacimiento | date: 'shortDate' }}</td>
+
+      <td>{{ beneficiario.responsable }}</td>
+      <td>{{ beneficiario.organizacion }}</td>
       <td>{{ beneficiario.NombreProyecto }}</td>
-      <td *ngIf="canEdit" class="fixed-column">
+      <td *ngIf="canEdit || canDelete" class="fixed-column">
 
         <div class="button-container">
 
@@ -62,8 +66,12 @@
             color: '#333333',
             marginBottom: '5px'
           }"
+
+          *ngIf="canEdit"
           pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(beneficiario)"></button>
-          <button  pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(beneficiario)"></button>
+          <button
+          *ngIf="canDelete"
+          pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(beneficiario)"></button>
         </div>
       </td>
     </tr>

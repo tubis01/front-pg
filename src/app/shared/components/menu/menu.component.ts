@@ -13,6 +13,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   public isDigitador: boolean = false;
   public isUser: boolean = false;
+  public isResponsable: boolean = false;
 
   public userName: string | null = '';
   public isLoggedIn: boolean = false;
@@ -60,6 +61,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.isDigitador = true;
     }else if(roles.includes('ROLE_USER')){
       this.isUser = true;
+    }else if (roles.includes('ROLE_RESPONSABLE')) {
+      this.isResponsable = true;
     }
   }
 

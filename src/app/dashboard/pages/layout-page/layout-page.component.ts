@@ -1,12 +1,14 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
 import { Estado, ResponseCantidad } from '../../interfaces/reporte.types';
 import { Proyecto } from '../../interfaces/proyecto.interface';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'dashboard-layout-page',
   templateUrl: './layout-page.component.html',
-  styleUrl: './layout-page.component.scss'
+  styleUrl: './layout-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LayoutPageComponent implements OnInit{
 
@@ -22,16 +24,37 @@ export class LayoutPageComponent implements OnInit{
   public beneficiariosMes: number = 0;
   public beneficiariosActivos: number = 0; // Total de beneficiarios
 
-  constructor(private reporteService: DashboardService, private cd: ChangeDetectorRef) {}
+  constructor(private reporteService: DashboardService,
+    private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.obtenerProyectosEnCurso();
-    this.obtenerProyectosFinalizados();
-    this.obtenerBeneficiariosActivos();
-    this.obtenerBeneficiariosPorMes(new Date().getMonth() + 1); // Mes actual
-    this.obtenerBeneficiariosTodosLosMeses();
-    this.obtenerUltimosProyectosFinalizados();
-    // Configuración inicial de la gráfica
+    this.configurarGrafico();
+    this.cargarDatosIniciales();
+  }
+
+  cargarDatosIniciales(): void {
+
+    forkJoin({
+      proyectosEnCurso: this.reporteService.contarProyectosPorEstado(Estado.EnProceso),
+      proyectosFinalizados: this.reporteService.contarProyectosPorEstado(Estado.Finalizado),
+      beneficiariosActivos: this.reporteService.obtenerTotalBeneficiarios(),
+      beneficiariosMesActual: this.reporteService.contarBeneficiariosPorMes(new Date().getMonth() + 1)
+    }).subscribe({
+      next: (resultados) => {
+        this.proyectosEnCurso = resultados.proyectosEnCurso;
+        this.proyectosFinalizados = resultados.proyectosFinalizados;
+        this.beneficiariosActivos = resultados.beneficiariosActivos;
+        this.beneficiariosMes = resultados.beneficiariosMesActual;
+
+        this.obtenerBeneficiariosTodosLosMeses();
+      },
+      error: (err) => {
+        console.error('Error al cargar datos iniciales:', err);
+      }
+    });
+  }
+
+  configurarGrafico(): void {
     this.chartData = {
       labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       datasets: [
@@ -39,7 +62,7 @@ export class LayoutPageComponent implements OnInit{
           label: 'Beneficiarios',
           backgroundColor: '#42A5F5',
           borderColor: '#1E88E5',
-          data:  new Array(12).fill(0)  // Los datos se actualizarán dinámicamente
+          data: new Array(12).fill(0)
         }
       ]
     };
@@ -58,12 +81,12 @@ export class LayoutPageComponent implements OnInit{
     };
   }
 
+
   obtenerUltimosProyectosFinalizados(): void {
     this.reporteService.obtenerUltimosProyectosFinalizados(5).subscribe({
       next: (response: Proyecto[]) => {
         // console.log('Últimos proyectos finalizados:', response);
         this.completedProjects = response;
-        this.cd.detectChanges(); // Forzar la detección de cambios
       },
       error: (err: string) => {
         console.error('Error al obtener los últimos proyectos finalizados:', err);
@@ -77,7 +100,6 @@ export class LayoutPageComponent implements OnInit{
       next: (response: number) => {
         // console.log('Proyectos en curso:', response);
         this.proyectosEnCurso = response;
-        this.cd.detectChanges(); // Forzar la detección de cambios
       },
       error: (err: string) => {
         console.error('Error al obtener proyectos en curso:', err);
@@ -90,7 +112,6 @@ export class LayoutPageComponent implements OnInit{
       next: (response: number) => {
         // console.log('Proyectos finalizados:', response);
         this.proyectosFinalizados = response;
-        this.cd.detectChanges(); // Forzar la detección de cambios
       },
       error: (err: string) => {
         console.error('Error al obtener proyectos finalizados:', err);
@@ -98,18 +119,6 @@ export class LayoutPageComponent implements OnInit{
     });
   }
 
-  obtenerBeneficiariosActivos(): void {
-    this.reporteService.contarBeneficiarios(true).subscribe({
-      next: (response: number) => {
-        // console.log('Beneficiarios activos:', response);
-        this.beneficiariosActivos = response;
-        this.cd.detectChanges(); // Forzar la detección de cambios
-      },
-      error: (err: string) => {
-        console.error('Error al obtener beneficiarios activos:', err);
-      }
-    });
-  }
 
   obtenerBeneficiariosPorMes(mes: number): void {
     this.reporteService.contarBeneficiariosPorMes(mes).subscribe({
@@ -117,7 +126,6 @@ export class LayoutPageComponent implements OnInit{
         // console.log('Beneficiarios del mes:', response);
         this.beneficiariosMes = response;
         this.actualizarGraficoBeneficiarios(mes, response);
-        this.cd.detectChanges(); // Forzar la detección de cambios
       },
       error: (err: string) => {
         console.error('Error al obtener beneficiarios por mes:', err);
@@ -126,19 +134,31 @@ export class LayoutPageComponent implements OnInit{
   }
 
   obtenerBeneficiariosTodosLosMeses(): void {
-    for (let mes = 1; mes <= 12; mes++) {
-      this.reporteService.contarBeneficiariosPorMes(mes).subscribe({
-        next: (response) => {
-          // console.log(`Beneficiarios del mes ${mes}:`, response);
-          this.actualizarGraficoBeneficiarios(mes, response);
-          this.cd.detectChanges(); // Forzar la detección de cambios después de actualizar el gráfico
-        },
-        error: (err) => {
-          console.error(`Error al obtener beneficiarios del mes ${mes}:`, err);
-        }
-      });
-    }
+    const observables = Array.from({ length: 12 }, (_, i) => this.reporteService.contarBeneficiariosPorMes(i + 1));
+
+    forkJoin(observables).subscribe({
+      next: (resultados) => {
+        resultados.forEach((cantidad, mes) => {
+          this.actualizarGraficoBeneficiarios(mes + 1, cantidad);
+        });
+      },
+      error: (err) => {
+        console.error('Error al obtener beneficiarios por mes:', err);
+      }
+    });
   }
+
+  obtenerTotalBeneficiarios(): void {
+    this.reporteService.obtenerTotalBeneficiarios().subscribe({
+      next: (response: number) => {
+        this.beneficiariosActivos = response;
+      },
+      error: (err: string) => {
+        console.error('Error al obtener el total de beneficiarios:', err);
+      }
+    });
+  }
+
 
   actualizarGraficoBeneficiarios(mes: number, cantidad: number): void {
     const updatedData = [...this.chartData.datasets[0].data];
@@ -152,9 +172,9 @@ export class LayoutPageComponent implements OnInit{
         }
       ]
     };
-    this.cd.detectChanges(); // Forzar la detección de cambios después de actualizar el gráfico
+    // this.cd.detectChanges(); // Forzar la detección de cambios después de actualizar el gráfico
+    this.cd.markForCheck(); // Marcar el componente para que se actualice en la próxima detección de cambios
   }
-
 
 
   // Método para filtrar proyectos por fecha

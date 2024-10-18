@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DonadoresService } from '../../../donadores/services/donadores.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DatosDetalleDonadorList } from '../../../donadores/interfaces/donador.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-donador-form',
@@ -28,10 +28,8 @@ export class NewPageDonadorComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private donadorService: DonadoresService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
     private messageService: MessageService, // Servicio para mostrar notificaciones
-    private confirmationService: ConfirmationService // Servicio para confirmación
+    private router: Router
   ) {}
 
   // Obtener los datos actuales del donador desde el formulario
@@ -40,19 +38,7 @@ export class NewPageDonadorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Verificar si estamos en modo edición
-    this.activatedRoute.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.donadorService.getDonadorById(id).subscribe(donador => {
-          if (donador) {
-            this.donadorForm.patchValue(donador);
-          } else {
-            this.router.navigateByUrl('/donadores');
-          }
-        });
-      }
-    });
+
   }
 
   // Método para guardar o actualizar un donador
@@ -63,7 +49,7 @@ export class NewPageDonadorComponent implements OnInit {
       this.donadorService.addDonador(this.currentDonador).subscribe(
         donador => {
           this.showMessage(`Donador ${donador.nombre} creado!`);
-          this.router.navigate(['/donadores']);
+          this.router.navigate(['/home']);
         },
         error => {
         }

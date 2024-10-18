@@ -3,11 +3,12 @@ import { HateoasResponse, Links, Proyecto } from '../../interfaces/proyecto.inte
 import { ProjectServiceService } from '../../services/projects.service';
 import { Observer } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CacheService } from '../../../dashboard/services/cache.service';
 
 @Component({
   selector: 'app-project-table',
   templateUrl: './project-table.component.html',
-  styleUrl: './project-table.component.css'
+  styles: ''
 })
 export class ProjectTableComponent implements OnInit{
 
@@ -29,16 +30,18 @@ export class ProjectTableComponent implements OnInit{
   constructor(
     private proyectoService: ProjectServiceService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cacheServicer: CacheService
   ) {}
 
   ngOnInit(): void {
-    this.loadProyectos(this.currentPage);
+    this.loadProyectos();
   }
 
   // Cargar proyectos según la página actual
-  loadProyectos(page: number): void {
-    this.proyectoService.listarProyectos(page, this.pageSize).subscribe({
+  loadProyectos(): void {
+    this.isLoading = true;
+    this.proyectoService.listarProyectos().subscribe({
       next: (response: HateoasResponse<Proyecto>) => {
         if (response._embedded?.datosDetalleProyectoList) {
           this.proyectos = response._embedded.datosDetalleProyectoList;
@@ -47,6 +50,7 @@ export class ProjectTableComponent implements OnInit{
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching projects', error);
@@ -56,6 +60,7 @@ export class ProjectTableComponent implements OnInit{
 
   // Método para editar un proyecto
   onEdit(proyecto: Proyecto): void {
+    this.isLoading = true;
     if (this.isProcessing) return; // Evitar que se llame más de una vez
     this.isProcessing = true;
 
@@ -67,16 +72,19 @@ export class ProjectTableComponent implements OnInit{
         this.editProyecto.emit(proyecto);
         this.messageService.add({ severity: 'success', summary: 'Operación Exitosa', detail: `Edición del proyecto ${proyecto.nombre} iniciada.` });
         this.isProcessing = false;
+        this.isLoading = false;
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: `Edición del proyecto ${proyecto.nombre} cancelada.` });
         this.isProcessing = false;
+        this.isLoading = false;
       }
     }); // Emitir el proyecto para editar
   }
 
   // Método para eliminar un proyecto
   confirmDelete(proyecto: Proyecto): void {
+    this.isLoading = true;
     this.confirmationService.confirm({
       message: `¿Estás seguro de que deseas eliminar el proyecto ${proyecto.nombre}?`,
       header: 'Confirmar Eliminación',
@@ -85,7 +93,9 @@ export class ProjectTableComponent implements OnInit{
         this.proyectoService.finalizarProyecto(proyecto.id).subscribe({
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: `El proyecto ${proyecto.nombre} ha sido eliminado.` });
-            this.loadProyectos(this.currentPage); // Recargar la lista de proyectos
+            this.cacheServicer.delete('proyectos_listar'); // Eliminar la caché
+            this.loadProyectos(); // Recargar la lista de proyectos
+            this.isLoading = false;
           },
           error: (error) => {
             console.error('Error al eliminar el proyecto', error);
@@ -95,6 +105,7 @@ export class ProjectTableComponent implements OnInit{
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Eliminación cancelada.' });
+        this.isLoading = false;
       }
     });
   }
@@ -116,7 +127,7 @@ export class ProjectTableComponent implements OnInit{
       });
     } else {
       // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
-      this.loadProyectos(this.currentPage);
+      this.loadProyectos();
       this.isLoading = false;
     }
   }
@@ -124,7 +135,7 @@ export class ProjectTableComponent implements OnInit{
 
   // Métodos para la paginación
   onPageChange(event: any): void {
-    this.loadProyectos(event.page);
+    this.loadProyectos();
   }
 
   // Método para cambiar de página usando los enlaces HATEOAS
@@ -153,6 +164,7 @@ loadPrevPage(): void {
 }
 
 loadFromLink(url: string): void {
+  this.isLoading = true;
   this.proyectoService.getProyectoByUrl(url).subscribe(
     (response: HateoasResponse<Proyecto>) => {
         this.proyectos = response._embedded.datosDetalleProyectoList;
@@ -160,7 +172,7 @@ loadFromLink(url: string): void {
       this.currentPage = response.page.number;
       this.totalPages = response.page.totalPages;
       this.totalElements = response.page.totalElements;
-      console.log('Loaded projects from link', response);
+      this.isLoading = false;
 
     },
     (error) => {

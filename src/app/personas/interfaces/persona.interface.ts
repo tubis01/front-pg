@@ -31,6 +31,7 @@ export interface Persona {
   tipoProductor:          TipoProductor;
   idResponsable:           number;
   responsable:            string;
+  idOrganizacion:         number;
   organizacion:           string;
   tipoVivienda:           TipoVivienda;
 }

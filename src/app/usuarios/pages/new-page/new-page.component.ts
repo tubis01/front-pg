@@ -14,7 +14,8 @@ export class NewPageComponent  implements OnInit, OnChanges {
   public roles = [
     { label: 'ADMIN', value: 'admin' },
     { label: 'USER', value: 'user' },
-    { label: 'DIGITADOR', value: 'digitador' }
+    { label: 'DIGITADOR', value: 'digitador' },
+    { label: 'RESPONSABLE', value: 'responsable' }
   ];
 
   @Input() usuarioToEdit: Usuario | null = null;
@@ -55,7 +56,8 @@ export class NewPageComponent  implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    if (this.usuarioForm.invalid) return;
+
+    this.validarFormuario();
 
     const formValue = {
       ...this.usuarioForm.value,
@@ -63,43 +65,70 @@ export class NewPageComponent  implements OnInit, OnChanges {
     };
 
     if (this.usuarioToEdit?.id) {
-      this.usuarioService.actualizarUsuario(formValue).subscribe({
-        next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario actualizado con éxito' });
-          this.formSubmit.emit();
-          this.resetForm();
-        },
-        error: (err) => {
-          if (err.status === 404) {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Usuario no encontrado (404)' });
-          } else if (err.status === 409) {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Conflicto: el usuario ya existe (409)' });
-          } else {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario' });
-          }
-          console.error('Error al actualizar el usuario', err);
-        }
-      });
+      this.actualizarUsuario(formValue);
+
     } else {
-      this.usuarioService.registrarUsuario(formValue).subscribe({
-        next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario registrado con éxito' });
-          this.formSubmit.emit();
-          this.resetForm();
-        },
-        error: (err) => {
-          if (err.status === 404) {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error});
-          } else if (err.status === 409) {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error});
-          } else {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar el usuario' });
-          }
-          console.error('Error al registrar el usuario', err);
-        }
-      });
+      console.log('Registrando usuario', formValue);
+
+      this.registrarUsuario(formValue);
     }
   }
+
+
+  validarFormuario(): void {
+    if (this.usuarioForm.invalid) {
+      this.usuarioForm.markAllAsTouched();  // Esto solo se ejecuta si el formulario está siendo enviado
+      // Mostrar mensajes de alerta para los campos que no cumplen con los validadores
+      Object.keys(this.usuarioForm.controls).forEach(field => {
+        const control = this.usuarioForm.get(field);
+        if (control?.invalid) {
+          this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio.` });
+        }
+      });
+      return; // Salir si el formulario es inválido
+    }
+  }
+
+  actualizarUsuario(formValue:any): void {
+    this.usuarioService.actualizarUsuario(formValue).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario actualizado con éxito' });
+        this.formSubmit.emit();
+        this.resetForm();
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Usuario no encontrado (404)' });
+        } else if (err.status === 409) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Conflicto: el usuario ya existe (409)' });
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario' });
+        }
+        console.error('Error al actualizar el usuario', err);
+      }
+    });
+  }
+
+  registrarUsuario(formValue: any): void {
+    this.usuarioService.registrarUsuario(formValue).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario registrado con éxito' });
+        this.formSubmit.emit();
+        this.resetForm();
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error});
+        } else if (err.status === 409) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error});
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar el usuario' });
+        }
+        console.error('Error al registrar el usuario', err);
+      }
+    });
+  }
+
 
   resetForm(): void {
     this.usuarioForm.reset();

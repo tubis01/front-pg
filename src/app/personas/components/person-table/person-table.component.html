@@ -15,7 +15,6 @@
 [value]="persons"
 [rows]="pageSize"
 [totalRecords]="totalElements"
-(onPageChange)="onPageChange($event)"
 [scrollable]="true"
 scrollHeight="470px"
 >
@@ -64,7 +63,7 @@ scrollHeight="470px"
             <td>{{ person.segundoApellido }}</td>
             <td>{{ person.NIT }}</td>
             <td>{{ person.telefono }}</td>
-            <td>{{ person.fechaNacimiento }}</td>
+            <td>{{ person.fechaNacimiento | date: "dd-MM-YYYY" }}</td>
             <td>{{ person.etnia }}</td>
             <td>{{ person.genero }}</td>
             <td>{{ person.estadoCivil }}</td>

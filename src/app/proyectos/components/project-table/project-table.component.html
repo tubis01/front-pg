@@ -1,6 +1,6 @@
 <div class="search-and-export">
   <shared-search-box
-    [placeHolder]="'Buscar persona por nombre'"
+    [placeHolder]="'Buscar proyecto por nombre'"
   (onDebounce)="onSearch($event)"></shared-search-box>
 </div>
 
@@ -36,8 +36,8 @@
       <td>{{ currentPage * pageSize + i + 1 }}</td>
       <td>{{ proyecto.nombre }}</td>
       <td>{{ proyecto.descripcion }}</td>
-      <td>{{ proyecto.fechaInicio }}</td>
-      <td >{{ proyecto.fechaFin }}</td>
+      <td>{{ proyecto.fechaInicio | date: "dd-MM-YYYY"}}</td>
+      <td >{{ proyecto.fechaFin | date: "dd-MM-YYYY"}}</td>
       <td class="fixed-column">
         <div class="button-container">
 
@@ -74,3 +74,7 @@
   <button pButton icon="pi pi-angle-right" (click)="loadNextPage()" *ngIf="links?.next"></button>
   <button pButton icon="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
 </div>
+
+<shared-loading-spinner
+*ngIf="isLoading">
+</shared-loading-spinner>

@@ -1,6 +1,6 @@
 <div class="search-and-export">
   <shared-search-box
-    [placeHolder]="'Buscar persona por nombre'"
+    [placeHolder]="'Buscar usuario por alias'"
   (onDebounce)="onSearch($event)">
 </shared-search-box>
 </div>
@@ -16,7 +16,6 @@
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
-  (onPage)="onPageChange($event)"
   [scrollable]="true"
   scrollHeight="470px"
 >
@@ -39,7 +38,15 @@
       <td class="fixed-column">
         <div class="button-container">
 
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(usuario)"></button>
+          <button
+          [style]="{
+            border: '1px solid black',
+            backgroundColor: '#FFB82D',
+            color: '#333333',
+            marginBottom: '5px'
+          }"
+
+          pButton icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="onEdit(usuario)"></button>
           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(usuario)"></button>
         </div>
       </td>
@@ -53,3 +60,8 @@
   <button pButton class="pi pi-angle-right" (click)="loadNextPage()" *ngIf="links?.next"></button>
   <button pButton class="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
 </div>
+
+<shared-loading-spinner
+*ngIf="isLoading">
+
+</shared-loading-spinner>

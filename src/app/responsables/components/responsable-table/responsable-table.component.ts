@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Responsable, HateoasResponse, Links } from '../../interfaces/responsable.interface';
 import { ResponsableService } from '../../services/responsable.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CacheService } from '../../../dashboard/services/cache.service';
 
 @Component({
   selector: 'responsable-table',
   templateUrl: './responsable-table.component.html',
-  styleUrl: './responsable-table.component.css'
+  styles: ''
 })
 export class ResponsableTableComponent implements OnInit {// Lista de responsables
   // Lista de responsables
@@ -30,22 +31,25 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
   constructor(
     private responsableService: ResponsableService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cacheService: CacheService
   ) {}
 
   ngOnInit(): void {
-    this.loadResponsable(this.currentPage);
+    this.loadResponsable();
   }
 
   // Método para cargar los responsables según la página actual
-  loadResponsable(page: number): void {
-    this.responsableService.getResponsable(page, this.pageSize).subscribe({
+  loadResponsable(): void {
+    this.isLoading = true;
+    this.responsableService.getResponsable().subscribe({
       next: (response: HateoasResponse<Responsable>) => {
         this.responsables = response._embedded.datosDetalleResponsableList;
         this.links = response._links;
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching responsables', error);
@@ -55,6 +59,7 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
 
   // Método para confirmar antes de editar un responsable
   onEdit(responsable: Responsable): void {
+    this.isLoading = true;
     if (this.isProcessing) return; // Evitar que se llame más de una vez
     this.isProcessing = true;
 
@@ -66,16 +71,19 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
         this.editResponsable.emit(responsable);
         this.messageService.add({ severity: 'success', summary: 'Operación Exitosa', detail: `Edición del responsable ${responsable.nombre} iniciada.` });
         this.isProcessing = false;
+        this.isLoading = false;
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: `Edición del responsable ${responsable.nombre} cancelada.` });
         this.isProcessing = false;
+        this.isLoading = false;
       }
     });
   }
 
   // Método para confirmar antes de eliminar un responsable
   confirmDelete(responsable: Responsable): void {
+    this.isLoading = true;
     if (this.isProcessing) return; // Evitar que se llame más de una vez
     this.isProcessing = true;
 
@@ -87,20 +95,25 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
         this.responsableService.deleteResponsable(responsable.id).subscribe({
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: `El responsable ${responsable.nombre} ha sido eliminado.` });
-            this.loadResponsable(this.currentPage); // Recargar la lista de responsables
+            this.cacheService.delete('responsables_lista'); // Eliminar la caché
+            this.loadResponsable(); // Recargar la lista de responsables
             this.isProcessing = false;
+            this.isLoading = false;
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el responsable.' });
             this.isProcessing = false;
+            this.isLoading = false;
           }
         });
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: `Eliminación del responsable ${responsable.nombre} cancelada.` });
         this.isProcessing = false;
+        this.isLoading = false;
       }
     });
+
   }
 
   onSearch(term: string): void {
@@ -120,17 +133,12 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
       });
     } else {
       // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
-      this.loadResponsable(this.currentPage);
+      this.loadResponsable();
       this.isLoading = false;
     }
   }
 
 
-  // Método para manejar el cambio de página en la tabla
-  onPageChange(event: any): void {
-    const page = event.page;
-    this.loadResponsable(page);
-  }
 
   // Métodos para cambiar entre páginas utilizando los enlaces HATEOAS
   loadFirstPage(): void {
@@ -159,6 +167,7 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
 
   // Método para cargar una página desde un enlace HATEOAS
   loadFromLink(url: string): void {
+    this.isLoading = true;
     this.responsableService.getResponsableByUrl(url).subscribe({
       next: (response: HateoasResponse<Responsable>) => {
         this.responsables = response._embedded.datosDetalleResponsableList;
@@ -166,6 +175,7 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching responsables from link', error);

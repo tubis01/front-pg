@@ -20,25 +20,28 @@
       </ng-template>
     </p-dropdown>
 
-
-
-
       <div *ngIf="exportForm.get('proyecto')?.invalid && exportForm.get('proyecto')?.touched" class="error-message">
         Proyecto es obligatorio.
       </div>
     </div>
 
+
     <!-- RadioButtons para seleccionar el estado (activo/inactivo) -->
     <div class="p-field">
-      <label>Estado</label>
+      <label></label>
       <p-radioButton formControlName="activo" [value]="true" label="Activos"></p-radioButton>
       <p-radioButton formControlName="activo" [value]="false" label="Inactivos"></p-radioButton>
     </div>
 
     <!-- Botón de Exportar -->
-    <div class="p-dialog-footer">
-      <button pButton label="Exportar" icon="" (click)="onConfirm()" [disabled]="exportForm.invalid" type="button" styleClass="p-button-success"></button>
+    <div class="">
+      <button pButton label="Exportar" icon="" (click)="onConfirm()" [disabled]="exportForm.invalid" type="button" class="p-button-info"></button>
     </div>
+
+    <div *ngIf="nextPageUrl">
+      <button pButton label="Cargar más proyectos" (click)="cargarMasProyectos()" type="button" class="p-button-info mt-3"></button>
+    </div>
+
 
   </form>
 </div>

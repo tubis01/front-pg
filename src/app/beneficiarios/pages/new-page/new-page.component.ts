@@ -1,12 +1,11 @@
 import { Proyecto } from './../../../proyectos/interfaces/proyecto.interface';
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { Beneficiario, Links } from '../../interfaces/beneficiario.interface';
+import { Beneficiario } from '../../interfaces/beneficiario.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BeneficiarioService } from '../../services/beneficiario.service';
 import { ProjectServiceService } from '../../../proyectos/services/projects.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
-import { AuthService } from '../../../auth/services/auth.service';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-new-beneficiario',
@@ -20,11 +19,11 @@ export class NewPageComponent {
   public beneficiarioForm: FormGroup;
   public filteredProjects: Proyecto[] = [];  // Proyectos filtrados para autocompletar
 
-  public allLoadedProjects: Proyecto[] = []; // Todos los proyectos cargados
-  public nextPageUrl: string | null = null;  // Para cargar más proyectos
+  @Input() public allLoadedProjects: Proyecto[] = []; // Todos los proyectos cargados
+  @Input() public nextPageUrl: string | null = null;  // Para cargar más proyectos
 
 
-  public isDigitador: boolean = false
+  // public isDigitador: boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -32,16 +31,26 @@ export class NewPageComponent {
     private projectService: ProjectServiceService,
     private messageService: MessageService,
     private ConfirmationService: ConfirmationService,
-    private authserVice: AuthService
   ) {
     this.beneficiarioForm = this.fb.group({
       id: [''],
-      dpi: ['', Validators.required],
+      dpi: ['',
+        [Validators.required,
+          Validators.pattern('^[0-9]{13}$'), // Solo permite 13 dígitos numéricos
+          Validators.minLength(13),
+          Validators.maxLength(13)
+        ]],
       proyecto: ['', Validators.required], // Aquí almacenamos el ID del proyecto
     });
   }
 
   ngOnInit(): void {
+    this.allLoadedProjects = this.allLoadedProjects.map(proyecto => {
+      return {
+        ...proyecto,
+        nombreCompleto: `${proyecto.id} ${proyecto.nombre} - ${proyecto.descripcion}` // Generamos el nombre completo
+      };
+    });
     if (this.beneficiarioToEdit) {
       this.beneficiarioForm.patchValue({
         id: this.beneficiarioToEdit.id,
@@ -49,8 +58,9 @@ export class NewPageComponent {
         proyecto: this.beneficiarioToEdit.idProyecto// Asignamos el ID del proyecto si existe
       });
     }
-    this.cargarProyectos(); // Cargar los proyectos al iniciar el componente
-    this.checkRole();
+
+    // this.cargarProyectos(); // Cargar los proyectos al iniciar el componente
+    // this.checkRole();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -65,6 +75,7 @@ export class NewPageComponent {
 
   onSubmit(): void {
     this.validarFormulario();
+
     if (this.beneficiarioToEdit?.id) {
       this.updateBeneficiario();
     } else {
@@ -74,6 +85,11 @@ export class NewPageComponent {
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.registerBeneficiario();
+          console.log(this.beneficiarioForm.get('proyecto')?.value);
+
+          this.resetForm();
+          console.log(this.beneficiarioForm.get('proyecto')?.value);
+
         }
       });
     }
@@ -126,9 +142,18 @@ export class NewPageComponent {
   }
 
   resetForm(): void {
-    this.beneficiarioForm.reset();
-    this.beneficiarioToEdit = null;
+    this.beneficiarioForm.reset(); // Resetea todos los campos del formulario
+    this.beneficiarioForm.get('proyecto')?.setValue(null); // Limpiar el valor del campo autocompletar
+    this.selectedProyectoNombre = ''; // Limpiar el nombre visualmente
+    this.filteredProjects = []; // Limpiar las sugerencias
+
+    // Limpiar manualmente el valor visual del autocompletar
+    const autocomplete = document.querySelector('p-autoComplete input');
+    if (autocomplete) {
+      (autocomplete as HTMLInputElement).value = ''; // Limpiar el valor visible
+    }
   }
+
 
   // Validar si un campo es inválido
   isFieldInvalid(field: string): boolean | undefined {
@@ -136,21 +161,6 @@ export class NewPageComponent {
       (this.beneficiarioForm.get(field)?.dirty || this.beneficiarioForm.get(field)?.touched);
   }
 
-  cargarProyectos(): void {
-    this.projectService.listarProyectos().subscribe(response => {
-      this.allLoadedProjects = [
-        ...this.allLoadedProjects, // Mantener los ya cargados
-        ...response._embedded.datosDetalleProyectoList.map(proyecto => {
-          return {
-            ...proyecto,
-            nombreCompleto: `${proyecto.id}. ${proyecto.nombre} - ${proyecto.descripcion}` // Crear un nombre completo
-          };
-        })
-      ];
-      // Si hay un siguiente enlace para cargar más proyectos, lo guardamos
-      this.nextPageUrl = response._links.next?.href || null;
-    });
-  }
 
   // Método para cargar más proyectos
   cargarMasProyectos(): void {
@@ -175,10 +185,16 @@ export class NewPageComponent {
   // Método para buscar proyectos en la lista cargada
   buscarProyectos(event: AutoCompleteCompleteEvent): void {
     const query = event.query.toLowerCase();
-    this.filteredProjects = this.allLoadedProjects.filter(proyecto =>
-      proyecto.nombre.toLowerCase().includes(query)
-    );
+
+    // Agregar el campo nombreCompleto a los proyectos antes de filtrarlos
+    this.filteredProjects = this.allLoadedProjects.map(proyecto => {
+      return {
+        ...proyecto,
+        nombreCompleto: `${proyecto.id} ${proyecto.nombre} - ${proyecto.descripcion}`
+      };
+    }).filter(proyecto => proyecto.nombreCompleto.toLowerCase().includes(query));
   }
+
 
   public selectedProyectoNombre = ''; // Nombre del proyecto seleccionado
 
@@ -195,8 +211,4 @@ export class NewPageComponent {
     }
   }
 
-  checkRole(): void{
-    const roles = this.authserVice.getRoles();
-    this.isDigitador = roles.includes('ROLE_DIGITADOR');
-  }
 }

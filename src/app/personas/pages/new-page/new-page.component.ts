@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {  Router } from '@angular/router';
 import { PersonService } from '../../services/persons.service';
 import { DIRECCIONES } from '../../interfaces/direcciones';
 import { Persona } from '../../interfaces/persona.interface';
@@ -13,7 +12,8 @@ import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 @Component({
   selector: 'person-new-page',
   templateUrl: './new-page.component.html',
-  styleUrl: `./new-page.component.css`
+  styleUrl: `./new-page.component.css`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewPageComponent implements OnInit, OnChanges {
 
@@ -41,14 +41,16 @@ export class NewPageComponent implements OnInit, OnChanges {
 
   public tiposProductor = [
     { label: 'Excedencia', value: 'EXCEDENCIA' },
-    { label: 'Susbsistencia', value: 'SUSBSISTENCIA' },
-    { label: 'Infrasubsistencia', value: 'INFRASUBSISTENCIA' }
+    { label: 'Susbsistencia', value: 'SUBSISTENCIA' },
+    { label: 'Infrasubsistencia', value: 'INFRASUBSISTENCIA' },
+    { label: 'Comercial', value: 'COMERCIAL' },
+    { label: 'Exportador', value: 'EXPORTADOR' }
   ];
 
   public organizaciones = [
-    {label: 'Adics', value: 'ADICS'},
-    {label: 'Unac', value: 'UNAC'},
-    {label: 'Redcodezca', value: 'REDCODEZCA'},
+    {label: 'Adics', value: 1},
+    {label: 'Unac', value: 2},
+    {label: 'Redcodezca', value: 3},
 
   ]
 
@@ -71,13 +73,23 @@ export class NewPageComponent implements OnInit, OnChanges {
 
         ]
       ], // Validar que sea un número de 13 dígitos
-      NIT: [''],
+      NIT: ['',
+        [Validators.pattern('^[0-9]{9}$'),
+          Validators.minLength(9),
+          Validators.maxLength(9)
+        ]], // Validar que sea un número de 9 dígitos
       primerNombre: ['', Validators.required],
       segundoNombre: [''],
       tercerNombre: [''],
       primerApellido: ['', Validators.required],
       segundoApellido: [''],
-      telefono: ['', Validators.required],
+      apellidoCasada: [''],
+      telefono: ['',
+        [Validators.required,
+          Validators.pattern('^[0-9]{8}$'), // Solo permite 8 dígitos numéricos
+          Validators.minLength(8),
+          Validators.maxLength(8)
+        ]],
       fechaNacimiento: ['', Validators.required],
       etnia: ['', Validators.required],
       genero: ['', Validators.required],
@@ -105,19 +117,12 @@ export class NewPageComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
-    // Esta parte se ejecuta una sola vez cuando el componente es inicializado
-    if (this.personToEdit) {
-      this.isEditMode = true;
-      this.personaForm.patchValue(this.personToEdit);
-    }
     this.cargarResponsables();
 
 
 }
 
 cargarResponsables(): void {
-  console.log('Cargando responsables...');
-
   this.responsableService.getResponsable().subscribe(response => {
     // Concatenar los responsables previamente cargados con los nuevos
     this.responsables = [
@@ -173,37 +178,42 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
         this.personaForm.get('responsable')?.setValue(selectedResponsable.id);
 
         // Mostrar el nombre completo en la interfaz
-        this.selectedResponsableNombre = `${selectedResponsable.nombre} ${selectedResponsable.apellido}`;
+        this.selectedResponsableNombre = selectedResponsable.nombreCompleto;
         console.log('Responsable seleccionado con ID:', selectedResponsable.id); // Depuración
       } else {
         console.error('El responsable seleccionado no tiene un ID válido.');
       }
     }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // Detectar cambios en la propiedad de entrada personToEdit
-    if (changes['personToEdit'] && changes['personToEdit'].currentValue) {
-      this.isEditMode = true;
 
-    const { idResponsable, responsable, ...restOfPerson } = changes['personToEdit'].currentValue;
+    ngOnChanges(changes: SimpleChanges): void {
+      // Detectar cambios en la propiedad de entrada personToEdit
+      if (changes['personToEdit'] && changes['personToEdit'].currentValue) {
+        this.isEditMode = true;
 
-    this.personaForm.patchValue(restOfPerson);
+        const { idResponsable, responsable, organizacionId, ...restOfPerson } = changes['personToEdit'].currentValue;
 
-    // Asigna el idResponsable al campo responsable del formulario
-    this.personaForm.get('responsable')?.setValue(idResponsable);
+        this.personaForm.patchValue({
+          ...restOfPerson,
+          organizacion: organizacionId, // Asigna el ID de la organización al campo del formulario
+        });
 
-    // Almacenar el id original para comparar si se modifica
-    this.originalResponsableId = idResponsable;
+        // Asigna el idResponsable al campo responsable del formulario
+        this.personaForm.get('responsable')?.setValue(idResponsable);
 
-    // Establecer el nombre del responsable visible
-    this.selectedResponsableNombre = responsable || '';
-      // this.originalResponsableId = responsable ? responsable : null;
-      this.cd.detectChanges();
-    } else {
-      this.isEditMode = false;
-      this.personaForm.reset();
+        // Almacenar el id original para comparar si se modifica
+        this.originalResponsableId = idResponsable;
+
+        // Establecer el nombre del responsable visible
+        this.selectedResponsableNombre = responsable || '';
+
+        this.cd.markForCheck();
+      } else {
+        this.isEditMode = false;
+        this.personaForm.reset();
+      }
     }
-  }
+
 
   buscarUbicaciones(event: AutoCompleteCompleteEvent): void {
     const query = event.query.toLowerCase();
@@ -240,18 +250,7 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
 
   onSubmit(): void {
 
-    if (this.personaForm.invalid) {
-      this.personaForm.markAllAsTouched();  // Esto solo se ejecuta si el formulario está siendo enviado
-      // Mostrar mensajes de alerta para los campos que no cumplen con los validadores
-      Object.keys(this.personaForm.controls).forEach(field => {
-        const control = this.personaForm.get(field);
-        if (control?.invalid) {
-          this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio.` });
-        }
-      });
-      return; // Salir si el formulario es inválido
-    }
-
+    this.validarFormulario();
     if (this.isEditMode) {
 
       this.personaService.updatePerson(this.personaForm.value).subscribe({
@@ -259,7 +258,8 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
               this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona actualizada con éxito' });
               this.formSubmit.emit();
               this.isEditMode = false;
-              this.personaForm.reset();
+              this.resetForm();
+
 
           },
           error: (error) => {
@@ -280,7 +280,7 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
           this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona registrada con éxito' });
           console.log('Persona registrada con éxito');
           this.formSubmit.emit();
-          this.personaForm.reset();
+          this.resetForm();
 
         },
         error: (error) => {
@@ -294,5 +294,33 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
       });
     }
   }
+
+  validarFormulario(): void {
+    if (this.personaForm.invalid) {
+      this.personaForm.markAllAsTouched();  // Esto solo se ejecuta si el formulario está siendo enviado
+      // Mostrar mensajes de alerta para los campos que no cumplen con los validadores
+      Object.keys(this.personaForm.controls).forEach(field => {
+        const control = this.personaForm.get(field);
+        if (control?.invalid) {
+          this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio.` });
+        }
+      });
+      return; // Salir si el formulario es inválido
+    }
+  }
+
+  resetForm(): void {
+    this.personaForm.reset(); // Resetea todos los campos del formulario
+    this.isEditMode = false;  // Restablecer el modo edición
+    this.selectedResponsable = '';  // Limpiar el nombre del responsable visible
+    this.filteredResponsables = [];  // Limpiar las sugerencias
+
+    // Limpiar manualmente el valor visual del autocompletar
+    const autocomplete = document.querySelector('p-autoComplete input');
+    if (autocomplete) {
+      (autocomplete as HTMLInputElement).value = ''; // Limpiar el valor visible
+    }
+  }
+
 
 }

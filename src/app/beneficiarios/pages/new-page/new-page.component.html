@@ -1,7 +1,5 @@
 
-<shared-menu
-*ngIf="isDigitador"
-></shared-menu>
+
 
 <h1>{{ beneficiarioToEdit ? 'Actualizar Beneficiario' : 'Registrar Beneficiario' }}</h1>
 
@@ -21,7 +19,13 @@
             <label for="dpi">DPI</label>
             <input pInputText id="dpi" formControlName="dpi" placeholder="DPI" required  [readOnly]="beneficiarioToEdit ? true : false" />
             <div class="error-message" *ngIf="isFieldInvalid('dpi')">
-              El campo DPI es obligatorio.
+              <ng-container *ngIf="beneficiarioForm.get('dpi')?.errors?.['required']">
+                El campo DPI es obligatorio.
+              </ng-container>
+              <ng-container
+                *ngIf="beneficiarioForm.get('dpi')?.errors?.['minlength'] || beneficiarioForm.get('DPI')?.errors?.['maxlength']">
+                El DPI debe tener 13 caracteres numéricos.
+              </ng-container>
             </div>
           </div>
 
@@ -31,16 +35,18 @@
           <label for="proyecto">Proyecto</label>
           <p-autoComplete
           appendTo="body"
-            [inputStyle]="{'width': '100%'}"
-            [suggestions]="filteredProjects"
-            (completeMethod)="buscarProyectos($event)"
-            (onSelect)="onProyectoSeleccionado($event)"
-            [forceSelection]="true"
-            [dropdown]="true"
-            field="nombreCompleto"
-            [minLength]="1"
-            placeholder="Selecciona un proyecto">
-          </p-autoComplete>
+          [inputStyle]="{'width': '100%'}"
+          [suggestions]="filteredProjects"
+          (completeMethod)="buscarProyectos($event)"
+          (onSelect)="onProyectoSeleccionado($event)"
+          [forceSelection]="true"
+          [dropdown]="true"
+          field="nombreCompleto"
+          FormControl="beneficiarioForm.get('proyecto')"
+          [minLength]="1"
+          placeholder="Selecciona un proyecto">
+        </p-autoComplete>
+
           <!-- Campo oculto para enviar solo el ID del proyecto -->
           <input type="hidden" formControlName="proyecto">
           <div class="error-message" *ngIf="isFieldInvalid('proyecto')">

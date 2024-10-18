@@ -14,7 +14,8 @@
     >
       <app-beneficiario-table
       [canEdit]="canEdit"
-
+      [canDelete]="canDelete"
+      [nextPageUrl]="nextPageUrl"
       [proyectos]="proyectos"
       (editBeneficiario)="onEditBeneficiario($event)"></app-beneficiario-table>
     </p-card>
@@ -30,6 +31,8 @@
   color: '#333333'
 }">
       <app-new-beneficiario
+        [allLoadedProjects]="proyectos"
+        [nextPageUrl]="nextPageUrl"
         [beneficiarioToEdit]="selectedBeneficiario"
         (formSubmit)="onFormSubmit()"
       ></app-new-beneficiario>

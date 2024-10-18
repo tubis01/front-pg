@@ -11,9 +11,14 @@ export const authGuard: CanActivateFn = (route, state) => {
     const roles = authService.getRoles();  // Obtenemos los roles del usuario
 
     // Si el usuario tiene el rol ROLE_DIGITADOR, lo redirigimos al formulario de beneficiario
-    if (roles.includes('ROLE_DIGITADOR') && state.url !== '/beneficiarios/new-beneficiario') {
-      console.log('Redirigiendo ROLE_DIGITADOR a /beneficiarios/new-beneficiario');
-      router.navigate(['/beneficiarios/new-beneficiario']);
+    if (roles.includes('ROLE_DIGITADOR') && state.url !== '/beneficiarios/list') {
+      console.log('Redirigiendo ROLE_DIGITADOR a /beneficiarios/list');
+      router.navigate(['/beneficiarios/list']);
+      return false;  // Detener la navegación actual
+    }
+    if (roles.includes('ROLE_RESPONSABLE') && state.url !== '/beneficiarios/list') {
+      console.log('Redirigiendo ROLE_RESPONSABLE a /beneficiarios/list');
+      router.navigate(['/beneficiarios/list']);
       return false;  // Detener la navegación actual
     }
     // Verificamos si la ruta tiene roles esperados, y si el usuario no tiene ninguno, lo redirigimos

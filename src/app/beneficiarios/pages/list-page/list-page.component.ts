@@ -6,7 +6,7 @@ import { ProjectServiceService } from '../../../proyectos/services/projects.serv
 import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
-  selector: 'app-list-page',
+  selector: 'beneficiarios-list-page',
   templateUrl: './list-page.component.html',
   styleUrl: './list-page.component.css'
 })
@@ -14,6 +14,7 @@ export class ListPageComponent implements OnInit{
 
   public proyectos: Proyecto[] = [];
   public selectedBeneficiario: Beneficiario | null = null;
+  public nextPageUrl: string | null = null;
 
 
 
@@ -21,6 +22,7 @@ export class ListPageComponent implements OnInit{
   public canEdit: boolean =  false;
   public canViewTable: boolean = false;
   public canViewForm: boolean = false;
+  public canDelete: boolean = false;
 
 
 
@@ -32,15 +34,23 @@ export class ListPageComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.loadProjects();
+
     this.setPermission();
+    if (this.canEdit && this.canDelete) {
+      this.loadProjects();
+      }
   }
 
+  private requesCounter: number = 0;
   loadProjects(): void {
+
+    this.requesCounter++;
+
     this.projectService.listarProyectos().subscribe({
       next: (response) => {
         this.proyectos = response._embedded.datosDetalleProyectoList;
-        console.log('Proyectos cargados en listPage', this.proyectos);
+        this.nextPageUrl = response._links.next?.href || null;
+
 
       },
       error: (error) => {
@@ -56,18 +66,18 @@ export class ListPageComponent implements OnInit{
       this.canEdit = true;
       this.canViewTable = true;
       this.canViewForm = true;
-    }else if(roles.includes('ROLE_USER')){
+      this.canDelete = true;
+    }else if (roles.includes('ROLE_RESPONSABLE')) {
+      this.canViewTable = true;
+      this.canDelete = true;
+    } else if(roles.includes('ROLE_USER')){
       this.canViewTable = true;
     }else if(roles.includes('ROLE_DIGITADOR')){
       this.canViewForm = true;
   }
 
-  console.log('roles', roles);
 
 }
-
-
-
 
 
   onEditBeneficiario(beneficiario: Beneficiario): void {

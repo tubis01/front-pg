@@ -3,11 +3,12 @@ import { DatosDetalleDonadorList, HateoasResponse } from '../../interfaces/donad
 import { DonadoresService } from '../../services/donadores.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { catchError, of, tap } from 'rxjs';
+import { CacheService } from '../../../dashboard/services/cache.service';
 
 @Component({
   selector: 'donador-table',
   templateUrl: './donador-table.component.html',
-  styleUrl: `./donador-table.component.css`
+  styles: ''
 })
 export class DonadorTableComponent implements OnInit{
   public donadores: DatosDetalleDonadorList[] = [];
@@ -20,16 +21,17 @@ export class DonadorTableComponent implements OnInit{
   constructor(
     private donadorService: DonadoresService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cacheService: CacheService
   ) {}
 
   ngOnInit(): void {
-    this.loadDonadores(this.currentPage); // Cargar la primera página al inicializar el componente
+    this.loadDonadores(); // Cargar la primera página al inicializar el componente
   }
 
 
-  loadDonadores(page: number): void {
-    this.donadorService.getDonadores(page, this.pageSize).pipe(
+  loadDonadores(): void {
+    this.donadorService.getDonadores().pipe(
       tap((response: HateoasResponse<DatosDetalleDonadorList>) => {
         // Procesa la respuesta aquí
         this.donadores = response._embedded.datosDetalleDonadorList;
@@ -57,7 +59,8 @@ export class DonadorTableComponent implements OnInit{
         this.donadorService.deleteDonador(donador.id).subscribe({
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Donador eliminado correctamente' });
-            this.loadDonadores(this.currentPage); // Recargar la lista después de eliminar
+            this.cacheService.delete('donadores_list'); // Eliminar la caché
+            this.loadDonadores(); // Recargar la lista después de eliminar
           },
           error: (err) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el donador.' });
@@ -71,10 +74,6 @@ export class DonadorTableComponent implements OnInit{
     });
   }
 
-  // Maneja el cambio de página
-  onPageChange(event: any): void {
-    this.loadDonadores(event.page);
-  }
 
   // Navegar a la primera página
   loadFirstPage(): void {

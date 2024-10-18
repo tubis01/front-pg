@@ -8,7 +8,6 @@
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
-  (onPage)="onPageChange($event)"
   [scrollable]="true"
   scrollHeight="470px"
 >
@@ -34,7 +33,7 @@
       <td>{{ voluntario.genero }}</td>
       <td>{{ voluntario.correo }}</td>
       <td>{{ voluntario.telefono }}</td>
-      <td>{{ voluntario.fechaNacimiento }}</td>
+      <td>{{ voluntario.fechaNacimiento  | date: "dd-MM-YYYY" }}</td>
       <td>{{ voluntario.comentarios }}</td>
       <td class="fixed-column">
         <div class="button-container">

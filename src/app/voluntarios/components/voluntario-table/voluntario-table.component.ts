@@ -3,11 +3,12 @@ import { DatosDetalleVoluntarioList, HateoasResponse } from '../../interfaces/vo
 import { VoluntarioService } from '../../services/voluntario.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { catchError, of, tap } from 'rxjs';
+import { CacheService } from '../../../dashboard/services/cache.service';
 
 @Component({
   selector: 'voluntario-table',
   templateUrl: './voluntario-table.component.html',
-  styleUrl: './voluntario-table.component.css'
+  styles: ''
 })
 export class VoluntarioTableComponent implements OnInit{
 
@@ -21,15 +22,16 @@ export class VoluntarioTableComponent implements OnInit{
   constructor(
     private voluntarioService: VoluntarioService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cacheService: CacheService
   ) {}
 
   ngOnInit(): void {
-    this.loadVoluntarios(this.currentPage); // Cargar la primera página al inicializar el componente
+    this.loadVoluntarios(); // Cargar la primera página al inicializar el componente
   }
 
-  loadVoluntarios(page: number): void {
-    this.voluntarioService.getVoluntarios(page, this.pageSize).pipe(
+  loadVoluntarios(): void {
+    this.voluntarioService.getVoluntarios().pipe(
       tap((response: HateoasResponse<DatosDetalleVoluntarioList>) => {
         // Procesa la respuesta aquí
         this.voluntarios = response._embedded.datosDetalleVoluntarioList;
@@ -57,7 +59,8 @@ export class VoluntarioTableComponent implements OnInit{
         this.voluntarioService.deleteDonador(voluntario.id).subscribe({
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Voluntario eliminado correctamente' });
-            this.loadVoluntarios(this.currentPage); // Recargar la lista después de eliminar
+            this.cacheService.delete('voluntarios_lista'); // Eliminar la caché
+            this.loadVoluntarios(); // Recargar la lista después de eliminar
           },
           error: (err) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el voluntario.' });
@@ -71,10 +74,6 @@ export class VoluntarioTableComponent implements OnInit{
     });
   }
 
-  // Maneja el cambio de página
-  onPageChange(event: any): void {
-    this.loadVoluntarios(event.page);
-  }
 
   // Navegar a la primera página
   loadFirstPage(): void {

@@ -8,7 +8,6 @@
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
-  (onPage)="onPageChange($event)"
   [scrollable]="true"
   scrollHeight="470px"
   class="donador-table"
@@ -35,7 +34,7 @@
       <td>{{ donador.genero }}</td>
       <td>{{ donador.correo }}</td>
       <td>{{ donador.telefono }}</td>
-      <td>{{ donador.fechaNacimiento }}</td>
+      <td>{{ donador.fechaNacimiento  |date: "dd-MM-YYYY"}}</td>
       <td>{{ donador.comentarios }}</td>
       <td class="fixed-column">
         <div class="button-container">

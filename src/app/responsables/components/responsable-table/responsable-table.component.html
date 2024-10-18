@@ -1,7 +1,7 @@
 
 <div class="search-and-export">
   <shared-search-box
-    [placeHolder]="'Buscar persona por nombre'"
+    [placeHolder]="'Buscar responsable nombre'"
   (onDebounce)="onSearch($event)"></shared-search-box>
 </div>
 
@@ -15,7 +15,6 @@
   [rows]="pageSize"
   [totalRecords]="totalElements"
   [lazy]="true"
-  (onPage)="onPageChange($event)"
   [scrollable]="true"
   scrollHeight="470px"
   class="responsable-table"
@@ -41,7 +40,7 @@
       <td>{{ responsable.genero }}</td>
       <td>{{ responsable.correo }}</td>
       <td>{{ responsable.telefono }}</td>
-      <td>{{ responsable.fechaNacimiento }}</td>
+      <td>{{ responsable.fechaNacimiento | date: "dd-MM-YYYY" }}</td>
       <td class="fixed-column">
         <div class="button-container">
           <button
@@ -66,3 +65,8 @@
   <button pButton icon="pi pi-angle-right" (click)="loadNextPage()" *ngIf="links?.next"></button>
   <button pButton icon="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
 </div>
+
+<shared-loading-spinner
+*ngIf="isLoading"
+>
+</shared-loading-spinner>

@@ -3,12 +3,13 @@ import { PersonService } from '../../services/persons.service';
 import { Persona, HateoasResponse, Links } from '../../interfaces/persona.interface';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CacheService } from '../../../dashboard/services/cache.service';
 
 
 @Component({
   selector: 'person-table',
   templateUrl: './person-table.component.html',
-  styleUrl: `./person-table.component.css`
+  styles: ''
 })
 export class PersonTableComponent implements OnInit {
   public persons: Persona[] = [];
@@ -28,16 +29,18 @@ export class PersonTableComponent implements OnInit {
 
   constructor(private personService: PersonService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cacheService: CacheService
   ) {}
 
   ngOnInit(): void {
-    this.loadPersons(this.currentPage); // Cargar la primera página al inicializar el componente
+    this.loadPersons(); // Cargar la primera página al inicializar el componente
   }
 
   // Método para cargar personas según la página actual
-  loadPersons(page: number): void {
-    this.personService.getPersons(page, this.pageSize).subscribe({
+  loadPersons(): void {
+    this.isLoading = true;
+    this.personService.getPersons().subscribe({
       next: (response: HateoasResponse<Persona>) => {
         if (response._embedded && response._embedded.datosDetallePersonaList) {
           this.persons = response._embedded.datosDetallePersonaList;
@@ -46,7 +49,7 @@ export class PersonTableComponent implements OnInit {
         this.currentPage = response.page.number;
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
-        console.log('Persons loaded', this.persons);
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching persons', error);
@@ -60,6 +63,7 @@ export class PersonTableComponent implements OnInit {
   // Método para seleccionar una persona para editar
 // Método para confirmar antes de editar y asignar la persona seleccionada al formulario
 onEdit(person: Persona): void {
+  this.isLoading = true;
   this.confirmationService.confirm({
     message: `¿Estás seguro de que deseas editar a ${person.primerNombre} ${person.primerApellido}?`,
     header: 'Confirmar Edición',
@@ -68,9 +72,11 @@ onEdit(person: Persona): void {
 
       this.selectedPerson = person; // Asignar la persona seleccionada al formulario si se confirma
       this.editPerson.emit(person); // Emitir evento para llenar el formulario
+      this.isLoading = false;
     },
     reject: () => {
       this.messageService.add({ severity: 'info', summary: 'Edición Cancelada', detail: 'La operación ha sido cancelada.' });
+      this.isLoading = false;
     }
   });
 }
@@ -89,7 +95,7 @@ onEdit(person: Persona): void {
 
       this.personService.updatePerson(this.selectedPerson).subscribe({
         next: (response) => {
-          this.loadPersons(this.currentPage); // Recargar la lista de personas
+          this.loadPersons(); // Recargar la lista de personas
           this.selectedPerson = null; // Limpiar la selección
         },
         error: (error) => {
@@ -103,6 +109,7 @@ onEdit(person: Persona): void {
 
     // Método para mostrar el mensaje de confirmación antes de eliminar
     confirmDelete(person: Persona): void {
+      this.isLoading = true;
       this.confirmationService.confirm({
         message: `¿Estás seguro de que deseas eliminar a ${person.primerNombre} ${person.primerApellido}?`,
         header: 'Confirmar Eliminación',
@@ -111,7 +118,9 @@ onEdit(person: Persona): void {
           this.personService.deletePerson(person.DPI).subscribe({
             next: () => {
               this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Persona eliminada con éxito' });
-              this.loadPersons(this.currentPage); // Recargar la lista de personas
+              this.cacheService.delete('personas_listar')
+              this.loadPersons(); // Recargar la lista de personas
+              this.isLoading = false;
             },
             error: (error) => {
               this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
@@ -120,6 +129,7 @@ onEdit(person: Persona): void {
         },
         reject: () => {
           this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Eliminación cancelada' });
+          this.isLoading = false;
         }
       });
     }
@@ -153,16 +163,12 @@ onEdit(person: Persona): void {
         });
       } else {
         // Si no hay término de búsqueda, volver a cargar todos los beneficiarios automáticamente
-        this.loadPersons(this.currentPage);
+        this.loadPersons();
         this.isLoading = false;
       }
     }
 
-  // Método para manejar el cambio de página en la tabla
-  onPageChange(event: any): void {
-    const page = event.page; // Página seleccionada
-    this.loadPersons(page);
-  }
+
 
   // Método para cargar la primera página
   loadFirstPage(): void {
