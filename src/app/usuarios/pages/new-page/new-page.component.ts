@@ -35,7 +35,13 @@ export class NewPageComponent  implements OnInit, OnChanges {
       email: ['', [Validators.required, Validators.email]],
       confirmEmail: ['', [Validators.required, Validators.email]], // Campo para confirmar el email
       usuario: ['', Validators.required],
-      clave: ['', Validators.required],
+      clave: ['', [
+         Validators.required,
+
+
+
+        ],
+      ],
       rol: ['', Validators.required] // Se acepta solo un rol
     }, {
       validators: this.emailsMatchValidator // Validador personalizado para comparar los correos
@@ -57,7 +63,12 @@ export class NewPageComponent  implements OnInit, OnChanges {
 
   onSubmit(): void {
 
-    this.validarFormuario();
+    if(!this.usuarioForm.valid){
+      this.validarFormuario();
+      return;
+    }
+
+
 
     const formValue = {
       ...this.usuarioForm.value,
@@ -68,7 +79,6 @@ export class NewPageComponent  implements OnInit, OnChanges {
       this.actualizarUsuario(formValue);
 
     } else {
-      console.log('Registrando usuario', formValue);
 
       this.registrarUsuario(formValue);
     }
@@ -104,7 +114,6 @@ export class NewPageComponent  implements OnInit, OnChanges {
         } else {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario' });
         }
-        console.error('Error al actualizar el usuario', err);
       }
     });
   }
@@ -124,7 +133,6 @@ export class NewPageComponent  implements OnInit, OnChanges {
         } else {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar el usuario' });
         }
-        console.error('Error al registrar el usuario', err);
       }
     });
   }

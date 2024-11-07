@@ -18,6 +18,7 @@ export class VoluntarioTableComponent implements OnInit{
   public totalElements: number = 0; // Total de registros
   public pageSize: number = 20;      // Elementos por página
   public links: any = {};           // Para los enlaces de HATEOAS
+  public isLoading: boolean = false; // Para mostrar un spinner de carga
 
   constructor(
     private voluntarioService: VoluntarioService,
@@ -31,6 +32,7 @@ export class VoluntarioTableComponent implements OnInit{
   }
 
   loadVoluntarios(): void {
+    this.isLoading = true; // Activar el spinner de carga
     this.voluntarioService.getVoluntarios().pipe(
       tap((response: HateoasResponse<DatosDetalleVoluntarioList>) => {
         // Procesa la respuesta aquí
@@ -39,11 +41,12 @@ export class VoluntarioTableComponent implements OnInit{
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
         this.links = response._links; // Guardar los enlaces HATEOAS
+        this.isLoading = false; // Desactivar el spinner de
       }),
       catchError(error => {
         // Manejo de errores aquí
+        this.isLoading = false; // Desactivar el spinner de carga
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los voluntarios.' });
-        console.error('Error fetching voluntarios', error);
         return of(); // Retornar un observable vacío para no romper el flujo
       })
     ).subscribe();
@@ -51,6 +54,7 @@ export class VoluntarioTableComponent implements OnInit{
 
   // Confirmar y eliminar un voluntario
   confirmDelete(voluntario: DatosDetalleVoluntarioList): void {
+    this.isLoading = true; // Activar el spinner de carga
     this.confirmationService.confirm({
       message: `¿Estás seguro de que deseas eliminar al voluntario ${voluntario.nombre} ${voluntario.apellido}?`,
       header: 'Confirmar Eliminación',
@@ -61,15 +65,17 @@ export class VoluntarioTableComponent implements OnInit{
             this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Voluntario eliminado correctamente' });
             this.cacheService.delete('voluntarios_lista'); // Eliminar la caché
             this.loadVoluntarios(); // Recargar la lista después de eliminar
+            this.isLoading = false; // Desactivar el spinner de carga
           },
           error: (err) => {
+            this.isLoading = false; // Desactivar el spinner de carga
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el voluntario.' });
-            console.error('Error al eliminar voluntario', err);
           }
         });
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: 'La eliminación fue cancelada.' });
+        this.isLoading = false; // Desactivar el spinner de carga
       }
     });
   }
@@ -115,7 +121,6 @@ export class VoluntarioTableComponent implements OnInit{
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los voluntarios desde el enlace.' });
-        console.error('Error fetching voluntarios from link', error);
       }
     });
   }

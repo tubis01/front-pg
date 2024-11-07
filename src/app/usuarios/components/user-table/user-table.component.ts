@@ -50,7 +50,6 @@ export class UserTableComponent {
       catchError(error => {
         // Manejo de errores aquí
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los usuarios.' });
-        console.error('Error fetching usuarios', error);
         return of(); // Retornar un observable vacío para no romper el flujo
       })
     ).subscribe();
@@ -89,7 +88,6 @@ export class UserTableComponent {
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo deshabilitar al usuario.' });
-            console.error('Error al deshabilitar el usuario', error);
           }
         });
       },
@@ -113,7 +111,6 @@ export class UserTableComponent {
         },
         error: (err) => {
           this.isLoading = false;
-          console.error('Error al buscar beneficiarios por DPI parcial:', err);
         }
       });
     } else {
@@ -164,7 +161,6 @@ export class UserTableComponent {
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los usuarios desde el enlace.' });
-        console.error('Error fetching usuarios from link', error);
       }
     });
   }

@@ -8,12 +8,5 @@ import { Sidebar } from 'primeng/sidebar';
 })
 export class LayoutPageComponent {
 
-  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
-
-  closeCallback(e:any): void {
-      this.sidebarRef.close(e);
-  }
-
-  sidebarVisible: boolean = false;
 
 }

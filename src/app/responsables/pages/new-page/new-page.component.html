@@ -60,8 +60,16 @@
           <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('telefono') }">
             <label for="telefono">Teléfono</label>
             <input pInputText id="telefono" formControlName="telefono" placeholder="Teléfono" required />
-            <div *ngIf="isFieldInvalid('telefono')" class="error-message">El campo Teléfono es obligatorio.</div>
-          </div>
+            <div class="error-message" *ngIf="isFieldInvalid('telefono')">
+              <ng-container *ngIf="responsableForm.get('telefono')?.errors?.['required']">
+                El campo telefono es obligatorio.
+              </ng-container>
+              <ng-container
+                *ngIf="responsableForm.get('telefono')?.errors?.['pattern'] || responsableForm.get('telefono')?.errors?.['minlength'] || responsableForm.get('telefono')?.errors?.['maxlength']">
+                El teléfono debe tener 8 caracteres numéricos.
+              </ng-container>
+
+            </div> </div>
 
 
           <!-- Botón para guardar -->

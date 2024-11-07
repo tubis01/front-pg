@@ -18,6 +18,7 @@ export class ExporDialogComponent {
   public proyectos: Proyecto[] = [];  // Proyectos disponibles para el dropdown
   public nextPageUrl: string | null = null; // URL para la siguiente página de beneficiarios
 
+
   constructor(private fb: FormBuilder,
       private config: DynamicDialogConfig,
       private ref:  DynamicDialogRef,
@@ -33,8 +34,6 @@ export class ExporDialogComponent {
     // Recibimos los proyectos desde el data pasado en el Dialog
     this.proyectos = this.config.data.proyectos || [];
     this.nextPageUrl = this.config.data.nextPageUrl || null;
-    console.log('Proyectos en export dialog', this.proyectos);
-    console.log('URL de la siguiente página:', this.nextPageUrl);
 
 
   }
@@ -42,17 +41,14 @@ export class ExporDialogComponent {
 
 
   onConfirm(): void {
-    console.log('Exportar ha sido presionado');
     if (this.exportForm.valid) {
       const idProyecto = this.exportForm.get('proyecto')?.value;
       const activo = this.exportForm.get('activo')?.value;
       const exportData = { idProyecto, activo };
-      console.log('Datos a exportar:', exportData);
 
       // Cerrar el diálogo y pasar los datos al componente padre
       this.ref.close(exportData);
     } else {
-      console.log('Formulario no válido');
     }
   }
 
@@ -67,7 +63,6 @@ export class ExporDialogComponent {
         // Actualizar la URL del siguiente enlace, si lo hay
         this.nextPageUrl = response._links?.next?.href || null;
       }, (error) => {
-        console.error('Error al cargar más proyectos:', error);
       });
     }
   }

@@ -115,3 +115,6 @@ scrollHeight="470px"
   <button pButton class="pi pi-angle-double-right" (click)="loadLastPage()" *ngIf="links?.last"></button>
 </div>
 
+<shared-loading-spinner
+*ngIf="isLoading"
+></shared-loading-spinner>

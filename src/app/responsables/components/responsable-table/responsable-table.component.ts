@@ -52,7 +52,6 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error fetching responsables', error);
       }
     });
   }
@@ -128,7 +127,6 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
         },
         error: (err) => {
           this.isLoading = false;
-          console.error('Error al buscar beneficiarios por DPI parcial:', err);
         }
       });
     } else {
@@ -178,7 +176,6 @@ export class ResponsableTableComponent implements OnInit {// Lista de responsabl
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error fetching responsables from link', error);
       }
     });
   }

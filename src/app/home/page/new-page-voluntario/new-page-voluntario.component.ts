@@ -50,7 +50,7 @@ export class NewPageVoluntarioComponent implements OnInit {
           this.router.navigate(['/home']);
         },
         error => {
-          console.error('Error al crear donador', error);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el donador.' });
         }
       );
   }

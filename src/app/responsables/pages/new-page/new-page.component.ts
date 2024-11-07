@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResponsableService } from '../../services/responsable.service';
-import {  ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Responsable } from '../../interfaces/responsable.interface';
-import { EncryptionService } from '../../../services/encryptData.service';
+import { EncryptionService } from '../../../services/encription.service';
 
 @Component({
   selector: 'app-new-responsable',
@@ -41,7 +41,12 @@ export class NewPageComponent implements OnInit, OnChanges {
       apellido: ['', Validators.required],
       genero: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
-      telefono: ['', Validators.required],
+      telefono: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]*$/),
+        Validators.minLength(8),
+        Validators.maxLength(8)
+      ]],
       fechaNacimiento: ['', Validators.required],
     });
   }
@@ -65,26 +70,13 @@ export class NewPageComponent implements OnInit, OnChanges {
 
   // Método para manejar el envío del formulario
   onSubmit(): void {
-    // Si el formulario no es válido, mostrar mensajes de error y salir
+
+
+    this.validarFormulario(); // Validar el formulario antes de enviar
+
     if (this.responsableForm.invalid) {
-      // Mostrar errores específicos
-      Object.keys(this.responsableForm.controls).forEach(field => {
-        const control = this.responsableForm.get(field);
-        if (control && control.invalid) {
-          // Mostrar los errores de cada campo
-          if (control.errors?.['required']) {
-            this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio` });
-          } else if (control.errors?.['pattern']) {
-            this.messageService.add({ severity: 'warn', summary: 'Formato Incorrecto', detail: `El campo ${field} tiene un formato incorrecto` });
-          } else if (control.errors?.['minlength'] || control.errors?.['maxlength']) {
-            this.messageService.add({ severity: 'warn', summary: 'Longitud Incorrecta', detail: `El campo ${field} no tiene la longitud correcta` });
-          }
-        }
-      });
       return;
     }
-
-
     // Si se está editando (existe id), mostrar el diálogo de confirmación para la actualización
     if (this.responsableToEdit?.id) {
       this.confirmationService.confirm({
@@ -115,13 +107,14 @@ export class NewPageComponent implements OnInit, OnChanges {
         this.formSubmit.emit(); // Notificar al componente padre que el formulario ha sido enviado
         this.resetForm(); // Restablecer el formulario
       },
-      error: (error) => {if (error.status === 404) {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El DPI de la persona no existe para actualizar' });
-    } else if (error.status === 409) {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
-    } else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar la persona' });
-    }
+      error: (error) => {
+        if (error.status === 404) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El DPI de la persona no existe para actualizar' });
+        } else if (error.status === 409) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar la persona' });
+        }
       }
     });
   }
@@ -141,16 +134,37 @@ export class NewPageComponent implements OnInit, OnChanges {
         this.resetForm(); // Restablecer el formulario
       },
       error: (err) => {
-        if(err.status === 409) {
+        if (err.status === 409) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error });
         } else {
-          console.error('Error al registrar el responsable', err);
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el responsable.' });
         }
       }
     });
   }
 
+  validarFormulario(): void {
+    // Si el formulario no es válido, mostrar mensajes de error y salir
+    if (this.responsableForm.invalid) {
+      // this.responsableForm.markAllAsTouched();  // Esto solo se ejecuta si el formulario está siendo enviado
+      // Mostrar errores específicos
+      this.responsableForm.markAllAsTouched();
+      Object.keys(this.responsableForm.controls).forEach(field => {
+        const control = this.responsableForm.get(field);
+        if (control && control.invalid) {
+          // Mostrar los errores de cada campo
+          if (control.errors?.['required']) {
+            this.messageService.add({ severity: 'warn', summary: 'Campo Requerido', detail: `El campo ${field} es obligatorio` });
+          } else if (control.errors?.['pattern']) {
+            this.messageService.add({ severity: 'warn', summary: 'Formato Incorrecto', detail: `El campo ${field} tiene un formato incorrecto` });
+          } else if (control.errors?.['minlength'] || control.errors?.['maxlength']) {
+            this.messageService.add({ severity: 'warn', summary: 'Longitud Incorrecta', detail: `El campo ${field} no tiene la longitud correcta` });
+          }
+        }
+      });
+      return;
+    }
+  }
 
   // Método para restablecer el formulario y limpiar la selección actual
   resetForm(): void {

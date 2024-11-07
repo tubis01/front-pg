@@ -53,7 +53,6 @@ export class ProjectTableComponent implements OnInit{
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error fetching projects', error);
       }
     });
   }
@@ -98,7 +97,6 @@ export class ProjectTableComponent implements OnInit{
             this.isLoading = false;
           },
           error: (error) => {
-            console.error('Error al eliminar el proyecto', error);
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el proyecto.' });
           }
         });
@@ -122,7 +120,6 @@ export class ProjectTableComponent implements OnInit{
         },
         error: (err) => {
           this.isLoading = false;
-          console.error('Error al buscar beneficiarios por DPI parcial:', err);
         }
       });
     } else {
@@ -176,7 +173,6 @@ loadFromLink(url: string): void {
 
     },
     (error) => {
-      console.error('Error fetching projects from link', error);
     }
   );
 }

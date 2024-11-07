@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 import { HateoasResponse, Responsable } from '../../../responsables/interfaces/responsable.interface';
 import { ResponsableService } from '../../../responsables/services/responsable.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { CacheService } from '../../../dashboard/services/cache.service';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class NewPageComponent implements OnInit, OnChanges {
   @Output() formSubmit = new EventEmitter<void>();
 
   public personaForm: FormGroup;
-  public isEditMode  = false;
+  // public isEditMode  = false;
 
   public direcciones = DIRECCIONES;
   public filteredUbicaciones: any[] = [];
@@ -31,7 +32,7 @@ export class NewPageComponent implements OnInit, OnChanges {
 
   public nextPageUrl: string | null = null;
 
-  public selectedResponsable: string = '';
+  // public selectedResponsable: string = '';
   public originalResponsableId: number | null = null;
 
   public generos = [
@@ -43,7 +44,7 @@ export class NewPageComponent implements OnInit, OnChanges {
     { label: 'Excedencia', value: 'EXCEDENCIA' },
     { label: 'Susbsistencia', value: 'SUBSISTENCIA' },
     { label: 'Infrasubsistencia', value: 'INFRASUBSISTENCIA' },
-    { label: 'Comercial', value: 'COMERCIAL' },
+    { label: 'Comercial-comercial', value: 'SEMI_COMERCIAL' },
     { label: 'Exportador', value: 'EXPORTADOR' }
   ];
 
@@ -61,7 +62,8 @@ export class NewPageComponent implements OnInit, OnChanges {
     private personaService: PersonService,
     private cd: ChangeDetectorRef,
     private messageService: MessageService,
-    private responsableService : ResponsableService
+    private responsableService : ResponsableService,
+    private cacheService: CacheService
   ) {
     this.personaForm = this.fb.group({
       DPI: ['',
@@ -139,57 +141,10 @@ cargarResponsables(): void {
   });
 }
 
-// Método para cargar más responsables
-cargarMasResponsables(): void {
-  console.log('Cargando más responsables...');
-
-  if (this.nextPageUrl) {
-    this.responsableService.getResponsableByUrl(this.nextPageUrl).subscribe((data: HateoasResponse<Responsable>) => {
-      // Concatenar los nuevos responsables a los que ya tienes sin afectar la validación
-      this.responsables.push(...data._embedded.datosDetalleResponsableList.map(responsable => {
-        return {
-          ...responsable,
-          nombreCompleto: `${responsable.id} ${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
-        };
-      }));
-      console.log('Responsables cargados:', this.responsables);
-
-      // Actualizar el nextPageUrl para la siguiente carga, si existe
-      this.nextPageUrl = data._links.next?.href || null;
-    });
-  }
-}
-
-// Método para buscar responsables en la lista completa de responsables cargados
-buscarResponsables(event: AutoCompleteCompleteEvent): void {
-  const query = event.query.toLowerCase();
-  this.filteredResponsables = this.responsables.filter(responsable =>
-    responsable.nombre.toLowerCase().includes(query)
-  );
-}
-
-
-    public selectedResponsableNombre: string = ''; // Variable para mostrar el nombre en el autocompletado
-
-    onResponsableSeleccionado(event: any) {
-      const selectedResponsable = event.id ? event : event.value; // Manejar ambos casos (en caso de que `event.value` esté presente)
-      if (selectedResponsable && selectedResponsable.id) {
-        // Establecer el ID del responsable en el formulario
-        this.personaForm.get('responsable')?.setValue(selectedResponsable.id);
-
-        // Mostrar el nombre completo en la interfaz
-        this.selectedResponsableNombre = selectedResponsable.nombreCompleto;
-        console.log('Responsable seleccionado con ID:', selectedResponsable.id); // Depuración
-      } else {
-        console.error('El responsable seleccionado no tiene un ID válido.');
-      }
-    }
-
 
     ngOnChanges(changes: SimpleChanges): void {
       // Detectar cambios en la propiedad de entrada personToEdit
       if (changes['personToEdit'] && changes['personToEdit'].currentValue) {
-        this.isEditMode = true;
 
         const { idResponsable, responsable, organizacionId, ...restOfPerson } = changes['personToEdit'].currentValue;
 
@@ -207,10 +162,7 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
         // Establecer el nombre del responsable visible
         this.selectedResponsableNombre = responsable || '';
 
-        this.cd.markForCheck();
-      } else {
-        this.isEditMode = false;
-        this.personaForm.reset();
+        // this.cd.markForCheck();
       }
     }
 
@@ -227,73 +179,76 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
     // Acceder al valor dentro de "event.value"
     if (event && event.value && event.value.codigo) {
       this.personaForm.get('direccion.codigo')?.setValue(event.value.codigo);
-      console.log('Código asignado:', event.value.codigo); // Verifica que se asigna correctamente el código como string
     } else {
-      console.error('No se asignó código, evento no contiene "codigo".');
     }
   }
 
-
-  isFieldInvalid(field: string): boolean | undefined {
-    return (
-      this.personaForm.get(field)?.invalid &&
-      (this.personaForm.get(field)?.dirty || this.personaForm.get(field)?.touched)
-    );
-  }
-
-
-  isFieldInvalidD(groupName: string, fieldName: string): boolean | undefined {
-    const field = this.personaForm.get(`${groupName}.${fieldName}`);
-    return field?.invalid && (field?.dirty || field?.touched);
-  }
 
 
   onSubmit(): void {
+    if(!this.personToEdit){
+
+
+    }
 
     this.validarFormulario();
-    if (this.isEditMode) {
 
-      this.personaService.updatePerson(this.personaForm.value).subscribe({
-          next: () => {
-              this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona actualizada con éxito' });
-              this.formSubmit.emit();
-              this.isEditMode = false;
-              this.resetForm();
+    if (this.personaForm.invalid) {
+      return;
+    }
 
+    if (this.personToEdit?.DPI) {
 
-          },
-          error: (error) => {
-              // Aquí manejas los errores específicos que devuelve el backend
-              if (error.status === 404) {
-                  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El DPI de la persona no existe para actualizar' });
-              } else if (error.status === 409) {
-                  this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
-              } else {
-                  this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
-              }
-          }
-      });
+      this.modificarPersona();
     } else {
-      // Registrar nueva persona
-      this.personaService.registrarPersona(this.personaForm.value).subscribe({
-        next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona registrada con éxito' });
-          console.log('Persona registrada con éxito');
-          this.formSubmit.emit();
-          this.resetForm();
-
-        },
-        error: (error) => {
-          if (error.status === 409) {
-            this.messageService.add({ severity: 'error', summary: 'Error de Duplicación', detail: error.error });
-          } else {
-            console.error('Error registering person', error);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar la persona' });
-          }
-        }
-      });
+      this.registrarPersona();
+      this.resetForm();
     }
   }
+
+  modificarPersona(): void {
+    this.personaService.updatePerson(this.personaForm.value).subscribe({
+      next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona actualizada con éxito' });
+          this.formSubmit.emit();
+          // this.isEditMode = false;
+          this.cacheService.delete('personas_listar')
+          this.resetForm();
+
+
+      },
+      error: (error) => {
+          // Aquí manejas los errores específicos que devuelve el backend
+          if (error.status === 404) {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El DPI de la persona no existe para actualizar' });
+          } else if (error.status === 409) {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
+          } else {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
+          }
+      }
+  });
+}
+
+
+  registrarPersona(): void {
+          // Registrar nueva persona
+          this.personaService.registrarPersona(this.personaForm.value).subscribe({
+            next: () => {
+              this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona registrada con éxito' });
+              this.formSubmit.emit();
+              this.resetForm();
+
+            },
+            error: (error) => {
+              if (error.status === 409) {
+                this.messageService.add({ severity: 'error', summary: 'Error de Duplicación', detail: error.error });
+              } else {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar la persona' });
+              }
+            }
+          });
+        }
 
   validarFormulario(): void {
     if (this.personaForm.invalid) {
@@ -308,19 +263,75 @@ buscarResponsables(event: AutoCompleteCompleteEvent): void {
       return; // Salir si el formulario es inválido
     }
   }
+  isFieldInvalid(field: string): boolean | undefined {
+    return (
+      this.personaForm.get(field)?.invalid &&
+      (this.personaForm.get(field)?.dirty || this.personaForm.get(field)?.touched)
+    );
+  }
+
+
+  isFieldInvalidD(groupName: string, fieldName: string): boolean | undefined {
+    const field = this.personaForm.get(`${groupName}.${fieldName}`);
+    return field?.invalid && (field?.dirty || field?.touched);
+  }
+
+
+
+// Método para cargar más responsables
+cargarMasResponsables(): void {
+
+  if (this.nextPageUrl) {
+    this.responsableService.getResponsableByUrl(this.nextPageUrl).subscribe((data: HateoasResponse<Responsable>) => {
+      // Concatenar los nuevos responsables a los que ya tienes sin afectar la validación
+      this.responsables.push(...data._embedded.datosDetalleResponsableList.map(responsable => {
+        return {
+          ...responsable,
+          nombreCompleto: `${responsable.id} ${responsable.nombre} ${responsable.apellido}` // Asegura que `nombreCompleto` exista
+        };
+      }));
+
+      // Actualizar el nextPageUrl para la siguiente carga, si existe
+      this.nextPageUrl = data._links.next?.href || null;
+    });
+  }
+}
+
+
+  // Método para buscar responsables en la lista completa de responsables cargados
+buscarResponsables(event: AutoCompleteCompleteEvent): void {
+  const query = event.query.toLowerCase();
+  this.filteredResponsables = this.responsables.filter(responsable =>
+    responsable.nombre.toLowerCase().includes(query)
+  );
+}
+
+public selectedResponsableNombre = ''; // Variable para mostrar el nombre en el autocompletado
+
+
+  onResponsableSeleccionado(event: any) {
+    const selectedResponsable = event.id ? event : event.value; // Manejar ambos casos (en caso de que `event.value` esté presente)
+    if (selectedResponsable && selectedResponsable.id) {
+      // Establecer el ID del responsable en el formulario
+      this.personaForm.get('responsable')?.setValue(selectedResponsable.id);
+
+      // Mostrar el nombre completo en la interfaz
+      this.selectedResponsableNombre = selectedResponsable.nombreCompleto;
+    }
+  }
+
 
   resetForm(): void {
     this.personaForm.reset(); // Resetea todos los campos del formulario
-    this.isEditMode = false;  // Restablecer el modo edición
-    this.selectedResponsable = '';  // Limpiar el nombre del responsable visible
-    this.filteredResponsables = [];  // Limpiar las sugerencias
+    this.personaForm.get('responsable')?.setValue(null);
+    this.selectedResponsableNombre = ''; // Limpiar el nombre visualmente
+    this.filteredResponsables = []; // Limpiar las sugerencias
 
-    // Limpiar manualmente el valor visual del autocompletar
+    // Limpieza manual del valor visible en el autocompletar de "responsable"
     const autocomplete = document.querySelector('p-autoComplete input');
     if (autocomplete) {
       (autocomplete as HTMLInputElement).value = ''; // Limpiar el valor visible
     }
   }
-
 
 }

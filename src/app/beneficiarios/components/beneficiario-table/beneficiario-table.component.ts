@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Beneficiario, HateoasResponse, Links } from '../../interfaces/beneficiario.interface';
 import { BeneficiarioService } from '../../services/beneficiario.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -6,14 +6,14 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ExportService } from '../../../services/export.service';
 import { ExporDialogComponent } from '../expor-dialog/expor-dialog.component';
 import { Proyecto } from '../../../proyectos/interfaces/proyecto.interface';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, of, Subscription, tap } from 'rxjs';
 import { CacheService } from '../../../dashboard/services/cache.service';
 @Component({
   selector: 'app-beneficiario-table',
   templateUrl: './beneficiario-table.component.html',
   styles:''
 })
-export class BeneficiarioTableComponent {
+export class BeneficiarioTableComponent implements OnInit, OnDestroy {
   public beneficiarios: Beneficiario[] = [];
   public currentPage: number = 0;
   public totalPages: number = 1;
@@ -25,6 +25,9 @@ export class BeneficiarioTableComponent {
   public isLoading: boolean = false;
 
   public searchTerm: string = '';
+
+  private onCloseSubscription: Subscription | null = null; // Suscripción para cerrar el diálogo
+
 
   @Input() proyectos: Proyecto[] = [];
 
@@ -67,7 +70,6 @@ export class BeneficiarioTableComponent {
         catchError((error) => {
           this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los beneficiarios.' });
-          console.error('Error fetching beneficiarios', error);
           return of(); // Devolver un observable vacío para continuar con el flujo
         })
       )
@@ -75,7 +77,7 @@ export class BeneficiarioTableComponent {
   }
     // Método para editar un beneficiario
     onEdit(beneficiario: Beneficiario): void {
-      console.log('Editando beneficiario', beneficiario);
+      this.isLoading = true;
 
       this.confirmationService.confirm({
       message: `¿Deseas editar al beneficiario Dpi:${beneficiario.DPI} Proyecto:${beneficiario.NombreProyecto}?`,
@@ -84,15 +86,18 @@ export class BeneficiarioTableComponent {
       accept: () => {
         this.editBeneficiario.emit(beneficiario);
         this.messageService.add({ severity: 'success', summary: 'Operación Exitosa', detail: `Edición del beneficiario ${beneficiario.DPI} iniciada.` });
+        this.isLoading = false;
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: `Edición del beneficiario ${beneficiario.DPI} cancelada.` });
-      }
+
+        this.isLoading = false;}
       });
     }
 
     // Confirmar antes de eliminar un beneficiario
     confirmDelete(beneficiario: Beneficiario): void {
+      this.isLoading = true;
       this.confirmationService.confirm({
         message: `¿Estás seguro de que deseas eliminar al beneficiario con DPI ${beneficiario.DPI}?`,
         header: 'Confirmar Eliminación',
@@ -103,15 +108,16 @@ export class BeneficiarioTableComponent {
               this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Beneficiario eliminado correctamente' });
               this.cacheService.delete('beneficiarios_listar'); // Eliminar la caché
               this.loadBeneficiarios();
+              this.isLoading = false;
             },
             error: (err) => {
               this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el beneficiario.' });
-              console.error('Error al eliminar beneficiario', err);
             }
           });
         },
         reject: () => {
           this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'La eliminación fue cancelada.' });
+          this.isLoading = false;
         }
       });
     }
@@ -128,7 +134,6 @@ export class BeneficiarioTableComponent {
           },
           error: (err) => {
             this.isLoading = false;
-            console.error('Error al buscar beneficiarios por DPI parcial:', err);
           }
         });
       } else {
@@ -149,20 +154,14 @@ export class BeneficiarioTableComponent {
         }
       });
 
-
-
-      ref.onClose.subscribe((exportData) => {
-        console.log("Diálogo cerrado, datos de exportación:", exportData);
+      this.onCloseSubscription = ref.onClose.subscribe((exportData) => {
         if (exportData) {
           this.exportToExcel(exportData.idProyecto, exportData.activo);
         }
       });
-
-      console.log('Diálogo de exportación abierto');
     }
 
     exportToExcel(idProyecto: number, activo: boolean): void {
-      console.log('Exportando beneficiarios:', idProyecto, activo);
 
       this.exporService.exportBeneficiarios(idProyecto, activo).subscribe({
         next: (response) => {
@@ -183,7 +182,6 @@ export class BeneficiarioTableComponent {
           window.URL.revokeObjectURL(url);
         },
         error: (err) => {
-          console.error('Error al exportar beneficiarios', err);
         }
       });
     }
@@ -227,9 +225,15 @@ export class BeneficiarioTableComponent {
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los beneficiarios.' });
-        console.error('Error fetching beneficiarios from link', error);
       }
     });
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.onCloseSubscription) {
+      this.onCloseSubscription.unsubscribe();
+    }
   }
 
 }

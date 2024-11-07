@@ -4,7 +4,7 @@
   max-height: 520px; /* Ajusta esto según necesites */
   overflow-y: auto; /* Permite el scroll vertical */
   padding: 25px; /* Añade espacio interno para evitar que los elementos queden pegados al scrollbar */
-  width: 100%;
+  /* width: 100%; */
 }
 
 /* Adaptación para pantallas pequeñas */

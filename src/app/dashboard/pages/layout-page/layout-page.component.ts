@@ -17,6 +17,7 @@ export class LayoutPageComponent implements OnInit{
 
   public chartData: any;
   public chartOptions: any;
+
   public completedProjects: Proyecto[] = [];
 
   public proyectosEnCurso: number = 0;
@@ -24,15 +25,19 @@ export class LayoutPageComponent implements OnInit{
   public beneficiariosMes: number = 0;
   public beneficiariosActivos: number = 0; // Total de beneficiarios
 
+  public isLoading: boolean = false;
+
   constructor(private reporteService: DashboardService,
     private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.configurarGrafico();
     this.cargarDatosIniciales();
+    this.obtenerUltimosProyectosFinalizados();
   }
 
   cargarDatosIniciales(): void {
+    this.isLoading = true;
 
     forkJoin({
       proyectosEnCurso: this.reporteService.contarProyectosPorEstado(Estado.EnProceso),
@@ -47,9 +52,12 @@ export class LayoutPageComponent implements OnInit{
         this.beneficiariosMes = resultados.beneficiariosMesActual;
 
         this.obtenerBeneficiariosTodosLosMeses();
+    this.isLoading = false;
+
       },
       error: (err) => {
-        console.error('Error al cargar datos iniciales:', err);
+    this.isLoading = false;
+
       }
     });
   }
@@ -85,11 +93,9 @@ export class LayoutPageComponent implements OnInit{
   obtenerUltimosProyectosFinalizados(): void {
     this.reporteService.obtenerUltimosProyectosFinalizados(5).subscribe({
       next: (response: Proyecto[]) => {
-        // console.log('Últimos proyectos finalizados:', response);
         this.completedProjects = response;
       },
       error: (err: string) => {
-        console.error('Error al obtener los últimos proyectos finalizados:', err);
       }
     });
   }
@@ -98,11 +104,9 @@ export class LayoutPageComponent implements OnInit{
   obtenerProyectosEnCurso(): void {
     this.reporteService.contarProyectosPorEstado(Estado.EnProceso).subscribe({
       next: (response: number) => {
-        // console.log('Proyectos en curso:', response);
         this.proyectosEnCurso = response;
       },
       error: (err: string) => {
-        console.error('Error al obtener proyectos en curso:', err);
       }
     });
   }
@@ -110,11 +114,9 @@ export class LayoutPageComponent implements OnInit{
   obtenerProyectosFinalizados(): void {
     this.reporteService.contarProyectosPorEstado(Estado.Finalizado).subscribe({
       next: (response: number) => {
-        // console.log('Proyectos finalizados:', response);
         this.proyectosFinalizados = response;
       },
       error: (err: string) => {
-        console.error('Error al obtener proyectos finalizados:', err);
       }
     });
   }
@@ -123,12 +125,10 @@ export class LayoutPageComponent implements OnInit{
   obtenerBeneficiariosPorMes(mes: number): void {
     this.reporteService.contarBeneficiariosPorMes(mes).subscribe({
       next: (response: number) => {
-        // console.log('Beneficiarios del mes:', response);
         this.beneficiariosMes = response;
         this.actualizarGraficoBeneficiarios(mes, response);
       },
       error: (err: string) => {
-        console.error('Error al obtener beneficiarios por mes:', err);
       }
     });
   }
@@ -143,7 +143,6 @@ export class LayoutPageComponent implements OnInit{
         });
       },
       error: (err) => {
-        console.error('Error al obtener beneficiarios por mes:', err);
       }
     });
   }
@@ -154,7 +153,6 @@ export class LayoutPageComponent implements OnInit{
         this.beneficiariosActivos = response;
       },
       error: (err: string) => {
-        console.error('Error al obtener el total de beneficiarios:', err);
       }
     });
   }
@@ -180,7 +178,6 @@ export class LayoutPageComponent implements OnInit{
   // Método para filtrar proyectos por fecha
   onFilterByDate(): void {
     if (this.startDate && this.endDate) {
-      console.log('Filtrar proyectos entre: ', this.startDate, ' y ', this.endDate);
       // Aquí se podría aplicar la lógica para filtrar los proyectos
     }
   }

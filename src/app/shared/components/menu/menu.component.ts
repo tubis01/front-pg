@@ -7,8 +7,9 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'shared-menu',
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css'
+  styleUrls: ['./menu.component.css']
 })
+
 export class MenuComponent implements OnInit, OnDestroy {
 
   public isDigitador: boolean = false;
@@ -30,6 +31,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.isLoggedIn = loggedIn;
       if (loggedIn) {
         this.userName = this.authService.getUserName(); // Obtener el nombre del usuario si está logueado
+      } else {
+        this.userName = '';
       }
     });
 
@@ -50,9 +53,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
       this.subscription.unsubscribe(); // Desuscribirse para evitar pérdidas de memoria
-    }
   }
 
   setPermission(): void{
@@ -65,5 +66,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.isResponsable = true;
     }
   }
+
+
 
 }

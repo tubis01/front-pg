@@ -1,4 +1,63 @@
+
 .error-message {
   color: red;
   font-size: 12px;
+}
+
+/* Estilo para el card de login */
+/* Fondo del card con un degradado */
+.login-card {
+  background: linear-gradient(135deg, #ffffff, #e0e5ec);
+  padding: 3rem;
+  /* margin: 3rem; */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+/* Estilo del botón de iniciar sesión */
+.login-button {
+  background-color: #27AE60; /* Verde para más contraste */
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #1A61CC; /* Cambia a un azul más oscuro */
+}
+
+/* Estilo del encabezado de login */
+.login-header {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #162016;
+}
+
+/* Estilo para los campos de entrada */
+.input-field {
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+
+
+.login-button:hover {
+  background-color: #1A61CC;
+}
+
+/* Estilo para los mensajes de error */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.875rem;
+}
+
+/* Estilo de la descripción */
+.login-description {
+  font-size: 1.1rem;
+  color: #555;
+  text-align: center;
+  padding: 1rem;
 }

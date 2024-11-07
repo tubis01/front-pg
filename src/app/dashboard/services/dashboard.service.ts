@@ -32,8 +32,11 @@ export class DashboardService {
     const ttl = 3600000; // 1 hora
 
     if (this.cacheService.has(cacheKey)) {
+
       return of(this.cacheService.get(cacheKey));
+
     }
+
 
     const params = new HttpParams().set('mes', mes.toString());
     return this.http.get<number>(`${this.apiUrl}/beneficiariosPorMes`, { params }).pipe(
@@ -46,6 +49,7 @@ export class DashboardService {
     const ttl = 1800000; // 30 minutos
 
     if (this.cacheService.has(cacheKey)) {
+
       return of(this.cacheService.get(cacheKey));
     }
 

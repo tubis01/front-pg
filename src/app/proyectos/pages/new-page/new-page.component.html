@@ -16,22 +16,24 @@
               El campo Nombre del Proyecto es obligatorio.
             </div>
           </div>
-          <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaInicio') }">
-            <label for="fechaInicio">Fecha de Inicio</label>
-              <p-calendar id="fechaInicio" formControlName="fechaInicio" [showIcon]="true" placeholder="10/02/2024"  appendTo="body"></p-calendar>
-            <div class="error-message" *ngIf="isFieldInvalid('fechaInicio')">
-              El campo Fecha de Inicio es obligatorio.
-            </div>
-          </div>
+<!-- Campo Fecha de Inicio -->
+<div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('fechaInicio') }">
+  <label for="fechaInicio">Fecha de Inicio</label>
+  <p-calendar id="fechaInicio" formControlName="fechaInicio" [showIcon]="true" placeholder="10/02/2024" appendTo="body"></p-calendar>
+  <div class="error-message" *ngIf="isFieldInvalid('fechaInicio')">
+    El campo Fecha de Inicio es obligatorio.
+  </div>
+</div>
 
-          <!-- Campo Fecha de Fin -->
-          <div class="col-12 form-field " [ngClass]="{'has-error':isFieldInvalid('fechaFin')}">
-            <label for="fechaFin">Fecha de Fin </label>
-            <p-calendar id="fechaFin" formControlName="fechaFin" [showIcon]="true" placeholder="10/02/2024" appendTo="body"></p-calendar>
-            <div class="error-message" *ngIf="isFieldInvalid('fechaInicio')">
-              El campo Fecha de Fin es obligatorio.
-            </div>
-          </div>
+<!-- Campo Fecha de Fin -->
+<div class="col-12 form-field" [ngClass]="{'has-error': isFieldInvalid('fechaFin')}">
+  <label for="fechaFin">Fecha de Fin</label>
+  <p-calendar id="fechaFin" formControlName="fechaFin" [showIcon]="true" placeholder="10/02/2024" appendTo="body"></p-calendar>
+  <div class="error-message" *ngIf="isFieldInvalid('fechaFin')">
+    El campo Fecha de Fin es obligatorio.
+  </div>
+</div>
+
 
           <!-- Campo Descripción -->
           <div class="col-12 form-field" [ngClass]="{ 'has-error': isFieldInvalid('descripcion') }">

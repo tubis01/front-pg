@@ -9,6 +9,7 @@
   position: fixed;
   right: 15px;
   box-shadow: rgba(0,0, 0, .5);
+  z-index: 1000;
 }
 
 span{

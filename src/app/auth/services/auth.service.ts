@@ -25,11 +25,9 @@ export class AuthService  {
       const currentTime = Math.floor(Date.now() / 1000); // Tiempo actual en segundos
       // tiempo en minutos
       const tiempo = (decodedToken.exp - currentTime) / 60;
-      console.log(tiempo);
 
       return decodedToken.exp > currentTime; // El token sigue siendo válido
     } catch (error) {
-      console.error('Error al decodificar el token:', error);
       return false; // El token no es válido o no se puede decodificar
     }
   }
@@ -39,7 +37,6 @@ export class AuthService  {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<AuthResponse>(this.apiUrl, loginRequest, { headers }).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.error('Error al iniciar sesión:', error);
         return throwError(() => new Error('Error al iniciar sesión. Por favor, inténtelo de nuevo.'));
       })
     );

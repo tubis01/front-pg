@@ -20,10 +20,8 @@ export class DonadoresService {
 
     // Verificar si el caché tiene los datos y devolverlos si es así
     if (this.cacheService.has(cacheKey)) {
-      console.log('Datos desde caché');
       return of(this.cacheService.get(cacheKey));
     }
-    console.log('Datos desde API');
 
     // Realizar la solicitud HTTP y almacenar el resultado en el caché
     return this.http.get<HateoasResponse<DatosDetalleDonadorList>>(`${this.apirUrl}/listar`).pipe(

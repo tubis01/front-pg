@@ -45,22 +45,17 @@ export class NewPageComponent {
   }
 
   ngOnInit(): void {
+
+    this.cargarProyectos();
+  }
+
+  cargarProyectos(): void {
     this.allLoadedProjects = this.allLoadedProjects.map(proyecto => {
       return {
         ...proyecto,
         nombreCompleto: `${proyecto.id} ${proyecto.nombre} - ${proyecto.descripcion}` // Generamos el nombre completo
       };
     });
-    if (this.beneficiarioToEdit) {
-      this.beneficiarioForm.patchValue({
-        id: this.beneficiarioToEdit.id,
-        dpi: this.beneficiarioToEdit.DPI,
-        proyecto: this.beneficiarioToEdit.idProyecto// Asignamos el ID del proyecto si existe
-      });
-    }
-
-    // this.cargarProyectos(); // Cargar los proyectos al iniciar el componente
-    // this.checkRole();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -85,10 +80,7 @@ export class NewPageComponent {
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.registerBeneficiario();
-          console.log(this.beneficiarioForm.get('proyecto')?.value);
-
           this.resetForm();
-          console.log(this.beneficiarioForm.get('proyecto')?.value);
 
         }
       });
@@ -105,10 +97,7 @@ export class NewPageComponent {
       error: (error) => {
         if (error.status === 404 || error.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
-      }else{
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error});
       }
-      console.error('Error al registrar el beneficiario', error);
       }
     });
   }
@@ -121,10 +110,7 @@ export class NewPageComponent {
         this.formSubmit.emit();
         this.resetForm();
       },
-      error: (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el beneficiario' });
-        console.error('Error al actualizar el beneficiario', err);
-      }
+
     });
   }
 
@@ -138,19 +124,6 @@ export class NewPageComponent {
         }
       });
       return;
-    }
-  }
-
-  resetForm(): void {
-    this.beneficiarioForm.reset(); // Resetea todos los campos del formulario
-    this.beneficiarioForm.get('proyecto')?.setValue(null); // Limpiar el valor del campo autocompletar
-    this.selectedProyectoNombre = ''; // Limpiar el nombre visualmente
-    this.filteredProjects = []; // Limpiar las sugerencias
-
-    // Limpiar manualmente el valor visual del autocompletar
-    const autocomplete = document.querySelector('p-autoComplete input');
-    if (autocomplete) {
-      (autocomplete as HTMLInputElement).value = ''; // Limpiar el valor visible
     }
   }
 
@@ -206,9 +179,21 @@ export class NewPageComponent {
       this.beneficiarioForm.get('proyecto')?.setValue(selectedProyecto.id);
       // Mostrar el nombre completo en la interfaz
       this.selectedProyectoNombre = `${selectedProyecto.nombre} - ${selectedProyecto.descripcion}`;
-    } else {
-      console.error('El proyecto seleccionado no tiene un ID válido.');
     }
   }
+
+  resetForm(): void {
+    this.beneficiarioForm.reset(); // Resetea todos los campos del formulario
+    this.beneficiarioForm.get('proyecto')?.setValue(null); // Limpiar el valor del campo autocompletar
+    this.selectedProyectoNombre = ''; // Limpiar el nombre visualmente
+    this.filteredProjects = []; // Limpiar las sugerencias
+
+    // Limpiar manualmente el valor visual del autocompletar
+    const autocomplete = document.querySelector('p-autoComplete input');
+    if (autocomplete) {
+      (autocomplete as HTMLInputElement).value = ''; // Limpiar el valor visible
+    }
+  }
+
 
 }

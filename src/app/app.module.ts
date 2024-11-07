@@ -12,7 +12,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { AuthInterceptor } from './auth/services/auth.interceptor';
 import { MaterialModule } from './material/material.module';
-import { DialogService, DynamicDialogConfig, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 
 @NgModule({
   declarations: [

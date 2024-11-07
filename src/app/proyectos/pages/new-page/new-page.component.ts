@@ -83,7 +83,6 @@ export class NewPageComponent {
         this.resetForm();
       },
       error: (err) => {
-        console.error('Error al actualizar el proyecto', err);
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el proyecto.' });
       }
     });
@@ -98,7 +97,6 @@ export class NewPageComponent {
         this.resetForm();
       },
       error: (err) => {
-        console.error('Error al crear el proyecto', err);
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error });
       }
     });

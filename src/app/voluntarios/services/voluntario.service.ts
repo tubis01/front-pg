@@ -13,32 +13,13 @@ export class VoluntarioService {
   constructor(private http: HttpClient, private cacheService: CacheService) { }
 
 
-  // public getVoluntarios(page: number = 0, size: number = 20): Observable<HateoasResponse<DatosDetalleVoluntarioList>> {
-  //   const cacheKey = `voluntarios_page_${page}_size_${size}`;
-
-  //   // Verificar si la caché tiene los datos y devolverlos si es así
-  //   if (this.cacheService.has(cacheKey)) {
-  //     console.log('Datos de voluntarios obtenidos de la caché');
-
-  //     return of(this.cacheService.get(cacheKey));
-  //   }
-  //   console.log('Datos de voluntarios obtenidos del servidor');
-
-
-  //   // Realizar la solicitud HTTP y almacenar el resultado en la caché
-  //   return this.http.get<HateoasResponse<DatosDetalleVoluntarioList>>(`${this.apiUrl}/listar?page=${page}&size=${size}`).pipe(
-  //     tap(data => this.cacheService.set(cacheKey, data, 300000)) // Almacenar en caché por 5 minutos (300000 ms)
-  //   );
-  // }
   public getVoluntarios(): Observable<HateoasResponse<DatosDetalleVoluntarioList>> {
     const cacheKey = 'voluntarios_lista';
 
     // Verificar si los datos están en la caché y devolverlos si es así
     if (this.cacheService.has(cacheKey)) {
-      console.log('Datos de voluntarios obtenidos de la caché');
       return of(this.cacheService.get(cacheKey));
     }
-    console.log('Datos de voluntarios obtenidos del servidor');
 
     // Realizar la solicitud HTTP y almacenar el resultado en la caché
     return this.http.get<HateoasResponse<DatosDetalleVoluntarioList>>(`${this.apiUrl}/listar`).pipe(

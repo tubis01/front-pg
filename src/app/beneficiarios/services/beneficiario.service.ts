@@ -4,12 +4,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 import { environments } from '../../../environments/environment';
 import { CacheService } from '../../dashboard/services/cache.service';
+import { EncryptionService } from '../../services/encription.service';
 
 @Injectable({ providedIn: 'root' })
 export class BeneficiarioService {
   private apiUrl: string = environments.baseUrl+'/beneficiarios';
 
-  constructor(private http: HttpClient, private cacheService: CacheService) {}
+  constructor(private http: HttpClient, private cacheService: CacheService,
+    private encry: EncryptionService
+  ) {}
 
 
   public getBeneficiarios(): Observable<HateoasResponse<Beneficiario>> {
@@ -17,10 +20,8 @@ export class BeneficiarioService {
 
     // Verificar si los datos están en el caché y devolverlos si es así
     if (this.cacheService.has(cacheKey)) {
-      console.log('Datos benficiarios obtenidos del caché');
       return of(this.cacheService.get(cacheKey));
     }
-    console.log('Datos beneficiarios obtenidos del servidor');
 
     // Realizar la solicitud HTTP y almacenar el resultado en el caché
     return this.http.get<HateoasResponse<Beneficiario>>(`${this.apiUrl}/listar`).pipe(
@@ -29,12 +30,14 @@ export class BeneficiarioService {
   }
 
 
+
   public getBeneficiarioByUrl(url: string): Observable<HateoasResponse<Beneficiario>> {
     return this.http.get<HateoasResponse<Beneficiario>>(url);
   }
 
   public addBeneficiario(beneficiario: Beneficiario): Observable<Beneficiario> {
-    return this.http.post<Beneficiario>(`${this.apiUrl}/registrar`, beneficiario);
+    const encryptedData = this.encry.encryptPayload(beneficiario); // Encriptar el payload completo
+    return this.http.post<Beneficiario>(`${this.apiUrl}/registrar`, encryptedData);
   }
 
   public updateBeneficiario(beneficiario: UpdateBeneficiario): Observable<Beneficiario> {

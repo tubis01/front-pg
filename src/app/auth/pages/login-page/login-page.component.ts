@@ -13,14 +13,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 export class LoginPageComponent implements OnInit {
 
   public loginForm: FormGroup = new FormGroup({});
-  private dialogOpen = false;
 
 
   constructor(private fb: FormBuilder,
         private authService: AuthService,
         private router: Router,
         private messageService: MessageService,
-        private confirmationService: ConfirmationService
       ) {}
 
       ngOnInit(): void {
@@ -56,7 +54,6 @@ export class LoginPageComponent implements OnInit {
           },
           error: (error) => {
             this.resetForm();
-            // console.error('Error al iniciar sesión', error);
             this.messageService.add({
               severity: 'error',
               summary: 'Error al iniciar sesión',

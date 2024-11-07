@@ -12,12 +12,10 @@ export const authGuard: CanActivateFn = (route, state) => {
 
     // Si el usuario tiene el rol ROLE_DIGITADOR, lo redirigimos al formulario de beneficiario
     if (roles.includes('ROLE_DIGITADOR') && state.url !== '/beneficiarios/list') {
-      console.log('Redirigiendo ROLE_DIGITADOR a /beneficiarios/list');
       router.navigate(['/beneficiarios/list']);
       return false;  // Detener la navegación actual
     }
     if (roles.includes('ROLE_RESPONSABLE') && state.url !== '/beneficiarios/list') {
-      console.log('Redirigiendo ROLE_RESPONSABLE a /beneficiarios/list');
       router.navigate(['/beneficiarios/list']);
       return false;  // Detener la navegación actual
     }

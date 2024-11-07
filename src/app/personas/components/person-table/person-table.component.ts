@@ -52,7 +52,6 @@ export class PersonTableComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error fetching persons', error);
       }
     });
   }
@@ -91,7 +90,6 @@ onEdit(person: Persona): void {
   // Método para enviar los cambios al backend
   onSubmitUpdate(): void {
     if (this.selectedPerson) {
-      console.log('Updating person', this.selectedPerson);
 
       this.personService.updatePerson(this.selectedPerson).subscribe({
         next: (response) => {
@@ -99,7 +97,6 @@ onEdit(person: Persona): void {
           this.selectedPerson = null; // Limpiar la selección
         },
         error: (error) => {
-          console.error('Error updating person', error);
         }
       });
     }
@@ -158,7 +155,6 @@ onEdit(person: Persona): void {
           },
           error: (err) => {
             this.isLoading = false;
-            console.error('Error al buscar beneficiarios por DPI parcial:', err);
           }
         });
       } else {
@@ -208,7 +204,6 @@ onEdit(person: Persona): void {
         this.totalElements = response.page.totalElements;
       },
       error: (error) => {
-        console.error('Error fetching persons from link', error);
       }
     });
   }

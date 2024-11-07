@@ -5,7 +5,7 @@
 
 <p-divider></p-divider>
 
-<div class="grid">
+<div class="grid ">
   <div class="col-12 sm:col-6 md:col-3">
 
     <!-- Aquí va el contenido de la tarjeta -->
@@ -46,9 +46,9 @@
           [minLength]="1"
           placeholder="Selecciona un proyecto">
         </p-autoComplete>
-
           <!-- Campo oculto para enviar solo el ID del proyecto -->
           <input type="hidden" formControlName="proyecto">
+
           <div class="error-message" *ngIf="isFieldInvalid('proyecto')">
             <ng-container *ngIf="beneficiarioForm.get('proyecto')?.errors?.['required']">
               El campo Proyecto es obligatorio.

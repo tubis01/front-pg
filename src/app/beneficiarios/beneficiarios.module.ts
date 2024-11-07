@@ -10,7 +10,6 @@ import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ExporDialogComponent } from './components/expor-dialog/expor-dialog.component';
-import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 
 
 @NgModule({

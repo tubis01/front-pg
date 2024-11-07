@@ -18,6 +18,8 @@ export class DonadorTableComponent implements OnInit{
   public pageSize: number = 20;      // Elementos por página
   public links: any = {};           // Para los enlaces de HATEOAS
 
+  public isLoading: boolean = false; // Para mostrar un spinner de carga
+
   constructor(
     private donadorService: DonadoresService,
     private confirmationService: ConfirmationService,
@@ -31,6 +33,7 @@ export class DonadorTableComponent implements OnInit{
 
 
   loadDonadores(): void {
+    this.isLoading = true; // Activar el spinner de carga
     this.donadorService.getDonadores().pipe(
       tap((response: HateoasResponse<DatosDetalleDonadorList>) => {
         // Procesa la respuesta aquí
@@ -39,11 +42,11 @@ export class DonadorTableComponent implements OnInit{
         this.totalPages = response.page.totalPages;
         this.totalElements = response.page.totalElements;
         this.links = response._links; // Guardar los enlaces HATEOAS
+        this.isLoading = false; // Desactivar el spinner de
       }),
       catchError(error => {
         // Manejo de errores aquí
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los donadores.' });
-        console.error('Error fetching donadores', error);
         return of(); // Retornar un observable vacío para no romper el flujo
       })
     ).subscribe();
@@ -51,6 +54,7 @@ export class DonadorTableComponent implements OnInit{
 
   // Confirmar y eliminar un donador
   confirmDelete(donador: DatosDetalleDonadorList): void {
+    this.isLoading = true; // Activar el spinner de carga
     this.confirmationService.confirm({
       message: `¿Estás seguro de que deseas eliminar al donador ${donador.nombre} ${donador.apellido}?`,
       header: 'Confirmar Eliminación',
@@ -61,15 +65,16 @@ export class DonadorTableComponent implements OnInit{
             this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Donador eliminado correctamente' });
             this.cacheService.delete('donadores_list'); // Eliminar la caché
             this.loadDonadores(); // Recargar la lista después de eliminar
+            this.isLoading = false; // Desactivar el spinner de carga
           },
           error: (err) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el donador.' });
-            console.error('Error al eliminar donador', err);
           }
         });
       },
       reject: () => {
         this.messageService.add({ severity: 'info', summary: 'Operación Cancelada', detail: 'La eliminación fue cancelada.' });
+        this.isLoading = false; // Desactivar el spinner de carga
       }
     });
   }
@@ -115,7 +120,6 @@ export class DonadorTableComponent implements OnInit{
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los donadores desde el enlace.' });
-        console.error('Error fetching donadores from link', error);
       }
     });
   }

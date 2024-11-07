@@ -5,13 +5,16 @@ import { Observable, of, tap } from 'rxjs';
 import { HateoasResponse, Proyecto } from '../interfaces/proyecto.interface';
 import { environments } from '../../../environments/environment';
 import { CacheService } from '../../dashboard/services/cache.service';
+import { EncryptionService } from '../../services/encription.service';
 
 @Injectable({providedIn: 'root'})
 export class ProjectServiceService {
 
   private apiUrl = environments.baseUrl + '/proyectos'; // Cambiar según la URL real de la API
 
-  constructor(private http: HttpClient, private cacheService: CacheService) {}
+  constructor(private http: HttpClient, private cacheService: CacheService,
+    private encry: EncryptionService
+  ) {}
 
   // Obtener la lista de proyectos activos
   public listarProyectos(): Observable<HateoasResponse<Proyecto>> {
@@ -19,11 +22,9 @@ export class ProjectServiceService {
 
     // Verificar si el caché tiene los datos y devolverlos si es así
     if (this.cacheService.has(cacheKey)) {
-      console.log('Datos de proyectos obtenidos de la caché');
       return of(this.cacheService.get(cacheKey));
     }
 
-    console.log('Datos de proyectos obtenidos del servidor');
     // Realizar la solicitud HTTP y almacenar el resultado en la caché
     return this.http.get<HateoasResponse<Proyecto>>(`${this.apiUrl}/listar`).pipe(
       tap(data => this.cacheService.set(cacheKey, data, 300000)) // Almacenar en caché por 5 minutos (300000 ms)
@@ -46,8 +47,11 @@ export class ProjectServiceService {
 
 
   // Registrar un nuevo proyecto
-  public registrarProyecto(datosRegistroProyecto: any): Observable<Proyecto> {
-    return this.http.post<Proyecto>(`${this.apiUrl}/registrar`, datosRegistroProyecto);
+  public registrarProyecto(datosRegistroProyecto: Proyecto): Observable<Proyecto> {
+    const datosEncriptados = this.encry.encryptPayload(datosRegistroProyecto)
+    console.log(datosEncriptados);
+
+    return this.http.post<Proyecto>(`${this.apiUrl}/registrar`, datosEncriptados);
   }
 
   // Finalizar (eliminar) un proyecto por su ID

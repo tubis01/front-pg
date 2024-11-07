@@ -54,7 +54,6 @@ export class ListPageComponent implements OnInit{
 
       },
       error: (error) => {
-        console.error('Error al cargar proyectos', error);
       }
     });
 
