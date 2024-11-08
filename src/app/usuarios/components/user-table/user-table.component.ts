@@ -49,7 +49,8 @@ export class UserTableComponent {
       }),
       catchError(error => {
         // Manejo de errores aquí
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los usuarios.' });
+        this.isLoading = false;
+        // this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los usuarios.' });
         return of(); // Retornar un observable vacío para no romper el flujo
       })
     ).subscribe();

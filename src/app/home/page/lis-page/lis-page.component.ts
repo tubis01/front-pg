@@ -14,9 +14,10 @@ export class LisPageComponent {
 
   // Imágenes para el carrusel
   imagenesCarrusel = [
+    'assets/img/carrusel4.jpg',
     'assets/img/carrusel1.jpg',
     'assets/img/carrusel2.jpg',
-    'assets/img/carrusel3.jpg'
+    'assets/img/carrusel3.jpg',
   ];
 
   // Métodos para abrir los diálogos

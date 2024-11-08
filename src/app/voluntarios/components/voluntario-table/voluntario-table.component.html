@@ -44,6 +44,11 @@
   </ng-template>
 </p-table>
 
+<div *ngIf="!voluntarios?.length && !isLoading" class="alert alert-warning text-center">
+  No se encontraron proyectos.
+</div>
+
+
 <!-- Botones de navegación para la paginación -->
 <div class="pagination-container">
   <button pButton class="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>

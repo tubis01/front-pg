@@ -46,7 +46,8 @@ export class DonadorTableComponent implements OnInit{
       }),
       catchError(error => {
         // Manejo de errores aquí
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los donadores.' });
+        // this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los donadores.' });
+        this.isLoading = false; // Desactivar el spinner de carga
         return of(); // Retornar un observable vacío para no romper el flujo
       })
     ).subscribe();

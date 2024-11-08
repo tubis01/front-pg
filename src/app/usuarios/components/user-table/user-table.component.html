@@ -53,6 +53,9 @@
     </tr>
   </ng-template>
 </p-table>
+<div *ngIf="!usuarios?.length && !isLoading" class="alert alert-warning text-center">
+  No se encontraron usuarios.
+</div>
 
 <div class="pagination-container">
   <button pButton class="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>

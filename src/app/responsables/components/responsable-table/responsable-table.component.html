@@ -59,6 +59,11 @@
   </ng-template>
 </p-table>
 
+<div *ngIf="!responsables?.length && !isLoading" class="alert alert-warning text-center">
+  No se encontraron responsables.
+</div>
+
+
 <div class="pagination-container">
   <button pButton icon="pi pi-angle-double-left" (click)="loadFirstPage()" *ngIf="links?.first"></button>
   <button pButton icon="pi pi-angle-left" (click)="loadPrevPage()" *ngIf="links?.prev"></button>

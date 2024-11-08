@@ -46,7 +46,7 @@ export class VoluntarioTableComponent implements OnInit{
       catchError(error => {
         // Manejo de errores aquí
         this.isLoading = false; // Desactivar el spinner de carga
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los voluntarios.' });
+        // this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar los voluntarios.' });
         return of(); // Retornar un observable vacío para no romper el flujo
       })
     ).subscribe();

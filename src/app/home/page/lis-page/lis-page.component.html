@@ -15,51 +15,62 @@
       <div class="grid about-us-content">
         <div class="col-12 md:col-4 about-item">
           <h3>Nuestra Misión</h3>
-          <p>Transformar la vida de las personas a través de la educación, el apoyo comunitario y el acceso a oportunidades para un futuro mejor.</p>
+          <p>Transformar la vida de las personas a través del apoyo comunitario para un futuro mejor.</p>
         </div>
         <div class="col-12 md:col-4 about-item">
           <h3>Nuestra Visión</h3>
-          <p>Una sociedad justa y equitativa, donde cada individuo tenga acceso a las herramientas necesarias para lograr su máximo potencial.</p>
+          <p>Una sociedad justa y equitativa, donde cada individuo tenga apoyo.</p>
         </div>
         <div class="col-12 md:col-4 about-item">
           <h3>Nuestro Impacto</h3>
-          <p>Más de 5000 personas beneficiadas en los últimos 5 años, gracias a nuestros programas de educación, salud y bienestar comunitario.</p>
+          <p>Más de 50,000 personas beneficiadas en los últimos años, gracias a nuestros programas para el bienestar comunitario.</p>
         </div>
       </div>
     </section>
 
     <!-- Sección de Noticias y Actualizaciones -->
     <section class="news-section">
-      <h2 class="section-title">Noticias y Actualizaciones</h2>
+      <h2 class="section-title">proyectos y Actualizaciones</h2>
       <div class="grid">
         <div class="col-12 md:col-6">
           <article class="news-item">
-            <h3>Nuevas iniciativas de educación</h3>
-            <p>Estamos lanzando nuevas iniciativas educativas para niños y jóvenes en áreas rurales. Conoce más sobre cómo puedes apoyar estos programas.</p>
-            <button pButton label="Leer más" class="p-button-outlined"></button>
+            <h3>Nuevas Iniciativas para el Desarrollo Comunitario</h3>
+            <p>Estamos lanzando un conjunto de nuevas iniciativas en áreas rurales, destinadas a mejorar la calidad de vida y fortalecer el desarrollo sostenible en comunidades vulnerables.</p>
+            <p>Estas acciones están impactando positivamente a cientos de personas, ofreciendo acceso a educación, capacitación laboral y mejores recursos para el desarrollo comunitario.</p>
+            <!-- <button pButton label="Leer más" class="p-button-outlined"></button> -->
           </article>
+
+
         </div>
         <div class="col-12 md:col-6">
           <article class="news-item">
-            <h3>Donaciones de materiales de construcción</h3>
-            <p>Recibimos una donación importante de materiales de construcción para proyectos comunitarios. Ayúdanos a distribuir estos recursos donde más se necesitan.</p>
-            <button pButton label="Leer más" class="p-button-outlined"></button>
+            <h3>Proyectos Realizados</h3>
+            <p>Estos son algunos de los proyectos para el bienestar y el desarrollo en nuestras comunidades:</p>
+            <ul>
+              <li><strong>Entrega de alimentos esenciales:</strong> promoviendo a las familias con alimentos básicos.</li>
+              <li><strong>Suministro de abono:</strong> Apoyamos a los agricultores locales con abono de alta calidad, promoviendo una agricultura más sostenible y productiva.</li>
+              <li><strong>Capacitaciones y talleres:</strong> Ofrecemos capacitaciones en áreas clave como desarrollo personal, agricultura y emprendimiento para fortalecer las habilidades de la comunidad.</li>
+            </ul>
+            <!-- <button pButton label="Leer más" class="p-button-outlined"></button> -->
           </article>
+
         </div>
       </div>
     </section>
 
     <!-- Sección de Acceso Rápido -->
     <section class="quick-access-section">
-      <h2 class="section-title">Involúcrate con Nosotros</h2>
-      <div class="grid">
-        <div class="col-12 md:col-6">
-          <button pButton label="Hazte Voluntario" class="p-button-lg p-button-success" (click)="openVoluntarioForm()"></button>
-        </div>
-        <div class="col-12 md:col-6">
-          <button pButton label="Hazte Donador" class="p-button-lg p-button-warning" (click)="openDonadorForm()"></button>
-        </div>
-      </div>
+      <h2 class="section-title">Más Información</h2>
+      <p>
+        A lo largo de los años, nuestra ONG ha trabajado incansablemente para mejorar las condiciones de vida en diversas comunidades de Guatemala.
+        Desde programas de alfabetización hasta apoyo en infraestructura básica, nuestro enfoque ha sido integral y sostenible.
+      </p>
+      <p>
+        <strong>Contacto:</strong><br>
+        Guatemala, Centro América.<br>
+        Correo electrónico: <span>adics.sununche[at]gmail.com</span><br>
+        Teléfono: 49000684
+      </p>
     </section>
   </div>
 
@@ -67,14 +78,15 @@
   <aside class="sidebar col-12 md:col-4">
     <section class="sidebar-section">
       <h3>Acerca de Nuestra ONG</h3>
-      <p>Somos una organización comprometida con el bienestar y desarrollo de las personas más vulnerables de Guatemala, brindando apoyo en áreas clave como educación y salud.</p>
+      <p>Somos una organización comprometida con el bienestar y desarrollo de las personas más vulnerables de Guatemala, brindando apoyo con con capacitaciones, alimento. </p>
     </section>
 
     <section class="sidebar-section">
       <h3>Objetivos</h3>
       <ul>
+        <li>Brindar apoyo con alimentos.</li>
         <li>Fomentar el desarrollo sostenible.</li>
-        <li>Mejorar el acceso a la educación.</li>
+        <!-- <li>Mejorar el acceso a la educación.</li> -->
         <li>Brindar apoyo económico a familias vulnerables.</li>
         <li>Facilitar programas de capacitación.</li>
       </ul>
@@ -111,7 +123,7 @@
 </div>
 
 <!-- Dialogo para Voluntarios -->
-<p-dialog
+<!-- <p-dialog
   header="Formulario de Voluntarios"
   [(visible)]="showVoluntarioDialog"
   [modal]="true"
@@ -120,10 +132,10 @@
   [baseZIndex]="10000"
 >
   <app-voluntario-form></app-voluntario-form>
-</p-dialog>
+</p-dialog> -->
 
 <!-- Dialogo para Donadores -->
-<p-dialog
+<!-- <p-dialog
   header="Formulario de Donadores"
   [(visible)]="showDonadorDialog"
   [modal]="true"
@@ -132,4 +144,4 @@
   [baseZIndex]="10000"
 >
   <app-donador-form></app-donador-form>
-</p-dialog>
+</p-dialog> -->
